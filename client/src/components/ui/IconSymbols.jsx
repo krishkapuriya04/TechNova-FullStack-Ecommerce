@@ -14,9 +14,15 @@ export function IconClose(props) {
   )
 }
 
-export function IconHeart(props) {
+export function IconHeart({ filled = false, ...props }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill={filled ? 'currentColor' : 'none'}
+      stroke="currentColor"
+      aria-hidden
+      {...props}
+    >
       <path
         strokeWidth="2"
         strokeLinejoin="round"

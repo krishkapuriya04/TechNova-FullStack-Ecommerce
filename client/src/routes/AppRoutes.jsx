@@ -10,7 +10,10 @@ import { ShopPage } from '@/pages/shop/ShopPage.jsx'
 import { ProductDetailsPage } from '@/pages/shop/ProductDetailsPage.jsx'
 import { WishlistPage } from '@/pages/wishlist/WishlistPage.jsx'
 import { OrdersPage } from '@/pages/orders/OrdersPage.jsx'
+import { OrderDetailPage } from '@/pages/orders/OrderDetailPage.jsx'
 import { CheckoutPage } from '@/pages/checkout/CheckoutPage.jsx'
+import { CheckoutSuccessPage } from '@/pages/checkout/CheckoutSuccessPage.jsx'
+import { CartPage } from '@/pages/cart/CartPage.jsx'
 import { ProfilePage } from '@/pages/profile/ProfilePage.jsx'
 import { ProtectedRoute } from '@/components/routing/ProtectedRoute.jsx'
 import { ROUTES } from '@/constants/routes.js'
@@ -27,12 +30,14 @@ export function AppRoutes() {
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.SHOP} element={<ShopPage />} />
         <Route path={ROUTES.PRODUCT} element={<ProductDetailsPage />} />
-        <Route path={ROUTES.CART} element={<PlaceholderPage />} />
 
         <Route element={<ProtectedRoute />}>
+          <Route path={ROUTES.CART} element={<CartPage />} />
           <Route path={ROUTES.WISHLIST} element={<WishlistPage />} />
           <Route path={ROUTES.ORDERS} element={<OrdersPage />} />
+          <Route path={ROUTES.ORDER_DETAIL} element={<OrderDetailPage />} />
           <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
+          <Route path={ROUTES.CHECKOUT_SUCCESS} element={<CheckoutSuccessPage />} />
           <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         </Route>
 

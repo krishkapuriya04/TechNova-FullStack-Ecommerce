@@ -7,6 +7,7 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle.jsx'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion.js'
 import { ROUTES } from '@/constants/routes.js'
 import { useAuth } from '@/hooks/useAuth.js'
+import { useCart } from '@/hooks/useCart.js'
 
 const linkClass = ({ isActive }) =>
   [
@@ -19,6 +20,7 @@ const linkClass = ({ isActive }) =>
 export function MobileMenu({ open, onClose }) {
   const reduceMotion = usePrefersReducedMotion()
   const { isAuthenticated, bootstrapped, logout, user } = useAuth()
+  const { itemCount } = useCart()
 
   if (typeof document === 'undefined') return null
 
@@ -64,16 +66,24 @@ export function MobileMenu({ open, onClose }) {
             </div>
             <div className="flex-1 overflow-y-auto px-2 py-4">
               <div className="flex flex-col gap-1">
-                {primaryNavLinks.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    className={linkClass}
-                    onClick={onClose}
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
+                {primaryNavLinks.map((item) =>
+                  item.to === ROUTES.CART ? (
+                    <NavLink key={item.to} to={item.to} className={linkClass} onClick={onClose}>
+                      <span className="inline-flex items-center gap-2">
+                        {item.label}
+                        {bootstrapped && isAuthenticated && itemCount > 0 ? (
+                          <span className="min-w-[1.25rem] rounded-full bg-indigo-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-indigo-400 dark:text-tn-950">
+                            {itemCount > 99 ? '99+' : itemCount}
+                          </span>
+                        ) : null}
+                      </span>
+                    </NavLink>
+                  ) : (
+                    <NavLink key={item.to} to={item.to} className={linkClass} onClick={onClose}>
+                      {item.label}
+                    </NavLink>
+                  ),
+                )}
                 {bootstrapped && isAuthenticated ? (
                   <>
                     <NavLink to={ROUTES.PROFILE} className={linkClass} onClick={onClose}>

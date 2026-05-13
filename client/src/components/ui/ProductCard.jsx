@@ -1,11 +1,17 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
 import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
 import { RatingStars } from '@/components/ui/RatingStars.jsx'
 import { IconHeart, IconCart } from '@/components/ui/IconSymbols.jsx'
 import { formatCurrency } from '@/utils/formatCurrency.js'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion.js'
-import { productPath } from '@/constants/routes.js'
+import { productPath, ROUTES } from '@/constants/routes.js'
+import { useAuth } from '@/hooks/useAuth.js'
+import { useCart } from '@/hooks/useCart.js'
+import { useWishlist } from '@/hooks/useWishlist.js'
+import { getErrorMessage } from '@/utils/apiError.js'
 
 function hashGradient(seed) {
   const palettes = [
@@ -22,6 +28,14 @@ function hashGradient(seed) {
 
 export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist }) {
   const reduceMotion = usePrefersReducedMotion()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { isAuthenticated, bootstrapped } = useAuth()
+  const { addToCart, mutating: cartBusy } = useCart()
+  const { toggleWishlist, isInWishlist, mutating: wishBusy } = useWishlist()
+  const [addBusy, setAddBusy] = useState(false)
+  const [heartBusy, setHeartBusy] = useState(false)
+
   const images = product.images ?? []
   const hero = images[0]
   const gradient = product.gradient ?? hashGradient(detailSlug ?? product.slug ?? product.id)
@@ -37,6 +51,52 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
     ([product.brand, product.category].filter(Boolean).join(' · ') || 'Premium tech')
 
   const detailTo = detailSlug ? productPath(detailSlug) : null
+  const saved = isAuthenticated && isInWishlist(product.id)
+  const commerceLocked = !bootstrapped || cartBusy || wishBusy
+
+  async function handleAddToCart() {
+    if (onAddToCart) {
+      onAddToCart(product.id)
+      return
+    }
+    if (!bootstrapped) return
+    if (!isAuthenticated) {
+      toast.error('Sign in to add items to your cart')
+      navigate(ROUTES.AUTH_LOGIN, { state: { from: location } })
+      return
+    }
+    setAddBusy(true)
+    try {
+      await addToCart({ productId: product.id, quantity: 1 })
+      toast.success('Added to cart')
+    } catch (err) {
+      toast.error(getErrorMessage(err, 'Could not add to cart'))
+    } finally {
+      setAddBusy(false)
+    }
+  }
+
+  async function handleWishlist() {
+    if (onToggleWishlist) {
+      onToggleWishlist(product.id)
+      return
+    }
+    if (!bootstrapped) return
+    if (!isAuthenticated) {
+      toast.error('Sign in to save items')
+      navigate(ROUTES.AUTH_LOGIN, { state: { from: location } })
+      return
+    }
+    setHeartBusy(true)
+    try {
+      await toggleWishlist(product.id)
+      toast.success(saved ? 'Removed from wishlist' : 'Saved to wishlist')
+    } catch (err) {
+      toast.error(getErrorMessage(err, 'Wishlist could not be updated'))
+    } finally {
+      setHeartBusy(false)
+    }
+  }
 
   return (
     <motion.article
@@ -95,11 +155,14 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
         )}
         <button
           type="button"
-          onClick={() => onToggleWishlist?.(product.id)}
-          className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md tn-transition-base hover:border-white/40 hover:bg-black/45"
-          aria-label="Add to wishlist"
+          disabled={commerceLocked || heartBusy}
+          onClick={handleWishlist}
+          className={`absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md tn-transition-base hover:border-white/40 hover:bg-black/45 disabled:cursor-not-allowed disabled:opacity-50 ${
+            saved ? 'text-rose-300' : ''
+          }`}
+          aria-label={saved ? 'Remove from wishlist' : 'Add to wishlist'}
         >
-          <IconHeart className="h-5 w-5" />
+          <IconHeart className="h-5 w-5" filled={saved} />
         </button>
       </div>
 
@@ -130,10 +193,11 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
           type="button"
           size="sm"
           className="w-full justify-center shadow-none"
-          onClick={() => onAddToCart?.(product.id)}
+          disabled={commerceLocked || addBusy || (product.stock ?? 0) <= 0}
+          onClick={handleAddToCart}
         >
           <IconCart className="h-4 w-4" />
-          Add to cart
+          {addBusy ? 'Adding…' : (product.stock ?? 0) <= 0 ? 'Out of stock' : 'Add to cart'}
         </PrimaryButton>
       </div>
     </motion.article>

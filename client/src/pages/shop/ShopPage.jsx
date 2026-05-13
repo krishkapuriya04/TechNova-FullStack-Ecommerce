@@ -1,5 +1,4 @@
 import { startTransition, useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
 import { useSearchParams } from 'react-router-dom'
 import { fetchProducts } from '@/services/productService.js'
 import { SectionTitle } from '@/components/ui/SectionTitle.jsx'
@@ -104,15 +103,7 @@ export function ShopPage() {
 
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {data.products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  detailSlug={product.slug}
-                  onAddToCart={() => toast.success('Cart service is on the roadmap.')}
-                  onToggleWishlist={() =>
-                    toast.success('Save items after wishlist sync ships with MongoDB.')
-                  }
-                />
+                <ProductCard key={product.id} product={product} detailSlug={product.slug} />
               ))}
             </div>
 

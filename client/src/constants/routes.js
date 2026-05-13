@@ -9,7 +9,9 @@ export const ROUTES = {
   CART: '/cart',
   WISHLIST: '/wishlist',
   ORDERS: '/orders',
+  ORDER_DETAIL: '/orders/:orderId',
   CHECKOUT: '/checkout',
+  CHECKOUT_SUCCESS: '/checkout/success',
   PROFILE: '/profile',
   ADMIN: '/admin',
   AUTH_LOGIN: '/auth/login',
@@ -18,4 +20,8 @@ export const ROUTES = {
 
 export function productPath(slug) {
   return `/shop/${slug}`
+}
+
+export function orderDetailPath(orderId) {
+  return `/orders/${orderId}`
 }

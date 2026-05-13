@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { fetchProductBySlug } from '@/services/productService.js'
 import { ROUTES } from '@/constants/routes.js'
@@ -10,6 +10,9 @@ import { RatingStars } from '@/components/ui/RatingStars.jsx'
 import { IconHeart, IconCart } from '@/components/ui/IconSymbols.jsx'
 import { formatCurrency } from '@/utils/formatCurrency.js'
 import { getErrorMessage } from '@/utils/apiError.js'
+import { useAuth } from '@/hooks/useAuth.js'
+import { useCart } from '@/hooks/useCart.js'
+import { useWishlist } from '@/hooks/useWishlist.js'
 
 function hashGradient(slug) {
   const palettes = [
@@ -25,10 +28,19 @@ function hashGradient(slug) {
 
 export function ProductDetailsPage() {
   const { slug } = useParams()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { isAuthenticated, bootstrapped } = useAuth()
+  const { addToCart, mutating: cartBusy } = useCart()
+  const { toggleWishlist, isInWishlist, mutating: wishlistMutating } = useWishlist()
+
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [activeImage, setActiveImage] = useState(0)
+  const [qty, setQty] = useState(1)
+  const [addBusy, setAddBusy] = useState(false)
+  const [wishActionBusy, setWishActionBusy] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -40,6 +52,7 @@ export function ProductDetailsPage() {
         if (active) {
           setProduct(doc)
           setActiveImage(0)
+          setQty(1)
         }
       } catch (err) {
         if (active) setError(getErrorMessage(err, 'Product unavailable'))
@@ -76,9 +89,51 @@ export function ProductDetailsPage() {
 
   const images = product.images?.length ? product.images : []
   const hero = images[activeImage]
-  const effective = product.discountPrice && product.discountPrice < product.price
-    ? product.discountPrice
-    : product.price
+  const effective =
+    product.discountPrice && product.discountPrice < product.price
+      ? product.discountPrice
+      : product.price
+  const stock = product.stock ?? 0
+  const saved = isAuthenticated && isInWishlist(product.id)
+  const commerceLocked = !bootstrapped || cartBusy || wishlistMutating
+  const maxQty = Math.max(1, Math.min(stock, 999))
+  const safeQty = Math.min(qty, maxQty)
+
+  async function handleAddToCart() {
+    if (!bootstrapped) return
+    if (!isAuthenticated) {
+      toast.error('Sign in to add items to your cart')
+      navigate(ROUTES.AUTH_LOGIN, { state: { from: location } })
+      return
+    }
+    setAddBusy(true)
+    try {
+      await addToCart({ productId: product.id, quantity: safeQty })
+      toast.success('Added to cart')
+    } catch (err) {
+      toast.error(getErrorMessage(err, 'Could not add to cart'))
+    } finally {
+      setAddBusy(false)
+    }
+  }
+
+  async function handleWishlist() {
+    if (!bootstrapped) return
+    if (!isAuthenticated) {
+      toast.error('Sign in to save items')
+      navigate(ROUTES.AUTH_LOGIN, { state: { from: location } })
+      return
+    }
+    setWishActionBusy(true)
+    try {
+      await toggleWishlist(product.id)
+      toast.success(saved ? 'Removed from wishlist' : 'Saved to wishlist')
+    } catch (err) {
+      toast.error(getErrorMessage(err, 'Wishlist could not be updated'))
+    } finally {
+      setWishActionBusy(false)
+    }
+  }
 
   return (
     <div className="tn-section-y">
@@ -142,28 +197,60 @@ export function ProductDetailsPage() {
                 </p>
               ) : null}
             </div>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              {stock > 0 ? `${stock} in stock` : 'Currently out of stock'}
+            </p>
           </div>
 
           <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
             {product.description}
           </p>
 
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+              Quantity
+            </span>
+            <div className="inline-flex items-center rounded-tn border border-zinc-200 dark:border-white/10">
+              <button
+                type="button"
+                disabled={safeQty <= 1 || commerceLocked}
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                className="px-3 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:bg-zinc-100 disabled:opacity-40 dark:text-zinc-100 dark:enabled:hover:bg-white/5"
+              >
+                −
+              </button>
+              <span className="min-w-[2.5rem] px-2 py-2 text-center text-sm font-semibold tabular-nums text-zinc-900 dark:text-white">
+                {safeQty}
+              </span>
+              <button
+                type="button"
+                disabled={safeQty >= maxQty || stock <= 0 || commerceLocked}
+                onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+                className="px-3 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:bg-zinc-100 disabled:opacity-40 dark:text-zinc-100 dark:enabled:hover:bg-white/5"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-col gap-3 sm:flex-row">
             <PrimaryButton
               type="button"
               className="sm:flex-1"
-              onClick={() => toast.success('Cart module ships next — item saved locally soon.')}
+              disabled={commerceLocked || addBusy || stock <= 0}
+              onClick={handleAddToCart}
             >
               <IconCart className="h-4 w-4" />
-              Add to cart
+              {addBusy ? 'Adding…' : stock <= 0 ? 'Out of stock' : 'Add to cart'}
             </PrimaryButton>
             <SecondaryButton
               type="button"
               className="sm:flex-1"
-              onClick={() => toast.success('Wishlist sync arrives with the wishlist service.')}
+              disabled={commerceLocked || wishActionBusy}
+              onClick={handleWishlist}
             >
-              <IconHeart className="h-4 w-4" />
-              Wishlist
+              <IconHeart className="h-4 w-4" filled={saved} />
+              {saved ? 'Saved' : 'Wishlist'}
             </SecondaryButton>
           </div>
 

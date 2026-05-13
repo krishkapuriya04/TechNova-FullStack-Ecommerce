@@ -6,6 +6,7 @@ import { primaryNavLinks } from '@/data/navLinks.js'
 import { ThemeToggle } from '@/components/layout/ThemeToggle.jsx'
 import { MobileMenu, MobileMenuButton } from '@/components/layout/MobileMenu.jsx'
 import { useAuth } from '@/hooks/useAuth.js'
+import { useCart } from '@/hooks/useCart.js'
 
 const linkClass = ({ isActive }) =>
   [
@@ -21,6 +22,7 @@ const authLinkClass =
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { isAuthenticated, bootstrapped, logout, user } = useAuth()
+  const { itemCount } = useCart()
 
   useEffect(() => {
     if (!mobileOpen) return undefined
@@ -48,11 +50,24 @@ export function Navbar() {
           </NavLink>
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
-            {primaryNavLinks.map((item) => (
-              <NavLink key={item.to} to={item.to} className={linkClass}>
-                {item.label}
-              </NavLink>
-            ))}
+            {primaryNavLinks.map((item) =>
+              item.to === ROUTES.CART ? (
+                <NavLink key={item.to} to={item.to} className={linkClass}>
+                  <span className="inline-flex items-center gap-2">
+                    {item.label}
+                    {bootstrapped && isAuthenticated && itemCount > 0 ? (
+                      <span className="min-w-[1.25rem] rounded-full bg-indigo-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-indigo-400 dark:text-tn-950">
+                        {itemCount > 99 ? '99+' : itemCount}
+                      </span>
+                    ) : null}
+                  </span>
+                </NavLink>
+              ) : (
+                <NavLink key={item.to} to={item.to} className={linkClass}>
+                  {item.label}
+                </NavLink>
+              ),
+            )}
           </nav>
 
           <div className="hidden items-center gap-2 md:flex" aria-label="Account">

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import { fetchProducts } from '@/services/productService.js'
 import { sleep } from '@/utils/sleep.js'
 import { SectionTitle } from '@/components/ui/SectionTitle.jsx'
@@ -53,13 +52,7 @@ export function TrendingProductsSection() {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                detailSlug={product.slug}
-                onAddToCart={() => toast.success('Cart service is on the roadmap.')}
-                onToggleWishlist={() => toast.success('Wishlist sync arrives with auth persistence.')}
-              />
+              <ProductCard key={product.id} product={product} detailSlug={product.slug} />
             ))}
           </div>
         )}

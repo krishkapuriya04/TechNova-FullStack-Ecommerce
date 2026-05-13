@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/constants/routes.js'
+import { Seo } from '@/components/seo/Seo.jsx'
 
 export function NotFoundPage() {
   return (
-    <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-24 text-center">
+    <>
+      <Seo title="Page not found" noindex description="The page you requested does not exist on TechNova." />
+      <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-24 text-center">
       <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-300">404</p>
       <h1 className="mt-2 text-3xl font-semibold text-zinc-900 dark:text-white">
         Page not found
@@ -18,5 +21,6 @@ export function NotFoundPage() {
         Back home
       </Link>
     </div>
+    </>
   )
 }

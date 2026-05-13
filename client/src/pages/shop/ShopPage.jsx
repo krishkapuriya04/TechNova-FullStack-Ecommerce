@@ -12,6 +12,7 @@ import { getErrorMessage } from '@/utils/apiError.js'
 import { useDebounce } from '@/hooks/useDebounce.js'
 import { pushRecentSearch } from '@/hooks/useRecentSearches.js'
 import { ROUTES } from '@/constants/routes.js'
+import { Seo } from '@/components/seo/Seo.jsx'
 
 export function ShopPage() {
   const [params, setParams] = useSearchParams()
@@ -75,7 +76,13 @@ export function ShopPage() {
   const emptyResults = Boolean(data) && !loading && data.meta.total === 0
 
   return (
-    <div className="tn-section-y">
+    <>
+      <Seo
+        title="Shop catalog"
+        canonicalPath={ROUTES.SHOP}
+        description="Browse smartphones, laptops, gaming gear, audio, and accessories with live inventory and filters."
+      />
+      <div className="tn-section-y">
       <div className="tn-container space-y-8">
         <SectionTitle
           eyebrow="Catalog"
@@ -176,5 +183,6 @@ export function ShopPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

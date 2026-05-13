@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# After you deploy, point crawlers at your sitemap (replace with your public URL):
+# Sitemap: https://YOUR_DOMAIN.vercel.app/sitemap.xml

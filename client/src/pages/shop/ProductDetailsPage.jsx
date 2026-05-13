@@ -16,6 +16,7 @@ import { useAuth } from '@/hooks/useAuth.js'
 import { useCart } from '@/hooks/useCart.js'
 import { useWishlist } from '@/hooks/useWishlist.js'
 import { recordProductView, getRecentlyViewedSnapshots } from '@/hooks/useRecentlyViewed.js'
+import { Seo } from '@/components/seo/Seo.jsx'
 
 function ReviewPreview({ product }) {
   const avg = product.ratings?.average ?? 0
@@ -133,12 +134,19 @@ export function ProductDetailsPage() {
   const recentSnapshots = product?.id ? getRecentlyViewedSnapshots(product.id) : []
 
   if (loading && !product) {
-    return <PageLoader label="Loading product…" />
+    return (
+      <>
+        <Seo title="Product" canonicalPath={productPath(slug)} description="Loading product details on TechNova." />
+        <PageLoader label="Loading product…" />
+      </>
+    )
   }
 
   if (error || !product) {
     return (
-      <div className="tn-container tn-section-y space-y-4 text-center">
+      <>
+        <Seo title="Product not found" noindex description="This product could not be loaded." />
+        <div className="tn-container tn-section-y space-y-4 text-center">
         <p className="text-lg font-semibold text-zinc-900 dark:text-white">Product not found</p>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">{error}</p>
         <Link
@@ -148,6 +156,7 @@ export function ProductDetailsPage() {
           Back to shop
         </Link>
       </div>
+      </>
     )
   }
 
@@ -199,6 +208,12 @@ export function ProductDetailsPage() {
 
   return (
     <div className="tn-section-y">
+      <Seo
+        title={product.title}
+        description={product.description.replace(/\s+/g, ' ').trim().slice(0, 155)}
+        canonicalPath={productPath(product.slug)}
+        ogImage={product.images?.[0]}
+      />
       <div className="tn-container grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
         <div className="space-y-4">
           <div className="overflow-hidden rounded-tn-2xl border border-zinc-200/80 bg-zinc-100 dark:border-white/10 dark:bg-tn-900">

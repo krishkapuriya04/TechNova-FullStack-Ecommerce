@@ -4,6 +4,7 @@ import { ROUTES } from '@/constants/routes.js'
 import { useAuth } from '@/hooks/useAuth.js'
 import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
 import { SecondaryButton } from '@/components/ui/SecondaryButton.jsx'
+import { Seo } from '@/components/seo/Seo.jsx'
 
 export function RegisterPage() {
   const { register, loading } = useAuth()
@@ -24,7 +25,9 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="w-full rounded-tn-2xl border border-zinc-200/80 bg-white/90 p-8 shadow-tn-soft backdrop-blur dark:border-white/10 dark:bg-tn-900/80">
+    <>
+      <Seo title="Create account" canonicalPath={ROUTES.AUTH_REGISTER} noindex description="Create a TechNova shopper account." />
+      <div className="w-full rounded-tn-2xl border border-zinc-200/80 bg-white/90 p-8 shadow-tn-soft backdrop-blur dark:border-white/10 dark:bg-tn-900/80">
       <div className="space-y-2 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-300">
           Join TechNova
@@ -96,5 +99,6 @@ export function RegisterPage() {
         </SecondaryButton>
       </div>
     </div>
+    </>
   )
 }

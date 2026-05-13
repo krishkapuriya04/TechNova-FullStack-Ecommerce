@@ -7,10 +7,14 @@ import { GamingShowcaseSection } from '@/components/home/GamingShowcaseSection.j
 import { FeaturedBrandsSection } from '@/components/home/FeaturedBrandsSection.jsx'
 import { PromotionalBannerSection } from '@/components/home/PromotionalBannerSection.jsx'
 import { NewsletterSection } from '@/components/home/NewsletterSection.jsx'
+import { Seo } from '@/components/seo/Seo.jsx'
+import { SEO_DEFAULTS } from '@/constants/seoDefaults.js'
 
 export function HomePage() {
   return (
-    <div className="bg-zinc-50 dark:bg-tn-void">
+    <>
+      <Seo title="Premium electronics" canonicalPath="/" description={SEO_DEFAULTS.description} />
+      <div className="bg-zinc-50 dark:bg-tn-void">
       <HeroSection />
       <TrustShippingSection />
       <FeaturedCategoriesSection />
@@ -21,5 +25,6 @@ export function HomePage() {
       <PromotionalBannerSection />
       <NewsletterSection />
     </div>
+    </>
   )
 }

@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { AdminSidebar, AdminMobileSidebar } from '@/components/admin/AdminSidebar.jsx'
@@ -8,6 +9,9 @@ export function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-tn-void via-zinc-950 to-black text-zinc-100">
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <AdminMobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="flex min-h-screen">
         <AdminSidebar />

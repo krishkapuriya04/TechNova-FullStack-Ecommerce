@@ -5,6 +5,7 @@ import { ROUTES } from '@/constants/routes.js'
 import { primaryNavLinks } from '@/data/navLinks.js'
 import { ThemeToggle } from '@/components/layout/ThemeToggle.jsx'
 import { MobileMenu, MobileMenuButton } from '@/components/layout/MobileMenu.jsx'
+import { useAuth } from '@/hooks/useAuth.js'
 
 const linkClass = ({ isActive }) =>
   [
@@ -14,8 +15,12 @@ const linkClass = ({ isActive }) =>
       : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100',
   ].join(' ')
 
+const authLinkClass =
+  'rounded-tn px-3 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-500/10 dark:text-indigo-200 dark:hover:bg-white/5'
+
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { isAuthenticated, bootstrapped, logout, user } = useAuth()
 
   useEffect(() => {
     if (!mobileOpen) return undefined
@@ -49,6 +54,37 @@ export function Navbar() {
               </NavLink>
             ))}
           </nav>
+
+          <div className="hidden items-center gap-2 md:flex" aria-label="Account">
+            {!bootstrapped ? (
+              <span className="h-8 w-20 animate-pulse rounded-tn bg-zinc-200/80 dark:bg-white/10" />
+            ) : isAuthenticated ? (
+              <>
+                <NavLink to={ROUTES.PROFILE} className={authLinkClass}>
+                  {user?.name?.split(' ')[0] ?? 'Profile'}
+                </NavLink>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="rounded-tn border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:border-zinc-300 dark:border-white/10 dark:text-zinc-100 dark:hover:border-white/20"
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <NavLink to={ROUTES.AUTH_LOGIN} className={authLinkClass}>
+                  Log in
+                </NavLink>
+                <NavLink
+                  to={ROUTES.AUTH_REGISTER}
+                  className="rounded-tn bg-gradient-to-r from-indigo-500 to-violet-600 px-3 py-2 text-xs font-semibold text-white shadow-tn-glow-sm hover:brightness-110"
+                >
+                  Register
+                </NavLink>
+              </>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             <div className="hidden md:block">

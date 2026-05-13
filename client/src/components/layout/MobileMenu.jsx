@@ -5,6 +5,8 @@ import { primaryNavLinks } from '@/data/navLinks.js'
 import { IconClose, IconMenu } from '@/components/ui/IconSymbols.jsx'
 import { ThemeToggle } from '@/components/layout/ThemeToggle.jsx'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion.js'
+import { ROUTES } from '@/constants/routes.js'
+import { useAuth } from '@/hooks/useAuth.js'
 
 const linkClass = ({ isActive }) =>
   [
@@ -16,6 +18,7 @@ const linkClass = ({ isActive }) =>
 
 export function MobileMenu({ open, onClose }) {
   const reduceMotion = usePrefersReducedMotion()
+  const { isAuthenticated, bootstrapped, logout, user } = useAuth()
 
   if (typeof document === 'undefined') return null
 
@@ -71,6 +74,33 @@ export function MobileMenu({ open, onClose }) {
                     {item.label}
                   </NavLink>
                 ))}
+                {bootstrapped && isAuthenticated ? (
+                  <>
+                    <NavLink to={ROUTES.PROFILE} className={linkClass} onClick={onClose}>
+                      Profile ({user?.name ?? 'you'})
+                    </NavLink>
+                    <button
+                      type="button"
+                      className="block w-full rounded-tn px-4 py-3 text-left text-base font-semibold text-red-600 hover:bg-red-500/10 dark:text-red-300"
+                      onClick={() => {
+                        logout()
+                        onClose()
+                      }}
+                    >
+                      Log out
+                    </button>
+                  </>
+                ) : null}
+                {bootstrapped && !isAuthenticated ? (
+                  <>
+                    <NavLink to={ROUTES.AUTH_LOGIN} className={linkClass} onClick={onClose}>
+                      Log in
+                    </NavLink>
+                    <NavLink to={ROUTES.AUTH_REGISTER} className={linkClass} onClick={onClose}>
+                      Register
+                    </NavLink>
+                  </>
+                ) : null}
               </div>
             </div>
           </motion.nav>

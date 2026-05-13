@@ -17,6 +17,8 @@ const footerColumns = [
     links: [
       { to: ROUTES.AUTH_LOGIN, label: 'Sign in' },
       { to: ROUTES.AUTH_REGISTER, label: 'Register' },
+      { to: ROUTES.PROFILE, label: 'Profile' },
+      { to: ROUTES.CHECKOUT, label: 'Checkout' },
       { to: ROUTES.ADMIN, label: 'Admin' },
     ],
   },

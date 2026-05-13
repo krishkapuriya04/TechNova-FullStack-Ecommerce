@@ -5,10 +5,17 @@
 export const ROUTES = {
   HOME: '/',
   SHOP: '/shop',
+  PRODUCT: '/shop/:slug',
   CART: '/cart',
   WISHLIST: '/wishlist',
   ORDERS: '/orders',
+  CHECKOUT: '/checkout',
+  PROFILE: '/profile',
   ADMIN: '/admin',
   AUTH_LOGIN: '/auth/login',
   AUTH_REGISTER: '/auth/register',
+}
+
+export function productPath(slug) {
+  return `/shop/${slug}`
 }

@@ -31,6 +31,7 @@ export async function listAdminProducts(req, res) {
       images: doc.images,
       stock: doc.stock,
       featured: doc.featured,
+      trending: Boolean(doc.trending),
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     })),

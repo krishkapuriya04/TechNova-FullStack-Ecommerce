@@ -1,5 +1,11 @@
+import mongoose from 'mongoose'
+
 export function buildProductFilter(query) {
   const filter = {}
+
+  if (query.excludeId && mongoose.isValidObjectId(query.excludeId)) {
+    filter._id = { $ne: new mongoose.Types.ObjectId(query.excludeId) }
+  }
 
   if (query.search) {
     const term = query.search.trim()
@@ -18,6 +24,12 @@ export function buildProductFilter(query) {
     filter.featured = true
   } else if (query.featured === 'false' || query.featured === false) {
     filter.featured = false
+  }
+
+  if (query.trending === 'true' || query.trending === true) {
+    filter.trending = true
+  } else if (query.trending === 'false' || query.trending === false) {
+    filter.trending = false
   }
 
   const min = query.minPrice

@@ -8,6 +8,8 @@ export const listProductValidators = [
   query('search').optional().isString().trim().isLength({ max: 120 }),
   query('category').optional().isString().trim().isLength({ max: 64 }),
   query('featured').optional().isIn(['true', 'false']),
+  query('trending').optional().isIn(['true', 'false']),
+  query('excludeId').optional().isMongoId(),
   query('minPrice').optional().toFloat().isFloat({ min: 0 }),
   query('maxPrice').optional().toFloat().isFloat({ min: 0 }),
   query('sort').optional().isIn(['newest', 'price_asc', 'price_desc', 'rating']),
@@ -34,6 +36,7 @@ export const createProductValidators = [
   body('images.*').optional().isString().trim().isLength({ min: 1, max: 2048 }).isURL(),
   body('stock').isInt({ min: 0 }).toInt(),
   body('featured').optional().isBoolean().toBoolean(),
+  body('trending').optional().isBoolean().toBoolean(),
   body('specifications').optional().isArray(),
   body('specifications.*.name').optional().isString().trim().isLength({ max: 80 }),
   body('specifications.*.value').optional().isString().trim().isLength({ max: 240 }),
@@ -56,5 +59,6 @@ export const updateProductValidators = [
   body('images.*').optional().isString().trim().isLength({ min: 1, max: 2048 }).isURL(),
   body('stock').optional().isInt({ min: 0 }).toInt(),
   body('featured').optional().isBoolean().toBoolean(),
+  body('trending').optional().isBoolean().toBoolean(),
   body('specifications').optional().isArray(),
 ]

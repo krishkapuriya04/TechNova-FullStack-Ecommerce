@@ -69,6 +69,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    trending: {
+      type: Boolean,
+      default: false,
+    },
     specifications: {
       type: [specSchema],
       default: [],
@@ -85,6 +89,7 @@ const productSchema = new mongoose.Schema(
 
 productSchema.index({ category: 1 })
 productSchema.index({ featured: 1 })
+productSchema.index({ trending: 1 })
 productSchema.index({ createdAt: -1 })
 
 function computeEffectivePrice(doc) {
@@ -126,6 +131,7 @@ productSchema.methods.toPublicJSON = function toPublicJSON() {
     stock: this.stock,
     ratings: this.ratings,
     featured: this.featured,
+    trending: Boolean(this.trending),
     specifications: this.specifications,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,

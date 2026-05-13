@@ -6,14 +6,33 @@ import { registerRoutes } from './routes/index.js'
 import { notFoundHandler } from './middleware/notFound.middleware.js'
 import { errorHandler } from './middleware/error.middleware.js'
 
+const allowedOrigins = new Set(env.clientOrigins)
+
+function corsOrigin(origin, callback) {
+  if (!origin) {
+    callback(null, true)
+    return
+  }
+  const normalized = origin.replace(/\/$/, '')
+  if (allowedOrigins.has(normalized)) {
+    callback(null, true)
+    return
+  }
+  callback(null, false)
+}
+
 export function createApp() {
   const app = express()
+
+  if (env.trustProxy) {
+    app.set('trust proxy', 1)
+  }
 
   app.disable('x-powered-by')
   app.use(helmet())
   app.use(
     cors({
-      origin: env.clientOrigin,
+      origin: corsOrigin,
       credentials: true,
     }),
   )

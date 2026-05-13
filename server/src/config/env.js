@@ -33,16 +33,36 @@ if (!rawMongo) {
   )
 }
 
+function parseClientOrigins() {
+  const multi = (process.env.CLIENT_ORIGINS ?? '').trim()
+  if (multi) {
+    return multi
+      .split(',')
+      .map((s) => s.trim().replace(/\/$/, ''))
+      .filter(Boolean)
+  }
+  const single = (process.env.CLIENT_ORIGIN ?? '').trim().replace(/\/$/, '')
+  if (single) return [single]
+  return ['http://localhost:5173']
+}
+
+const trustProxy =
+  process.env.TRUST_PROXY === '1' ||
+  process.env.TRUST_PROXY === 'true' ||
+  process.env.TRUST_PROXY === 'yes'
+
 export const env = {
   nodeEnv,
   isProduction,
   port: Number(process.env.PORT) || 5000,
-  clientOrigin: (process.env.CLIENT_ORIGIN ?? 'http://localhost:5173').trim(),
+  /** Allowed browser origins for CORS (comma list or single CLIENT_ORIGIN). */
+  clientOrigins: parseClientOrigins(),
   mongodbUri: rawMongo,
   jwtSecret: rawJwt,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
-  /** True when JWT_SECRET was not provided and the dev fallback is in use */
   jwtUsingDevFallback: rawJwt === JWT_DEV_FALLBACK,
+  /** When true, Express honors X-Forwarded-* (Render, Railway, etc.). */
+  trustProxy,
 }
 
 /**
@@ -51,9 +71,17 @@ export const env = {
 export function logStartupEnv() {
   const mongoState = env.mongodbUri ? 'configured' : 'MISSING (set MONGODB_URI in server/.env)'
   const jwtState = env.jwtUsingDevFallback ? 'DEV PLACEHOLDER (set JWT_SECRET for real auth)' : 'configured'
+
+  if (env.isProduction) {
+    console.log(
+      `[env] production port=${env.port} trustProxy=${env.trustProxy} origins=${env.clientOrigins.length} mongo=${mongoState === 'configured' ? 'ok' : 'MISSING'} jwt=${jwtState === 'configured' ? 'ok' : 'PLACEHOLDER'}`,
+    )
+    return
+  }
+
   console.log(`[env] Loaded from: ${envPath}`)
-  console.log(`[env] NODE_ENV=${env.nodeEnv} PORT=${env.port}`)
-  console.log(`[env] CLIENT_ORIGIN=${env.clientOrigin}`)
+  console.log(`[env] NODE_ENV=${env.nodeEnv} PORT=${env.port} trustProxy=${env.trustProxy}`)
+  console.log(`[env] CORS origins (${env.clientOrigins.length}): ${env.clientOrigins.join(' | ')}`)
   console.log(`[env] MONGODB_URI: ${mongoState}`)
   console.log(`[env] JWT_SECRET: ${jwtState}`)
 }
@@ -68,6 +96,7 @@ export function assertBootstrapConfig() {
     console.error('  1. Copy server/.env.example → server/.env')
     console.error('  2. Paste your MongoDB connection string as MONGODB_URI=')
     console.error('  3. Set a strong JWT_SECRET (required in production; recommended everywhere)')
+    console.error('  4. Set CLIENT_ORIGIN or CLIENT_ORIGINS to match your deployed frontend URL(s)')
     console.error('')
     process.exit(1)
   }

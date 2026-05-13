@@ -1,6 +1,20 @@
 import { HttpStatus } from '../constants/httpStatus.js'
 import mongoose from 'mongoose'
 
+/**
+ * Liveness — no DB check. Use for load balancers / platform health pings.
+ */
+export function getLive(req, res) {
+  res.status(HttpStatus.OK).json({
+    ok: true,
+    service: 'technova-api',
+    timestamp: new Date().toISOString(),
+  })
+}
+
+/**
+ * Readiness — includes MongoDB connection state.
+ */
 export function getHealth(req, res) {
   const dbState = mongoose.connection.readyState
   const dbOk = dbState === 1

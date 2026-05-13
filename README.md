@@ -1,67 +1,188 @@
-# TechNova (Full-Stack E-Commerce)
+# TechNova · Full-Stack E-Commerce
 
-Modern full-stack gadget e-commerce application: **React (Vite) + Tailwind** in `client/`, **Express + MongoDB + JWT-ready middleware** in `server/`.
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![JWT](https://img.shields.io/badge/Auth-JWT-fb0150?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
-## Prerequisites
+**TechNova** is a production-style electronics storefront: **React 19 + Vite + Tailwind** on the client, **Express + MongoDB Atlas + JWT** on the API. It includes a live **catalog**, **cart**, **wishlist**, **checkout**, **orders**, and an **admin** area with analytics — suitable for portfolios and recruiter demos.
 
-- [Node.js](https://nodejs.org/) 20+
-- MongoDB Atlas cluster (connection string)
+### Screenshots
 
-## Commands (what each does)
+Add images under [`docs/screenshots/`](./docs/screenshots/) and embed them here for portfolio and recruiter review.
 
-| Command | Purpose |
-|--------|---------|
-| `cd client` then `npm install` | Install frontend dependencies from `client/package.json`. |
-| `cd client` then `npm run dev` | Start Vite dev server (default [http://localhost:5173](http://localhost:5173)). |
-| `cd server` then `npm install` | Install backend dependencies from `server/package.json`. |
-| `cd server` then `npm run dev` | Start API with file watch ([http://localhost:5000](http://localhost:5000)). |
-| `cp server/.env.example server/.env` (Unix) or copy the file on Windows | Create local env file for the API. |
-| `cp client/.env.example client/.env` | Optional: set `VITE_API_BASE_URL`; dev proxy already maps `/api` to the backend. |
+<!-- ![Home](docs/screenshots/home.png) -->
 
-## Environment
+## Features
 
-- **Server:** copy `server/.env.example` → `server/.env` and set `MONGODB_URI`, `JWT_SECRET`, `CLIENT_ORIGIN`, and optional `JWT_EXPIRES_IN` (defaults to `7d`).
-- **Client:** optional `client/.env`; `VITE_API_BASE_URL` defaults to `/api/v1` (proxied to the API in dev).
+- **Storefront** — hero, trending carousel, collections, brand grid, responsive shop with filters, search suggestions, product detail with gallery and recommendations.
+- **Commerce** — JWT auth, cart, wishlist, checkout, order history (MongoDB-backed).
+- **Admin** — products CRUD, orders, users, analytics charts (Recharts).
+- **Production hooks** — API health (`/live` + DB readiness), CORS allowlist, Helmet, env validation, Vite `VITE_API_BASE_URL` for split deploys, SEO component, error boundary, scroll-to-top, PWA manifest.
 
-## Seed data
+---
 
-After MongoDB is configured, run `cd server && npm run seed` to insert demo products and a development admin:
+## Tech stack
 
-- Email: `admin@technova.dev`
-- Password: `Password123`
+| Layer | Stack |
+|--------|--------|
+| Frontend | React 19, React Router 7, Vite 8, Tailwind 4, Framer Motion, Axios, react-helmet-async |
+| Backend | Express 5, Mongoose 9, JWT, express-validator, Helmet, CORS |
+| Data | MongoDB Atlas (or local URI) |
 
-Rotate or delete this account before any production deployment.
+---
 
-## API (v1)
+## Quick start
 
-**Auth**
+### Prerequisites
 
-- `POST /api/v1/auth/register`
-- `POST /api/v1/auth/login`
-- `GET /api/v1/auth/me` (Bearer token)
+- **Node.js 20+**
+- **MongoDB Atlas** (or local MongoDB) — connection string
 
-**Products**
+### 1. Clone & install
 
-- `GET /api/v1/products` — pagination (`page`, `limit`), `search`, `category`, `featured`, `minPrice`, `maxPrice`, `sort`
-- `GET /api/v1/products/slug/:slug`
-- `GET /api/v1/products/:id`
-- `POST|PUT|DELETE /api/v1/products/...` — admin only (`role: admin` in JWT)
+```bash
+git clone https://github.com/krishkapuriya04/TechNova-FullStack-Ecommerce.git
+cd TechNova-FullStack-Ecommerce
 
-**System**
+cd server && npm install
+cd ../client && npm install
+```
 
-- `GET /api/v1/health`
+### 2. Environment
+
+**Server** — copy and edit:
+
+```bash
+cp server/.env.example server/.env   # Windows: copy server\.env.example server\.env
+```
+
+Set at minimum: **`MONGODB_URI`**, **`JWT_SECRET`**, and **`CLIENT_ORIGIN`** (or **`CLIENT_ORIGINS`** comma-separated) to match your frontend origin.
+
+**Client** (optional for local dev — Vite proxies `/api` by default):
+
+```bash
+cp client/.env.example client/.env.local
+```
+
+For **production** builds, set **`VITE_API_BASE_URL`** and **`VITE_APP_URL`** (see [DEPLOYMENT.md](./DEPLOYMENT.md)).
+
+### 3. Seed demo data
+
+```bash
+cd server
+npm run seed          # first run inserts catalog + admin user
+# npm run seed -- --fresh   # optional: wipe products and re-seed
+```
+
+**Demo admin (rotate or remove before any real deployment):**
+
+| Field | Value |
+|--------|--------|
+| Email | `admin@technova.dev` |
+| Password | `Password123` |
+
+### 4. Run
+
+```bash
+# Terminal A — API (http://localhost:5000)
+cd server && npm run dev
+
+# Terminal B — UI (http://localhost:5173)
+cd client && npm run dev
+```
+
+---
 
 ## Scripts
 
-- **Client:** `npm run dev`, `npm run build`, `npm run lint`, `npm run format`
-- **Server:** `npm run dev`, `npm start`, `npm run lint`, `npm run seed`
+| Location | Command | Purpose |
+|----------|---------|---------|
+| `client/` | `npm run dev` | Vite dev server + API proxy |
+| `client/` | `npm run build` | Production bundle → `client/dist` |
+| `client/` | `npm run lint` | ESLint |
+| `server/` | `npm run dev` | API with `--watch` |
+| `server/` | `npm start` | API (production-style) |
+| `server/` | `npm run seed` | Seed catalog + admin |
+| `server/` | `npm run lint` | ESLint |
 
-## Next phase (commerce modules)
+---
 
-- **Cart & checkout:** persist line items per user/session, integrate payments, reuse `ProtectedRoute` on `ROUTES.CHECKOUT`.
-- **Wishlist & orders:** MongoDB collections + `/api/v1/wishlist` and `/api/v1/orders`, syncing with the existing UI placeholders.
-- **Admin dashboard:** product CRUD UI using the secured admin routes and richer analytics.
+## Deployment
+
+Step-by-step guides for **Vercel** (frontend), **Render** (backend), and **Atlas** are in **[DEPLOYMENT.md](./DEPLOYMENT.md)**.
+
+Summary:
+
+1. Deploy **API** first; note the public URL (e.g. `https://…onrender.com`).
+2. Set **`CLIENT_ORIGIN`** / **`CLIENT_ORIGINS`** on the server to your **Vercel** site URL (exact match for CORS).
+3. Build the **client** with **`VITE_API_BASE_URL=https://YOUR_API/api/v1`** and **`VITE_APP_URL=https://YOUR_VERCEL_APP`**.
+
+Health checks:
+
+- `GET /api/v1/health/live` — process liveness (always 200 when up).
+- `GET /api/v1/health` — includes MongoDB readiness.
+
+---
+
+## Architecture (high level)
+
+```
+client/                 Vite SPA, lazy routes, contexts (auth/cart/wishlist)
+  src/services/api      Axios instance → VITE_API_BASE_URL or /api/v1 proxy
+  src/components/seo    Helmet-based <Seo /> per route
+
+server/                 Express app, versioned under /api/v1
+  src/routes            Feature routers (auth, products, cart, …)
+  src/config            env (dotenv path-safe), database
+  src/models            Mongoose schemas
+```
+
+---
+
+## API overview (v1)
+
+| Area | Examples |
+|------|-----------|
+| Auth | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET /api/v1/auth/me` |
+| Products | `GET /api/v1/products`, `GET /api/v1/products/slug/:slug` |
+| Cart / wishlist / orders | `/api/v1/cart`, `/api/v1/wishlist`, `/api/v1/orders` |
+| Admin | `/api/v1/admin/*` (JWT + `role: admin`) |
+| Health | `GET /api/v1/health`, `GET /api/v1/health/live` |
+
+Full detail: see earlier sections and route files under `server/src/routes/`.
+
+---
+
+## SEO & PWA
+
+- **Per-route titles / descriptions** via `react-helmet-async` and `<Seo />` on key pages.
+- **Static fallbacks** in `client/index.html` (Open Graph + Twitter defaults).
+- **`public/manifest.json`** + **`public/robots.txt`** for installable-app foundation and crawlers.
+- **`client/src/config/sitemap.js`** — seed list for a future sitemap generator.
+
+---
+
+## Security notes
+
+- Never commit **`server/.env`** or real **JWT** / **Atlas** credentials.
+- Use strong **`JWT_SECRET`** in production; the server refuses the dev placeholder when `NODE_ENV=production`.
+- Restrict Atlas **Network Access** to known IPs in real production (avoid open `0.0.0.0/0` long term).
+
+---
+
+## Future improvements
+
+- Payment provider (Stripe) + webhooks  
+- Email receipts / password reset  
+- Server-driven sitemap + SSR or prerender for flagship URLs  
+- Rate limiting & Redis session store  
+- E2E tests (Playwright) in CI  
+
+---
 
 ## License
 
-Private / your choice — add a `LICENSE` when you publish.
+Add a `LICENSE` file when you publish publicly. Until then, treat as **private / portfolio use**.

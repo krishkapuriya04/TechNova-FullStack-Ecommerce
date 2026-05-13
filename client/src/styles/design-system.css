@@ -1,0 +1,81 @@
+/**
+ * TechNova design tokens — consumed by Tailwind v4 @theme.
+ * Pair with `dark` class on <html> for premium dark aesthetics.
+ */
+
+@theme {
+  /* Surfaces — premium black / zinc */
+  --color-tn-void: #030308;
+  --color-tn-950: #07070d;
+  --color-tn-900: #0c0c14;
+  --color-tn-850: #11111a;
+  --color-tn-800: #181822;
+  --color-tn-700: #22222e;
+  --color-tn-muted: #71717b;
+  --color-tn-ink: #fafafa;
+
+  /* Accent + glow */
+  --color-tn-accent: #818cf8;
+  --color-tn-accent-strong: #6366f1;
+  --color-tn-accent-soft: #312e81;
+  --color-tn-violet: #a78bfa;
+
+  /* Radii */
+  --radius-tn-sm: 0.5rem;
+  --radius-tn: 0.75rem;
+  --radius-tn-lg: 1rem;
+  --radius-tn-xl: 1.25rem;
+  --radius-tn-2xl: 1.5rem;
+
+  /* Shadows */
+  --shadow-tn-soft: 0 18px 50px -24px rgb(0 0 0 / 0.45);
+  --shadow-tn-card: 0 12px 40px -18px rgb(0 0 0 / 0.35);
+  --shadow-tn-glow: 0 0 60px -12px rgb(99 102 241 / 0.45);
+  --shadow-tn-glow-sm: 0 0 32px -8px rgb(129 140 248 / 0.35);
+
+  /* Type scale */
+  --text-tn-display: clamp(2.25rem, 4vw + 1rem, 3.75rem);
+  --text-tn-lead: clamp(1rem, 0.6vw + 0.95rem, 1.125rem);
+
+  /* Layout */
+  --spacing-tn-section: clamp(3rem, 6vw, 5rem);
+  --max-width-tn: 72rem;
+}
+
+@layer utilities {
+  .tn-container {
+    @apply mx-auto w-full max-w-tn px-4 sm:px-6 lg:px-8;
+  }
+
+  .tn-section-y {
+    padding-block: var(--spacing-tn-section);
+  }
+
+  .tn-glow-ring {
+    box-shadow:
+      0 0 0 1px rgb(99 102 241 / 0.12),
+      var(--shadow-tn-glow-sm);
+  }
+
+  .dark .tn-glow-ring {
+    box-shadow:
+      0 0 0 1px rgb(129 140 248 / 0.18),
+      var(--shadow-tn-glow);
+  }
+
+  .tn-transition-base {
+    @apply transition-colors duration-200 ease-out;
+  }
+
+  .tn-transition-transform {
+    @apply transition-transform duration-200 ease-out;
+  }
+
+  .tn-surface {
+    @apply rounded-tn-lg border border-zinc-200/90 bg-white/80 shadow-tn-card backdrop-blur-md dark:border-white/5 dark:bg-tn-850/80;
+  }
+
+  .tn-surface-elevated {
+    @apply rounded-tn-xl border border-zinc-200 bg-white shadow-tn-soft dark:border-white/10 dark:bg-tn-900/90;
+  }
+}

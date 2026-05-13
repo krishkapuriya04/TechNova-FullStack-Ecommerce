@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+
+/* Manual dark mode via `.dark` on <html> (toggle-ready) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import './styles/design-system.css';
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-tn-void dark:text-zinc-100 font-sans transition-colors duration-200 ease-out;
+  }
+}

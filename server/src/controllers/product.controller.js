@@ -5,6 +5,9 @@ import { sendCreated, sendSuccess } from '../utils/apiResponse.js'
 import { slugify } from '../utils/slugify.js'
 import { buildProductFilter, buildProductSort } from '../utils/productQuery.js'
 
+const PLACEHOLDER_IMAGE =
+  'https://placehold.co/1200x800/e2e8f0/475569?text=TechNova+Product'
+
 export async function getProducts(req, res) {
   const page = Number(req.query.page) || 1
   const limit = Math.min(Number(req.query.limit) || 12, 50)
@@ -69,6 +72,9 @@ export async function createProduct(req, res) {
   if (!payload.slug) {
     payload.slug = slugify(payload.title)
   }
+  if (!payload.images?.length) {
+    payload.images = [PLACEHOLDER_IMAGE]
+  }
 
   try {
     const product = await Product.create(payload)
@@ -90,6 +96,9 @@ export async function updateProduct(req, res) {
   const updates = { ...req.body }
   if (updates.title && !updates.slug) {
     updates.slug = slugify(updates.title)
+  }
+  if (updates.images !== undefined && (!Array.isArray(updates.images) || updates.images.length === 0)) {
+    updates.images = [PLACEHOLDER_IMAGE]
   }
 
   Object.assign(product, updates)

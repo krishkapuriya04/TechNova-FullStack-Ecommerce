@@ -46,3 +46,6 @@ export function authorizeRoles(...roles) {
     next()
   }
 }
+
+/** Compose JWT auth + admin role check for admin-only routers. */
+export const requireAdmin = [authenticate, authorizeRoles('admin')]

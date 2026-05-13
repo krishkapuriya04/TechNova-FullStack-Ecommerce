@@ -27,8 +27,11 @@ export const createProductValidators = [
   body('discountPrice').optional({ nullable: true }).isFloat({ min: 0 }).toFloat(),
   body('category').trim().notEmpty().isLength({ max: 64 }),
   body('brand').trim().notEmpty().isLength({ max: 64 }),
-  body('images').isArray({ min: 1 }).withMessage('At least one image URL is required'),
-  body('images.*').isURL().withMessage('Each image must be a valid URL'),
+  body('images')
+    .optional()
+    .isArray({ max: 24 })
+    .withMessage('Images must be an array'),
+  body('images.*').optional().isString().trim().isLength({ min: 1, max: 2048 }).isURL(),
   body('stock').isInt({ min: 0 }).toInt(),
   body('featured').optional().isBoolean().toBoolean(),
   body('specifications').optional().isArray(),
@@ -49,8 +52,8 @@ export const updateProductValidators = [
   body('discountPrice').optional({ nullable: true }).isFloat({ min: 0 }).toFloat(),
   body('category').optional().trim().notEmpty().isLength({ max: 64 }),
   body('brand').optional().trim().notEmpty().isLength({ max: 64 }),
-  body('images').optional().isArray({ min: 1 }),
-  body('images.*').optional().isURL(),
+  body('images').optional().isArray({ min: 1, max: 24 }),
+  body('images.*').optional().isString().trim().isLength({ min: 1, max: 2048 }).isURL(),
   body('stock').optional().isInt({ min: 0 }).toInt(),
   body('featured').optional().isBoolean().toBoolean(),
   body('specifications').optional().isArray(),

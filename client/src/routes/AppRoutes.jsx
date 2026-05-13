@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom'
 import { MainLayout } from '@/layouts/MainLayout.jsx'
 import { AuthLayout } from '@/layouts/AuthLayout.jsx'
+import { AdminLayout } from '@/layouts/AdminLayout.jsx'
 import { HomePage } from '@/pages/home/HomePage.jsx'
 import { NotFoundPage } from '@/pages/notFound/NotFoundPage.jsx'
-import { PlaceholderPage } from '@/pages/PlaceholderPage.jsx'
 import { LoginPage } from '@/pages/auth/LoginPage.jsx'
 import { RegisterPage } from '@/pages/auth/RegisterPage.jsx'
 import { ShopPage } from '@/pages/shop/ShopPage.jsx'
@@ -16,6 +16,13 @@ import { CheckoutSuccessPage } from '@/pages/checkout/CheckoutSuccessPage.jsx'
 import { CartPage } from '@/pages/cart/CartPage.jsx'
 import { ProfilePage } from '@/pages/profile/ProfilePage.jsx'
 import { ProtectedRoute } from '@/components/routing/ProtectedRoute.jsx'
+import { AdminRoute } from '@/components/routing/AdminRoute.jsx'
+import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage.jsx'
+import { AdminProductsPage } from '@/pages/admin/AdminProductsPage.jsx'
+import { AdminOrdersPage } from '@/pages/admin/AdminOrdersPage.jsx'
+import { AdminUsersPage } from '@/pages/admin/AdminUsersPage.jsx'
+import { AdminAnalyticsPage } from '@/pages/admin/AdminAnalyticsPage.jsx'
+import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage.jsx'
 import { ROUTES } from '@/constants/routes.js'
 
 export function AppRoutes() {
@@ -24,6 +31,17 @@ export function AppRoutes() {
       <Route element={<AuthLayout />}>
         <Route path={ROUTES.AUTH_LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.AUTH_REGISTER} element={<RegisterPage />} />
+      </Route>
+
+      <Route path={ROUTES.ADMIN} element={<AdminRoute />}>
+        <Route element={<AdminLayout />}>
+          <Route index element={<AdminDashboardPage />} />
+          <Route path="products" element={<AdminProductsPage />} />
+          <Route path="orders" element={<AdminOrdersPage />} />
+          <Route path="users" element={<AdminUsersPage />} />
+          <Route path="analytics" element={<AdminAnalyticsPage />} />
+          <Route path="settings" element={<AdminSettingsPage />} />
+        </Route>
       </Route>
 
       <Route element={<MainLayout />}>
@@ -41,7 +59,6 @@ export function AppRoutes() {
           <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
         </Route>
 
-        <Route path={ROUTES.ADMIN} element={<PlaceholderPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

@@ -89,6 +89,11 @@ export function MobileMenu({ open, onClose }) {
                     <NavLink to={ROUTES.PROFILE} className={linkClass} onClick={onClose}>
                       Profile ({user?.name ?? 'you'})
                     </NavLink>
+                    {user?.role === 'admin' ? (
+                      <NavLink to={ROUTES.ADMIN} className={linkClass} onClick={onClose}>
+                        Admin dashboard
+                      </NavLink>
+                    ) : null}
                     <button
                       type="button"
                       className="block w-full rounded-tn px-4 py-3 text-left text-base font-semibold text-red-600 hover:bg-red-500/10 dark:text-red-300"

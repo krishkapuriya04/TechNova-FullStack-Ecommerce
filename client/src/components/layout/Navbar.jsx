@@ -78,6 +78,11 @@ export function Navbar() {
                 <NavLink to={ROUTES.PROFILE} className={authLinkClass}>
                   {user?.name?.split(' ')[0] ?? 'Profile'}
                 </NavLink>
+                {user?.role === 'admin' ? (
+                  <NavLink to={ROUTES.ADMIN} className={authLinkClass}>
+                    Admin
+                  </NavLink>
+                ) : null}
                 <button
                   type="button"
                   onClick={logout}

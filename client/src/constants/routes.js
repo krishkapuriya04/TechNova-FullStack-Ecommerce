@@ -14,6 +14,11 @@ export const ROUTES = {
   CHECKOUT_SUCCESS: '/checkout/success',
   PROFILE: '/profile',
   ADMIN: '/admin',
+  ADMIN_PRODUCTS: '/admin/products',
+  ADMIN_ORDERS: '/admin/orders',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_ANALYTICS: '/admin/analytics',
+  ADMIN_SETTINGS: '/admin/settings',
   AUTH_LOGIN: '/auth/login',
   AUTH_REGISTER: '/auth/register',
 }

@@ -11,7 +11,7 @@ export function FeaturedCategoriesSection() {
           title="Featured categories"
           subtitle="High-intent collections — swap data for CMS or API-driven categories."
         />
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {featuredCategories.map((category) => (
             <CategoryCard key={category.id} category={category} />
           ))}

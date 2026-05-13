@@ -9,9 +9,9 @@ export function FeaturedBrandsSection() {
         <SectionTitle
           eyebrow="Partners"
           title="Featured brands"
-          subtitle="Logo-ready cards with consistent spacing — drop in SVG marks when design hands off assets."
+          subtitle="Each tile jumps into a live shop search — perfect for partner landing pages while you wait on official marks."
         />
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {featuredBrands.map((brand) => (
             <BrandCard key={brand.id} brand={brand} />
           ))}

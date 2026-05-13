@@ -1,101 +1,136 @@
-/** Temporary homepage content — replace with API responses later. */
+/** Homepage marketing content — category links mirror `constants/shopTaxonomy.js`. */
 
 export const heroContent = {
   eyebrow: 'Next-gen electronics',
   title: 'Upgrade your everyday.',
   highlight: 'TechNova',
   description:
-    'Curated devices, smart home, and accessories — engineered for clarity, speed, and a premium checkout experience.',
-  primaryCta: { label: 'Shop trending', to: '/shop' },
-  secondaryCta: { label: 'View wishlist', to: '/wishlist' },
+    'Premium smartphones, laptops, gaming gear, and studio-grade audio — merchandised like a real Series A storefront with live MongoDB inventory.',
+  primaryCta: { label: 'Shop trending', to: '/shop?trending=true&sort=rating' },
+  secondaryCta: { label: 'Build a gaming setup', to: '/shop?category=Gaming&sort=newest' },
   stats: [
-    { label: 'Same-day dispatch', value: '48 cities' },
-    { label: 'Member savings', value: 'Up to 25%' },
+    { label: 'Same-day dispatch', value: 'Major metros' },
+    { label: 'Member savings', value: 'Up to 30%' },
     { label: 'Support', value: '24/7 chat' },
   ],
 }
 
+function shopCategory(category) {
+  return `/shop?category=${encodeURIComponent(category)}`
+}
+
 export const featuredCategories = [
+  {
+    id: 'cat-smartphones',
+    title: 'Smartphones',
+    description: 'Flagship silicon · 5G · pro cameras',
+    accent: 'from-violet-500/80 to-fuchsia-600/80',
+    to: shopCategory('Smartphones'),
+  },
   {
     id: 'cat-laptops',
     title: 'Laptops',
-    description: 'Workstations & ultrabooks',
+    description: 'Ultrabooks · creator · business',
     accent: 'from-indigo-500/80 to-violet-600/80',
-    to: '/shop',
+    to: shopCategory('Laptops'),
+  },
+  {
+    id: 'cat-gaming',
+    title: 'Gaming',
+    description: 'Handhelds · battlestations',
+    accent: 'from-fuchsia-500/80 to-rose-600/80',
+    to: shopCategory('Gaming'),
   },
   {
     id: 'cat-audio',
     title: 'Audio',
     description: 'ANC · studio · portable',
-    accent: 'from-fuchsia-500/80 to-pink-600/80',
-    to: '/shop',
-  },
-  {
-    id: 'cat-wearables',
-    title: 'Wearables',
-    description: 'Health & performance',
     accent: 'from-cyan-500/80 to-blue-600/80',
-    to: '/shop',
+    to: shopCategory('Audio'),
   },
   {
-    id: 'cat-smart-home',
-    title: 'Smart home',
-    description: 'Lights · hubs · security',
+    id: 'cat-watches',
+    title: 'Smart watches',
+    description: 'Health stacks · endurance GPS',
     accent: 'from-emerald-500/80 to-teal-600/80',
-    to: '/shop',
+    to: shopCategory('Smart Watches'),
+  },
+  {
+    id: 'cat-monitors',
+    title: 'Monitors',
+    description: 'OLED · ultrawide · color',
+    accent: 'from-amber-500/80 to-orange-600/80',
+    to: shopCategory('Monitors'),
+  },
+  {
+    id: 'cat-keyboards',
+    title: 'Keyboards',
+    description: 'Mechanical · low profile',
+    accent: 'from-sky-500/80 to-indigo-600/80',
+    to: shopCategory('Keyboards'),
+  },
+  {
+    id: 'cat-tablets',
+    title: 'Tablets',
+    description: 'Creators · readers · 5G',
+    accent: 'from-rose-500/80 to-purple-600/80',
+    to: shopCategory('Tablets'),
   },
 ]
 
 export const trendingProducts = [
   {
-    id: 'p-nova-x1',
-    title: 'NovaBook X1',
-    price: 1899,
-    rating: 4.8,
-    reviewCount: 312,
-    imageHint: '16" OLED · 32GB RAM',
+    id: 'p-iphone',
+    title: 'iPhone 15 Pro',
+    price: 1199,
+    rating: 4.9,
+    reviewCount: 8420,
+    imageHint: 'Titanium · Action button',
     gradient: 'from-indigo-600 via-violet-600 to-fuchsia-500',
   },
   {
-    id: 'p-pulse-ear',
-    title: 'Pulse ANC Pro',
-    price: 249,
-    rating: 4.6,
-    reviewCount: 1284,
-    imageHint: 'Hybrid noise canceling',
+    id: 'p-galaxy',
+    title: 'Galaxy S24 Ultra',
+    price: 1419,
+    rating: 4.8,
+    reviewCount: 6120,
+    imageHint: 'S Pen · 200MP sensor',
     gradient: 'from-slate-700 via-zinc-800 to-zinc-900',
   },
   {
-    id: 'p-orbit-watch',
-    title: 'Orbit Watch Ultra',
-    price: 429,
+    id: 'p-airpods',
+    title: 'AirPods Pro (2nd gen)',
+    price: 249,
     rating: 4.7,
-    reviewCount: 891,
-    imageHint: 'Titanium · satellite SOS',
+    reviewCount: 15400,
+    imageHint: 'USB-C · Adaptive Audio',
     gradient: 'from-sky-600 via-blue-700 to-indigo-800',
   },
   {
-    id: 'p-lumen-hub',
-    title: 'Lumen Hub Max',
-    price: 179,
-    rating: 4.5,
-    reviewCount: 640,
-    imageHint: 'Matter-ready smart hub',
+    id: 'p-rog',
+    title: 'ROG Zephyrus G16',
+    price: 2299,
+    rating: 4.8,
+    reviewCount: 980,
+    imageHint: 'OLED · RTX 4080',
     gradient: 'from-amber-500 via-orange-600 to-rose-600',
   },
 ]
 
 export const featuredBrands = [
-  { id: 'b-aurora', name: 'Aurora', tagline: 'Displays & panels' },
-  { id: 'b-helix', name: 'Helix Audio', tagline: 'Signature sound' },
-  { id: 'b-vertex', name: 'Vertex Labs', tagline: 'AI edge devices' },
+  { id: 'b-apple', name: 'Apple', tagline: 'Phones · tablets · wearables', to: '/shop?search=Apple' },
+  { id: 'b-samsung', name: 'Samsung', tagline: 'Galaxy ecosystem', to: '/shop?search=Samsung' },
+  { id: 'b-sony', name: 'Sony', tagline: 'Alpha-grade audio', to: '/shop?search=Sony' },
+  { id: 'b-asus', name: 'ASUS', tagline: 'ROG · ProArt · Zenbook', to: '/shop?search=ASUS' },
+  { id: 'b-logi', name: 'Logitech', tagline: 'MX workspace · PRO play', to: '/shop?search=Logitech' },
+  { id: 'b-razer', name: 'Razer', tagline: 'Chroma everything', to: '/shop?search=Razer' },
 ]
 
 export const promoBanner = {
-  badge: 'Member week',
-  title: '20% off flagship laptops',
-  subtitle: 'Ends Sunday · auto-applied at checkout for logged-in members.',
-  cta: { label: 'Unlock deal', to: '/shop' },
+  badge: 'Spring upgrade',
+  title: 'Up to $250 off creator laptops',
+  subtitle: 'Auto-refreshed from MongoDB discount pricing — ends when inventory clears.',
+  cta: { label: 'Browse laptops', to: '/shop?category=Laptops&sort=price_asc' },
 }
 
 export const newsletterContent = {

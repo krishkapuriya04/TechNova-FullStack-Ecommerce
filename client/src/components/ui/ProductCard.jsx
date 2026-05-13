@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth.js'
 import { useCart } from '@/hooks/useCart.js'
 import { useWishlist } from '@/hooks/useWishlist.js'
 import { getErrorMessage } from '@/utils/apiError.js'
+import { ProductImage } from '@/components/ui/ProductImage.jsx'
 
 function hashGradient(seed) {
   const palettes = [
@@ -112,47 +113,60 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
       <div className="relative">
         {detailTo ? (
           <Link to={detailTo} className="block" aria-label={`View ${product.title}`}>
-            <div
-              className={`relative aspect-[4/3] ${
-                hero ? 'bg-zinc-100 dark:bg-tn-950' : `bg-gradient-to-br ${gradient}`
-              }`}
-            >
+            <div className="relative">
               {hero ? (
-                <img
+                <ProductImage
                   src={hero}
                   alt={product.title}
-                  className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                  loading="lazy"
+                  seed={detailSlug ?? product.slug ?? product.id}
+                  aspectClassName="aspect-[4/3]"
+                  className="rounded-none"
                 />
               ) : (
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.35),transparent_55%)]" />
+                <div
+                  className={`relative aspect-[4/3] bg-gradient-to-br ${gradient} overflow-hidden`}
+                >
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.35),transparent_55%)]" />
+                </div>
               )}
-              <div className="absolute inset-x-4 bottom-4 rounded-lg bg-black/25 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm dark:bg-black/35">
+              <div className="pointer-events-none absolute inset-x-4 bottom-4 rounded-lg bg-black/25 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm dark:bg-black/35">
                 {hint}
               </div>
             </div>
           </Link>
         ) : (
-          <div
-            className={`relative aspect-[4/3] ${
-              hero ? 'bg-zinc-100 dark:bg-tn-950' : `bg-gradient-to-br ${gradient}`
-            }`}
-          >
+          <div className="relative">
             {hero ? (
-              <img
+              <ProductImage
                 src={hero}
                 alt={product.title}
-                className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                loading="lazy"
+                seed={product.slug ?? product.id}
+                aspectClassName="aspect-[4/3]"
               />
             ) : (
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.35),transparent_55%)]" />
+              <div
+                className={`relative aspect-[4/3] bg-gradient-to-br ${gradient} overflow-hidden`}
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.35),transparent_55%)]" />
+              </div>
             )}
-            <div className="absolute inset-x-4 bottom-4 rounded-lg bg-black/25 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm dark:bg-black/35">
+            <div className="pointer-events-none absolute inset-x-4 bottom-4 rounded-lg bg-black/25 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm dark:bg-black/35">
               {hint}
             </div>
           </div>
         )}
+        <div className="pointer-events-none absolute left-3 top-3 flex flex-wrap gap-2">
+          {product.featured ? (
+            <span className="rounded-full bg-amber-500/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-zinc-950 shadow">
+              Featured
+            </span>
+          ) : null}
+          {product.trending ? (
+            <span className="rounded-full bg-fuchsia-600/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow">
+              Trending
+            </span>
+          ) : null}
+        </div>
         <button
           type="button"
           disabled={commerceLocked || heartBusy}

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { fetchProducts } from '@/services/productService.js'
-import { sleep } from '@/utils/sleep.js'
 import { SectionTitle } from '@/components/ui/SectionTitle.jsx'
 import { ProductCard } from '@/components/ui/ProductCard.jsx'
 import { ProductGridSkeleton } from '@/components/ui/LoadingSkeleton.jsx'
+import { ProductCarousel, ProductCarouselItem } from '@/components/home/ProductCarousel.jsx'
 import { getErrorMessage } from '@/utils/apiError.js'
 
 export function TrendingProductsSection() {
@@ -18,11 +18,10 @@ export function TrendingProductsSection() {
       setLoading(true)
       setError('')
       try {
-        await sleep(450)
-        const payload = await fetchProducts({ featured: 'true', limit: '4', sort: 'rating' })
+        const payload = await fetchProducts({ trending: 'true', limit: '12', sort: 'rating' })
         if (active) setProducts(payload.products)
       } catch (err) {
-        if (active) setError(getErrorMessage(err, 'Unable to load featured products'))
+        if (active) setError(getErrorMessage(err, 'Unable to load trending products'))
       } finally {
         if (active) setLoading(false)
       }
@@ -36,11 +35,11 @@ export function TrendingProductsSection() {
 
   return (
     <section className="tn-section-y">
-      <div className="tn-container">
+      <div className="tn-container space-y-8">
         <SectionTitle
           eyebrow="Trending"
-          title="Products shoppers love"
-          subtitle="Pulled live from MongoDB — featured catalog items rotate with your merchandising rules."
+          title="What the community is buying"
+          subtitle="Live trending flags from MongoDB — ideal for homepage carousels and campaign landings."
         />
         {error ? (
           <p className="rounded-tn-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
@@ -50,11 +49,13 @@ export function TrendingProductsSection() {
         {loading ? (
           <ProductGridSkeleton count={4} />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          <ProductCarousel className="px-0.5">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} detailSlug={product.slug} />
+              <ProductCarouselItem key={product.id}>
+                <ProductCard product={product} detailSlug={product.slug} />
+              </ProductCarouselItem>
             ))}
-          </div>
+          </ProductCarousel>
         )}
       </div>
     </section>

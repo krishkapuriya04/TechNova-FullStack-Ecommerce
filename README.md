@@ -1,6 +1,6 @@
-# TechNova
+# TechNova (Full-Stack E-Commerce)
 
-Full-stack e-commerce foundation: **React (Vite) + Tailwind** in `client/`, **Express + MongoDB + JWT-ready middleware** in `server/`.
+Modern full-stack gadget e-commerce application: **React (Vite) + Tailwind** in `client/`, **Express + MongoDB + JWT-ready middleware** in `server/`.
 
 ## Prerequisites
 

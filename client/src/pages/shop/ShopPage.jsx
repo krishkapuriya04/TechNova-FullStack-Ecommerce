@@ -5,9 +5,13 @@ import { SectionTitle } from '@/components/ui/SectionTitle.jsx'
 import { ProductGridSkeleton } from '@/components/ui/LoadingSkeleton.jsx'
 import { PageLoader } from '@/components/ui/PageLoader.jsx'
 import { ShopToolbar } from '@/components/shop/ShopToolbar.jsx'
+import { ShopCategoryNav } from '@/components/shop/ShopCategoryNav.jsx'
 import { ProductCard } from '@/components/ui/ProductCard.jsx'
+import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
 import { getErrorMessage } from '@/utils/apiError.js'
 import { useDebounce } from '@/hooks/useDebounce.js'
+import { pushRecentSearch } from '@/hooks/useRecentSearches.js'
+import { ROUTES } from '@/constants/routes.js'
 
 export function ShopPage() {
   const [params, setParams] = useSearchParams()
@@ -19,6 +23,8 @@ export function ShopPage() {
 
   const [searchInput, setSearchInput] = useState(() => params.get('search') ?? '')
   const debouncedSearch = useDebounce(searchInput, 400)
+
+  const searchInUrl = params.get('search') ?? ''
 
   useEffect(() => {
     startTransition(() => {
@@ -38,6 +44,11 @@ export function ShopPage() {
     next.delete('page')
     setParams(next, { replace: true })
   }, [debouncedSearch, params, setParams])
+
+  useEffect(() => {
+    const s = searchInUrl.trim()
+    if (s.length >= 2) pushRecentSearch(s)
+  }, [searchInUrl])
 
   useEffect(() => {
     let active = true
@@ -61,80 +72,108 @@ export function ShopPage() {
     }
   }, [queryKey, params])
 
+  const emptyResults = Boolean(data) && !loading && data.meta.total === 0
+
   return (
     <div className="tn-section-y">
-      <div className="tn-container space-y-10">
+      <div className="tn-container space-y-8">
         <SectionTitle
           eyebrow="Catalog"
           title="Shop the collection"
-          subtitle="Live inventory powered by MongoDB — filters sync to the URL for shareable searches."
+          subtitle="Filters sync to the URL for shareable searches — sticky controls keep context while you scroll."
         />
 
         <ShopToolbar searchInput={searchInput} onSearchChange={setSearchInput} />
 
-        {loading && !data ? <ProductGridSkeleton count={8} /> : null}
+        <div className="grid gap-10 xl:grid-cols-[15rem_minmax(0,1fr)] xl:items-start">
+          <aside className="hidden xl:block">
+            <div className="sticky top-24 rounded-tn-2xl border border-zinc-200/80 bg-white/80 p-4 shadow-sm dark:border-white/10 dark:bg-tn-900/70">
+              <ShopCategoryNav />
+            </div>
+          </aside>
 
-        {error ? (
-          <p className="rounded-tn-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200">
-            {error}
-          </p>
-        ) : null}
+          <div className="space-y-8">
+            {loading && !data ? <ProductGridSkeleton count={8} /> : null}
 
-        {loading && data ? <PageLoader label="Updating results…" /> : null}
-
-        {data ? (
-          <>
-            <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-zinc-600 dark:text-zinc-400">
-              <p>
-                Showing{' '}
-                <span className="font-semibold text-zinc-900 dark:text-white">
-                  {data.products.length}
-                </span>{' '}
-                of{' '}
-                <span className="font-semibold text-zinc-900 dark:text-white">
-                  {data.meta.total}
-                </span>{' '}
-                products
+            {error ? (
+              <p className="rounded-tn-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200">
+                {error}
               </p>
-              <p>
-                Page {data.meta.page} / {data.meta.pages}
-              </p>
-            </div>
+            ) : null}
 
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {data.products.map((product) => (
-                <ProductCard key={product.id} product={product} detailSlug={product.slug} />
-              ))}
-            </div>
+            {loading && data ? <PageLoader label="Updating results…" /> : null}
 
-            <div className="flex items-center justify-center gap-3 pt-4">
-              <button
-                type="button"
-                disabled={data.meta.page <= 1 || loading}
-                onClick={() => {
-                  const next = new URLSearchParams(params)
-                  next.set('page', String(data.meta.page - 1))
-                  setParams(next, { replace: true })
-                }}
-                className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-indigo-400 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
-              >
-                Previous
-              </button>
-              <button
-                type="button"
-                disabled={data.meta.page >= data.meta.pages || loading}
-                onClick={() => {
-                  const next = new URLSearchParams(params)
-                  next.set('page', String(data.meta.page + 1))
-                  setParams(next, { replace: true })
-                }}
-                className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-indigo-400 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
-              >
-                Next
-              </button>
-            </div>
-          </>
-        ) : null}
+            {emptyResults ? (
+              <div className="rounded-tn-2xl border border-dashed border-zinc-300/80 bg-white/70 px-8 py-16 text-center dark:border-white/15 dark:bg-tn-900/50">
+                <p className="text-lg font-semibold text-zinc-900 dark:text-white">No matches for this search</p>
+                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  Try clearing filters, browsing categories from the sidebar, or searching for a brand like Apple or
+                  Samsung.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <PrimaryButton
+                    type="button"
+                    onClick={() => {
+                      setSearchInput('')
+                      setParams(new URLSearchParams(), { replace: true })
+                    }}
+                  >
+                    Reset catalog
+                  </PrimaryButton>
+                  <PrimaryButton to={ROUTES.HOME}>Back to homepage</PrimaryButton>
+                </div>
+              </div>
+            ) : null}
+
+            {data && !emptyResults ? (
+              <>
+                <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-zinc-600 dark:text-zinc-400">
+                  <p>
+                    Showing{' '}
+                    <span className="font-semibold text-zinc-900 dark:text-white">{data.products.length}</span> of{' '}
+                    <span className="font-semibold text-zinc-900 dark:text-white">{data.meta.total}</span> products
+                  </p>
+                  <p>
+                    Page {data.meta.page} / {data.meta.pages}
+                  </p>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {data.products.map((product) => (
+                    <ProductCard key={product.id} product={product} detailSlug={product.slug} />
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-center gap-3 pt-4">
+                  <button
+                    type="button"
+                    disabled={data.meta.page <= 1 || loading}
+                    onClick={() => {
+                      const next = new URLSearchParams(params)
+                      next.set('page', String(data.meta.page - 1))
+                      setParams(next, { replace: true })
+                    }}
+                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-indigo-400 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    disabled={data.meta.page >= data.meta.pages || loading}
+                    onClick={() => {
+                      const next = new URLSearchParams(params)
+                      next.set('page', String(data.meta.page + 1))
+                      setParams(next, { replace: true })
+                    }}
+                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-indigo-400 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
+                  >
+                    Next
+                  </button>
+                </div>
+              </>
+            ) : null}
+          </div>
+        </div>
       </div>
     </div>
   )

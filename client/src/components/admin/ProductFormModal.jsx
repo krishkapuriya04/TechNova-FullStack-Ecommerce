@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
 import { SecondaryButton } from '@/components/ui/SecondaryButton.jsx'
+import { ProductImage } from '@/components/ui/ProductImage.jsx'
 import { createProduct, updateProduct } from '@/services/productService.js'
 import { getErrorMessage } from '@/utils/apiError.js'
+import { SHOP_CATEGORIES } from '@/constants/shopTaxonomy.js'
 
 const emptyForm = {
   title: '',
@@ -18,6 +20,7 @@ const emptyForm = {
   images: '',
   stock: '',
   featured: false,
+  trending: false,
 }
 
 function toForm(product) {
@@ -34,12 +37,23 @@ function toForm(product) {
     images: (product.images ?? []).join('\n'),
     stock: String(product.stock ?? ''),
     featured: Boolean(product.featured),
+    trending: Boolean(product.trending),
   }
 }
 
 export function ProductFormModal({ open, product, onClose, onSaved }) {
   const [form, setForm] = useState(() => toForm(product))
   const [saving, setSaving] = useState(false)
+
+  const imageUrls = useMemo(
+    () =>
+      form.images
+        .split(/[\n,]+/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 6),
+    [form.images],
+  )
 
   if (typeof document === 'undefined') return null
 
@@ -69,6 +83,7 @@ export function ProductFormModal({ open, product, onClose, onSaved }) {
       images: images.length ? images : undefined,
       stock,
       featured: form.featured,
+      trending: form.trending,
     }
     const dp = form.discountPrice.trim()
     if (dp) {
@@ -116,14 +131,16 @@ export function ProductFormModal({ open, product, onClose, onSaved }) {
             initial={{ y: 16, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 16, opacity: 0 }}
-            className="relative z-10 w-full max-w-lg rounded-tn-2xl border border-white/10 bg-tn-900/95 p-6 shadow-2xl backdrop-blur-xl"
+            className="relative z-10 w-full max-w-2xl rounded-tn-2xl border border-white/10 bg-tn-900/95 p-6 shadow-2xl backdrop-blur-xl"
           >
             <h2 className="text-lg font-semibold text-white">
               {product?.id ? 'Edit product' : 'New product'}
             </h2>
-            <div className="mt-4 max-h-[70vh] space-y-3 overflow-y-auto pr-1">
-              <Field label="Title" value={form.title} onChange={(v) => setForm((f) => ({ ...f, title: v }))} />
-              <Field label="Slug (optional)" value={form.slug} onChange={(v) => setForm((f) => ({ ...f, slug: v }))} />
+            <div className="mt-4 max-h-[75vh] space-y-4 overflow-y-auto pr-1">
+              <div className="grid gap-3 lg:grid-cols-2">
+                <Field label="Title" value={form.title} onChange={(v) => setForm((f) => ({ ...f, title: v }))} />
+                <Field label="Slug (optional)" value={form.slug} onChange={(v) => setForm((f) => ({ ...f, slug: v }))} />
+              </div>
               <Field
                 label="Description"
                 value={form.description}
@@ -140,7 +157,21 @@ export function ProductFormModal({ open, product, onClose, onSaved }) {
                 />
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                <Field label="Category" value={form.category} onChange={(v) => setForm((f) => ({ ...f, category: v }))} />
+                <div>
+                  <label className="text-xs font-semibold text-zinc-400">Category</label>
+                  <select
+                    value={form.category}
+                    onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+                    className="mt-2 w-full rounded-tn border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none ring-indigo-400/30 focus:ring-2"
+                  >
+                    <option value="">Select category</option>
+                    {SHOP_CATEGORIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <Field label="Brand" value={form.brand} onChange={(v) => setForm((f) => ({ ...f, brand: v }))} />
               </div>
               <Field label="Stock" type="number" value={form.stock} onChange={(v) => setForm((f) => ({ ...f, stock: v }))} />
@@ -154,15 +185,38 @@ export function ProductFormModal({ open, product, onClose, onSaved }) {
                   placeholder="https://…"
                 />
               </div>
-              <label className="flex items-center gap-2 text-sm text-zinc-300">
-                <input
-                  type="checkbox"
-                  checked={form.featured}
-                  onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
-                  className="rounded border-white/20 bg-black/30 accent-indigo-500"
-                />
-                Featured catalog
-              </label>
+              {imageUrls.length ? (
+                <div>
+                  <p className="text-xs font-semibold text-zinc-400">Preview</p>
+                  <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {imageUrls.map((url) => (
+                      <div key={url} className="overflow-hidden rounded-tn border border-white/10">
+                        <ProductImage src={url} alt="" seed={url} aspectClassName="aspect-[4/3] w-full" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              <div className="flex flex-wrap gap-4">
+                <label className="flex items-center gap-2 text-sm text-zinc-300">
+                  <input
+                    type="checkbox"
+                    checked={form.featured}
+                    onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
+                    className="rounded border-white/20 bg-black/30 accent-indigo-500"
+                  />
+                  Featured catalog
+                </label>
+                <label className="flex items-center gap-2 text-sm text-zinc-300">
+                  <input
+                    type="checkbox"
+                    checked={form.trending}
+                    onChange={(e) => setForm((f) => ({ ...f, trending: e.target.checked }))}
+                    className="rounded border-white/20 bg-black/30 accent-indigo-500"
+                  />
+                  Trending
+                </label>
+              </div>
             </div>
             <div className="mt-6 flex justify-end gap-2">
               <SecondaryButton type="button" onClick={onClose} disabled={saving}>

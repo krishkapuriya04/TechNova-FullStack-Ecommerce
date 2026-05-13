@@ -110,13 +110,14 @@ export function AdminProductsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[52rem] text-left text-sm">
+            <table className="w-full min-w-[58rem] text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-500">
                   <th className="px-4 py-3">Product</th>
                   <th className="px-4 py-3">Price</th>
                   <th className="px-4 py-3">Stock</th>
                   <th className="px-4 py-3">Featured</th>
+                  <th className="px-4 py-3">Trending</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -137,6 +138,7 @@ export function AdminProductsPage() {
                     <td className="px-4 py-3 font-semibold text-white">{formatCurrency(p.effectivePrice)}</td>
                     <td className="px-4 py-3">{p.stock}</td>
                     <td className="px-4 py-3">{p.featured ? 'Yes' : '—'}</td>
+                    <td className="px-4 py-3">{p.trending ? 'Yes' : '—'}</td>
                     <td className="px-4 py-3 text-right">
                       <button
                         type="button"

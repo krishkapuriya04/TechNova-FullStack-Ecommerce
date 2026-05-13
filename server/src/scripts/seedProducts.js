@@ -1,10 +1,8 @@
-import dotenv from 'dotenv'
+import '../config/env.js'
 import { connectDatabase, disconnectDatabase } from '../config/database.js'
 import { Product } from '../models/Product.js'
 import { User } from '../models/User.js'
 import { generateBulkCatalog } from './lib/generateBulkCatalog.js'
-
-dotenv.config()
 
 const ADMIN_EMAIL = 'admin@technova.dev'
 const ADMIN_PASSWORD = 'Password123'

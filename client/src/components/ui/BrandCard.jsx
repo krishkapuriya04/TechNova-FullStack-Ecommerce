@@ -7,7 +7,7 @@ export function BrandCard({ brand }) {
   const inner = (
     <>
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 items-center justify-center rounded-tn bg-gradient-to-br from-sky-500 to-cyan-600 text-sm font-bold text-white shadow-tn-glow-sm">
+        <span className="flex h-11 w-11 items-center justify-center rounded-tn bg-gradient-to-br from-teal-500 to-cyan-600 text-sm font-bold text-white shadow-tn-glow-sm">
           {brand.name.slice(0, 1)}
         </span>
         <div>
@@ -22,7 +22,7 @@ export function BrandCard({ brand }) {
   )
 
   const surfaceClass =
-    'tn-surface-elevated flex h-full flex-col justify-between gap-4 rounded-tn-xl p-6 tn-transition-base hover:border-sky-300/40 dark:hover:border-sky-400/25'
+    'tn-surface-elevated flex h-full flex-col justify-between gap-4 rounded-tn-xl p-6 tn-transition-base hover:border-teal-400/40 dark:hover:border-teal-400/25'
 
   return (
     <motion.div

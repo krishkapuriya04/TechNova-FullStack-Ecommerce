@@ -4,8 +4,9 @@ import { BrandCard } from '@/components/ui/BrandCard.jsx'
 
 export function FeaturedBrandsSection() {
   return (
-    <section className="border-t border-zinc-200/80 bg-white/60 py-16 dark:border-white/5 dark:bg-tn-900/40">
-      <div className="tn-container">
+    <section className="relative overflow-hidden border-t border-zinc-200/70 bg-gradient-to-b from-white to-zinc-50 py-16 dark:border-white/[0.06] dark:from-tn-950 dark:to-black">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/20 to-transparent" />
+      <div className="tn-container relative">
         <SectionTitle
           eyebrow="Partners"
           title="Featured brands"

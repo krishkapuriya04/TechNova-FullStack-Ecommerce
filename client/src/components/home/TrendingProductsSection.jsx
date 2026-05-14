@@ -40,22 +40,27 @@ export function TrendingProductsSection() {
   }, [])
 
   return (
-    <section className="tn-section-y">
-      <div className="tn-container space-y-8">
+    <section className="relative overflow-hidden tn-section-y">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-zinc-50/90 via-white to-zinc-100/80 dark:from-tn-950 dark:via-black/80 dark:to-tn-void" />
+      <div
+        className="pointer-events-none absolute -right-24 top-1/4 h-72 w-72 rounded-full bg-teal-500/10 blur-[100px] dark:bg-teal-500/15"
+        aria-hidden
+      />
+      <div className="tn-container relative space-y-8">
         <SectionTitle
           eyebrow="Trending"
           title="What the community is buying"
           subtitle="Live trending flags from MongoDB — ideal for homepage carousels and campaign landings."
         />
         {error ? (
-          <p className="rounded-tn-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
+          <p className="rounded-tn-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-950 dark:text-amber-100">
             {error}
           </p>
         ) : null}
         {loading ? (
           <ProductGridSkeleton count={4} />
         ) : products.length === 0 && !error ? (
-          <p className="rounded-tn-lg border border-zinc-200/80 bg-zinc-50/80 px-4 py-6 text-center text-sm text-zinc-600 dark:border-white/10 dark:bg-tn-900/50 dark:text-zinc-400">
+          <p className="rounded-tn-2xl border border-dashed border-zinc-300/90 bg-white/70 px-6 py-10 text-center text-sm text-zinc-600 shadow-inner dark:border-white/12 dark:bg-zinc-950/50 dark:text-zinc-400">
             No trending products yet. Seed the catalog or mark items as trending in Admin → Products.
           </p>
         ) : (

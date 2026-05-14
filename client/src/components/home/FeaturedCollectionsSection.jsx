@@ -9,14 +9,14 @@ const collections = [
     id: 'col-creator',
     title: 'Creator workstations',
     subtitle: 'OLED laptops · color-accurate monitors',
-    accent: 'from-sky-500/90 to-cyan-600/90',
+    accent: 'from-teal-500/90 to-cyan-600/90',
     params: { category: 'Laptops', sort: 'rating' },
   },
   {
     id: 'col-game',
     title: 'Battle-ready setups',
     subtitle: 'High-refresh panels · precision mice',
-    accent: 'from-rose-600/90 to-orange-600/90',
+    accent: 'from-zinc-700/90 via-slate-800/90 to-teal-700/90',
     params: { category: 'Gaming', sort: 'newest' },
   },
   {
@@ -37,8 +37,10 @@ export function FeaturedCollectionsSection() {
   const reduceMotion = usePrefersReducedMotion()
 
   return (
-    <section className="tn-section-y bg-white/70 dark:bg-tn-950/40">
-      <div className="tn-container space-y-10">
+    <section className="relative overflow-hidden tn-section-y">
+      <div className="pointer-events-none absolute inset-0 bg-white/80 dark:bg-tn-950/50" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/25 to-transparent" />
+      <div className="tn-container relative space-y-10">
         <SectionTitle
           eyebrow="Collections"
           title="Featured edits"
@@ -55,19 +57,19 @@ export function FeaturedCollectionsSection() {
             >
               <Link
                 to={shopHref(col.params)}
-                className="group relative block overflow-hidden rounded-tn-2xl border border-zinc-200/80 bg-zinc-50 p-8 shadow-tn-card transition hover:-translate-y-1 hover:border-sky-300/60 dark:border-white/10 dark:bg-tn-900/80 dark:hover:border-sky-400/30"
+                className="group relative block overflow-hidden rounded-tn-3xl border border-zinc-200/70 bg-zinc-50/90 p-8 shadow-tn-card backdrop-blur-md transition hover:-translate-y-1 hover:border-teal-400/45 hover:shadow-tn-lift dark:border-white/[0.07] dark:bg-zinc-950/70 dark:hover:border-teal-400/30"
               >
                 <div
-                  className={`pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br ${col.accent} opacity-40 blur-3xl transition duration-500 group-hover:opacity-70`}
+                  className={`pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-gradient-to-br ${col.accent} opacity-35 blur-3xl transition duration-500 group-hover:opacity-65`}
                   aria-hidden
                 />
                 <div className="relative space-y-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-300">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-700 dark:text-teal-300">
                     Shop the edit
                   </p>
-                  <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">{col.title}</h3>
+                  <h3 className="text-2xl font-semibold text-zinc-950 dark:text-white">{col.title}</h3>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">{col.subtitle}</p>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-sky-600 dark:text-sky-300">
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700 dark:text-teal-300">
                     Explore collection
                     <span aria-hidden>→</span>
                   </span>

@@ -4,8 +4,9 @@ import { CategoryCard } from '@/components/ui/CategoryCard.jsx'
 
 export function FeaturedCategoriesSection() {
   return (
-    <section className="border-y border-zinc-200/80 bg-zinc-50/80 py-16 dark:border-white/5 dark:bg-tn-950/60">
-      <div className="tn-container">
+    <section className="relative overflow-hidden border-y border-zinc-200/70 py-16 dark:border-white/[0.06]">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-zinc-100/95 via-zinc-50 to-white dark:from-tn-void dark:via-tn-950 dark:to-black" />
+      <div className="tn-container relative">
         <SectionTitle
           eyebrow="Browse"
           title="Featured categories"

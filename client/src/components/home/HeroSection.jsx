@@ -38,83 +38,101 @@ export function HeroSection() {
   }, [])
 
   return (
-    <section className="relative overflow-hidden border-b border-zinc-200/80 bg-gradient-to-b from-white via-zinc-50 to-zinc-100 dark:border-white/5 dark:from-tn-void dark:via-tn-950 dark:to-slate-950 tn-section-y">
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgb(14_165_233/0.12),transparent)] dark:bg-[radial-gradient(ellipse_70%_45%_at_50%_-10%,rgb(56_189_248/0.14),transparent)]" />
-        <motion.div
-          className="absolute -right-24 top-20 h-[22rem] w-[22rem] rounded-full bg-sky-400/20 blur-[120px] dark:bg-sky-500/12"
-          animate={
-            reduceMotion
-              ? undefined
-              : {
-                  opacity: [0.35, 0.55, 0.35],
-                  scale: [1, 1.05, 1],
-                }
-          }
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-cyan-500/15 blur-[100px] dark:bg-cyan-400/10"
-          animate={
-            reduceMotion
-              ? undefined
-              : {
-                  x: [0, 12, 0],
-                  y: [0, -8, 0],
-                }
-          }
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
+    <section className="relative overflow-hidden border-b border-zinc-200/60 bg-gradient-to-b from-white via-zinc-50 to-zinc-100 dark:border-white/[0.06] dark:from-tn-void dark:via-tn-950 dark:to-black tn-section-y">
+      <div className="pointer-events-none absolute inset-0 tn-grid-faint opacity-60 dark:opacity-100" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0 dark:tn-mesh-hero-dark tn-mesh-hero-light"
+        aria-hidden
+      />
+      <motion.div
+        className="pointer-events-none absolute -right-32 top-10 h-[28rem] w-[28rem] rounded-full bg-teal-400/15 blur-[120px] dark:bg-teal-500/12"
+        aria-hidden
+        animate={
+          reduceMotion
+            ? undefined
+            : {
+                opacity: [0.35, 0.55, 0.35],
+                scale: [1, 1.06, 1],
+              }
+        }
+        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="pointer-events-none absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-cyan-400/12 blur-[100px] dark:bg-cyan-500/10"
+        aria-hidden
+        animate={
+          reduceMotion
+            ? undefined
+            : {
+                x: [0, 16, 0],
+                y: [0, -10, 0],
+              }
+        }
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+      />
 
-      <div className="tn-container relative grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-center lg:gap-16">
+      <div className="tn-container relative flex flex-col gap-14 lg:gap-16 xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] xl:items-center">
         <motion.div
-          initial={reduceMotion ? undefined : { opacity: 0, y: 18 }}
+          initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="space-y-8"
+          className="order-2 max-w-2xl space-y-8 xl:order-1"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-700 dark:text-sky-300/95">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-teal-700 dark:text-teal-300/95">
             {heroContent.eyebrow}
           </p>
-          <h1 className="text-balance text-tn-display font-semibold tracking-tight text-zinc-900 dark:text-white">
+          <h1 className="text-balance text-tn-display font-semibold tracking-tight text-zinc-950 dark:text-white">
             {heroContent.title}{' '}
-            <span className="bg-gradient-to-r from-sky-500 via-cyan-400 to-sky-300 bg-clip-text text-transparent dark:from-sky-400 dark:via-cyan-300 dark:to-sky-200">
+            <span className="bg-gradient-to-r from-teal-500 via-cyan-400 to-teal-300 bg-clip-text text-transparent dark:from-teal-400 dark:via-cyan-300 dark:to-teal-200">
               {heroContent.highlight}
             </span>
           </h1>
-          <p className="max-w-xl text-tn-lead text-zinc-600 dark:text-zinc-400">{heroContent.description}</p>
+          <p className="max-w-xl text-tn-lead leading-relaxed text-zinc-600 dark:text-zinc-400">
+            {heroContent.description}
+          </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <PrimaryButton to={heroContent.primaryCta.to}>{heroContent.primaryCta.label}</PrimaryButton>
             <SecondaryButton to={heroContent.secondaryCta.to}>{heroContent.secondaryCta.label}</SecondaryButton>
           </div>
-          <dl className="grid gap-4 pt-2 sm:grid-cols-3">
+          <dl className="grid gap-3 pt-1 sm:grid-cols-3">
             {heroContent.stats.map((item) => (
               <div
                 key={item.label}
-                className="rounded-tn-lg border border-zinc-200/90 bg-white/80 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-slate-950/50"
+                className="rounded-tn-xl border border-zinc-200/80 bg-white/75 p-4 shadow-sm backdrop-blur-xl dark:border-white/[0.07] dark:bg-zinc-950/55"
               >
-                <dt className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-500">
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-500">
                   {item.label}
                 </dt>
-                <dd className="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100">{item.value}</dd>
+                <dd className="mt-1.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
+                  {item.value}
+                </dd>
               </div>
             ))}
           </dl>
         </motion.div>
 
-        <div className="relative min-h-[22rem] lg:min-h-[28rem]">
-          <div className="absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-sky-500/10 via-transparent to-cyan-500/10 blur-2xl dark:from-sky-500/5 dark:to-cyan-500/5" aria-hidden />
+        <div className="relative order-1 min-h-[20rem] sm:min-h-[24rem] xl:order-2 xl:min-h-[28rem]">
+          <div
+            className="absolute inset-0 -z-10 rounded-[2rem] bg-gradient-to-br from-teal-500/12 via-transparent to-cyan-500/10 blur-2xl dark:from-teal-500/8 dark:to-cyan-500/6"
+            aria-hidden
+          />
 
-          <div className="relative mx-auto grid max-w-lg grid-cols-2 gap-4 sm:max-w-none sm:grid-cols-3 lg:max-w-none">
+          <div className="relative mx-auto grid max-w-lg grid-cols-2 gap-3 sm:max-w-none sm:grid-cols-3 sm:gap-4 lg:max-w-none">
             {heroShowcaseDevices.map((item, idx) => (
               <motion.div
                 key={item.key}
-                initial={reduceMotion ? undefined : { opacity: 0, y: 28 }}
+                initial={reduceMotion ? undefined : { opacity: 0, y: 32 }}
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-5%' }}
-                transition={{ delay: 0.08 * idx, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.07 * idx, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                animate={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        y: [0, -6, 0],
+                      }
+                }
                 className={[
                   'group relative',
                   idx === 0 ? 'col-span-2 sm:col-span-1' : '',
@@ -123,7 +141,7 @@ export function HeroSection() {
               >
                 <Link
                   to={item.to}
-                  className="block overflow-hidden rounded-tn-2xl border border-white/40 bg-white/60 shadow-tn-card backdrop-blur-xl tn-transition-transform hover:-translate-y-1 dark:border-white/10 dark:bg-slate-950/55"
+                  className="block overflow-hidden rounded-tn-2xl border border-white/50 bg-white/55 shadow-tn-card backdrop-blur-2xl tn-transition-base hover:-translate-y-1 hover:border-teal-300/35 hover:shadow-tn-lift dark:border-white/[0.08] dark:bg-zinc-950/50 dark:hover:border-teal-400/25"
                 >
                   <div className="relative aspect-[5/4] overflow-hidden">
                     <img
@@ -131,11 +149,13 @@ export function HeroSection() {
                       alt={item.title}
                       loading="eager"
                       decoding="async"
-                      className="h-full w-full object-cover tn-transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+                      className="h-full w-full object-cover tn-transition-transform duration-700 ease-out group-hover:scale-[1.07]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/90">{item.title}</p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 border-t border-white/10 bg-black/25 p-4 backdrop-blur-md dark:bg-black/35">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-teal-200/95">
+                        {item.title}
+                      </p>
                       <p className="mt-1 text-sm font-medium text-white">{item.subtitle}</p>
                     </div>
                   </div>
@@ -145,23 +165,24 @@ export function HeroSection() {
           </div>
 
           <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
+            initial={reduceMotion ? undefined : { opacity: 0, y: 18 }}
             whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.25, duration: 0.5 }}
-            className="relative mt-10 overflow-hidden rounded-tn-2xl border border-zinc-200/90 bg-white/85 p-5 shadow-tn-soft backdrop-blur-xl dark:border-white/10 dark:bg-tn-900/70"
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="relative mt-8 overflow-hidden rounded-tn-2xl border border-zinc-200/70 bg-white/80 p-5 shadow-tn-soft backdrop-blur-2xl dark:border-white/[0.07] dark:bg-zinc-950/65"
           >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-teal-500/[0.06] via-transparent to-cyan-500/[0.05]" aria-hidden />
+            <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300/90">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-teal-700 dark:text-teal-300/90">
                   Staff picks
                 </p>
                 <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                  Live from MongoDB — featured, top-rated catalog highlights.
+                  Live from your catalog — featured, top-rated highlights.
                 </p>
               </div>
             </div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="relative mt-4 grid gap-3 sm:grid-cols-3">
               {spotlights.length ? (
                 spotlights.map((p, idx) => {
                   const img = p.images?.[0]
@@ -170,28 +191,28 @@ export function HeroSection() {
                   return (
                     <motion.div
                       key={p.id}
-                      initial={reduceMotion ? undefined : { opacity: 0, y: 8 }}
+                      initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
                       whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.05 * idx, duration: 0.4 }}
                     >
                       <Link
                         to={productPath(p.slug)}
-                        className="group flex items-center gap-3 rounded-tn-lg border border-zinc-200/80 bg-zinc-50/80 p-3 tn-transition-base hover:border-sky-300/50 hover:bg-white dark:border-white/10 dark:bg-slate-950/60 dark:hover:border-sky-500/30"
+                        className="group flex items-center gap-3 rounded-tn-xl border border-zinc-200/70 bg-zinc-50/80 p-3 tn-transition-base hover:border-teal-400/40 hover:bg-white hover:shadow-md dark:border-white/[0.06] dark:bg-black/30 dark:hover:border-teal-400/30"
                       >
                         <ProductImage
                           src={img}
                           alt={p.title}
                           seed={p.slug}
                           aspectClassName="h-14 w-[4.5rem] shrink-0 rounded-tn"
-                          className="rounded-tn"
+                          className="rounded-tn ring-1 ring-black/5 dark:ring-white/10"
                         />
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-semibold text-zinc-900 dark:text-white">{p.title}</p>
                           <p className="text-xs text-zinc-500 dark:text-zinc-400">
                             {p.brand} · {p.category}
                           </p>
-                          <p className="mt-0.5 text-sm font-semibold text-sky-700 dark:text-sky-300">
+                          <p className="mt-0.5 text-sm font-semibold tabular-nums text-teal-700 dark:text-teal-300">
                             {formatCurrency(price)}
                           </p>
                         </div>
@@ -200,7 +221,8 @@ export function HeroSection() {
                   )
                 })
               ) : (
-                <div className="col-span-full rounded-tn border border-dashed border-zinc-300/80 px-4 py-6 text-center text-sm text-zinc-500 dark:border-white/15 dark:text-zinc-400">
+                <div className="col-span-full rounded-tn-xl border border-dashed border-zinc-300/90 px-4 py-8 text-center text-sm text-zinc-500 dark:border-white/12 dark:text-zinc-400">
+                  <span className="inline-block h-4 w-4 animate-pulse rounded-full bg-teal-500/40 align-middle" />{' '}
                   Loading featured picks…
                 </div>
               )}

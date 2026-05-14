@@ -206,13 +206,14 @@ export function ProductDetailsPage() {
         ogImage={product.images?.[0]}
       />
       <div className="tn-container grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
-        <div className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-          <div className="group overflow-hidden rounded-tn-2xl border border-zinc-200/80 bg-zinc-100 shadow-tn-card dark:border-white/10 dark:bg-tn-900">
+        <div className="space-y-5">
+          <div className="group overflow-hidden rounded-tn-3xl border border-zinc-200/70 bg-gradient-to-b from-zinc-100 to-white shadow-tn-lift ring-1 ring-black/[0.03] dark:border-white/[0.08] dark:from-tn-900 dark:to-black dark:ring-white/[0.04]">
             <ProductImage
               src={hero}
               alt={product.title}
               seed={product.slug}
               aspectClassName="aspect-[4/3] w-full"
+              className="rounded-none"
             />
           </div>
           {images.length > 1 ? (
@@ -222,10 +223,10 @@ export function ProductDetailsPage() {
                   key={`${src}-${index}`}
                   type="button"
                   onClick={() => setActiveImage(index)}
-                  className={`h-24 w-32 overflow-hidden rounded-tn-lg border-2 transition tn-transition-base ${
+                  className={`h-24 w-32 overflow-hidden rounded-xl border-2 transition tn-transition-base ${
                     index === activeImage
-                      ? 'border-sky-500 shadow-md ring-2 ring-sky-400/30'
-                      : 'border-zinc-200 opacity-90 hover:border-sky-300/80 hover:opacity-100 dark:border-white/10 dark:hover:border-sky-500/40'
+                      ? 'border-teal-500 shadow-lg ring-2 ring-teal-400/35 dark:border-teal-400'
+                      : 'border-zinc-200/90 opacity-90 hover:border-teal-300/70 hover:opacity-100 dark:border-white/10 dark:hover:border-teal-400/45'
                   }`}
                   aria-label={`Show image ${index + 1}`}
                 >
@@ -241,7 +242,7 @@ export function ProductDetailsPage() {
             </div>
           ) : null}
 
-          <div className="rounded-tn-xl border border-zinc-200/80 bg-white/70 p-5 dark:border-white/10 dark:bg-tn-900/70">
+          <div className="rounded-tn-2xl border border-zinc-200/70 bg-white/75 p-5 shadow-sm backdrop-blur-md dark:border-white/[0.07] dark:bg-zinc-950/60">
             <p className="text-sm font-semibold text-zinc-900 dark:text-white">Highlights</p>
             <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-600 dark:text-zinc-300">
               <li>Premium fit-and-finish with retail-grade packaging.</li>
@@ -250,7 +251,7 @@ export function ProductDetailsPage() {
             </ul>
           </div>
 
-          <div className="rounded-tn-xl border border-zinc-200/80 bg-white/70 p-5 dark:border-white/10 dark:bg-tn-900/70">
+          <div className="rounded-tn-2xl border border-zinc-200/70 bg-white/75 p-5 shadow-sm backdrop-blur-md dark:border-white/[0.07] dark:bg-zinc-950/60">
             <p className="text-sm font-semibold text-zinc-900 dark:text-white">Shipping & delivery</p>
             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
               Free expedited shipping on qualifying orders. Tracking hits your inbox as soon as the carrier scans the
@@ -261,9 +262,10 @@ export function ProductDetailsPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-tn-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-tn-card dark:border-white/10 dark:bg-tn-900/85">
+          <div className="lg:sticky lg:top-24 lg:z-10">
+          <div className="rounded-tn-3xl border border-zinc-200/70 bg-white/90 p-6 shadow-tn-soft ring-1 ring-black/[0.03] backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-950/80 dark:ring-white/[0.04]">
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
                 {product.brand} · {product.category}
               </p>
               <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
@@ -333,8 +335,9 @@ export function ProductDetailsPage() {
               </SecondaryButton>
             </div>
           </div>
+          </div>
 
-          <div className="rounded-tn-xl border border-zinc-200/80 bg-white/70 p-5 dark:border-white/10 dark:bg-tn-900/70">
+          <div className="rounded-tn-2xl border border-zinc-200/70 bg-white/75 p-5 shadow-sm backdrop-blur-md dark:border-white/[0.07] dark:bg-zinc-950/60">
             <p className="text-sm font-semibold text-zinc-900 dark:text-white">Specifications</p>
             <dl className="mt-4 space-y-3">
               {product.specifications?.length ? (
@@ -353,7 +356,7 @@ export function ProductDetailsPage() {
             </dl>
           </div>
 
-          <Link to={ROUTES.SHOP} className="inline-flex text-sm font-semibold text-sky-700 transition hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200">
+          <Link to={ROUTES.SHOP} className="inline-flex text-sm font-semibold text-teal-700 transition hover:text-teal-600 dark:text-teal-300 dark:hover:text-teal-200">
             ← Back to shop
           </Link>
         </div>
@@ -369,7 +372,7 @@ export function ProductDetailsPage() {
 
       {related.length ? (
         <div className="tn-container mt-16 space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
             Related in {product.category}
           </p>
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -382,7 +385,7 @@ export function ProductDetailsPage() {
 
       {trending.length ? (
         <div className="tn-container mt-12 space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
             Trending now
           </p>
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -395,7 +398,7 @@ export function ProductDetailsPage() {
 
       {recentSnapshots.length ? (
         <div className="tn-container mt-12 space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
             Recently viewed
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -403,7 +406,7 @@ export function ProductDetailsPage() {
               <Link
                 key={snap.slug}
                 to={productPath(snap.slug)}
-                className="flex items-center gap-3 rounded-tn-xl border border-zinc-200/80 bg-white/90 p-3 shadow-sm transition hover:border-sky-300/60 dark:border-white/10 dark:bg-tn-900/70 dark:hover:border-sky-500/35"
+                className="flex items-center gap-3 rounded-tn-xl border border-zinc-200/80 bg-white/90 p-3 shadow-sm transition hover:border-teal-400/50 dark:border-white/10 dark:bg-tn-900/70 dark:hover:border-teal-400/35"
               >
                 <ProductImage
                   src={snap.thumb}

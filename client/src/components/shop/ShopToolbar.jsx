@@ -73,14 +73,14 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
 
   return (
     <>
-      <div className="sticky top-16 z-30 -mx-4 border-b border-zinc-200/80 bg-zinc-50/90 px-4 py-3 backdrop-blur-md dark:border-white/5 dark:bg-tn-void/90">
+      <div className="sticky top-16 z-30 -mx-4 border-b border-zinc-200/60 bg-white/70 px-4 py-3 shadow-[0_8px_30px_-18px_rgb(0_0_0/0.12)] backdrop-blur-2xl dark:border-white/[0.05] dark:bg-black/50">
         <div className="tn-container flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             Refine results
           </p>
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-tn border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 shadow-sm dark:border-white/10 dark:bg-tn-900 dark:text-zinc-100 lg:hidden"
+            className="inline-flex items-center gap-2 rounded-full border border-zinc-200/90 bg-white/90 px-4 py-2 text-xs font-semibold text-zinc-800 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-zinc-950/80 dark:text-zinc-100 lg:hidden"
             onClick={() => setDrawerOpen(true)}
             aria-expanded={drawerOpen}
             aria-controls="shop-filter-drawer"
@@ -95,10 +95,10 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
                 key={chip.key}
                 type="button"
                 onClick={() => patch(chip.clear)}
-                className="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-900 transition hover:border-sky-300 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100"
+                className="inline-flex items-center gap-1 rounded-full border border-teal-200/80 bg-teal-50/90 px-3 py-1 text-xs font-semibold text-teal-950 transition hover:border-teal-300 dark:border-teal-500/35 dark:bg-teal-500/10 dark:text-teal-50"
               >
                 {chip.label}
-                <span aria-hidden className="text-sky-500">
+                <span aria-hidden className="text-teal-600 dark:text-teal-300">
                   ×
                 </span>
               </button>
@@ -107,7 +107,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
         ) : null}
       </div>
 
-      <div className="tn-surface rounded-tn-2xl p-5 sm:p-6">
+      <div className="rounded-tn-3xl border border-zinc-200/70 bg-white/70 p-5 shadow-tn-card backdrop-blur-2xl dark:border-white/[0.07] dark:bg-zinc-950/50 sm:p-6">
         <div className="grid gap-4 lg:grid-cols-12 lg:items-end">
           <div className="relative lg:col-span-5" ref={searchWrapRef}>
             <label
@@ -123,10 +123,10 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
               onFocus={() => setSuggestOpen(true)}
               autoComplete="off"
               placeholder="Search products, brands, categories…"
-              className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-900 dark:text-zinc-100"
+              className="mt-2 w-full rounded-tn-xl border border-zinc-200/90 bg-white/95 px-4 py-3 text-sm text-zinc-900 outline-none ring-teal-500/25 focus:border-teal-400/80 focus:ring-2 dark:border-white/10 dark:bg-zinc-950/90 dark:text-zinc-100"
             />
             {suggestOpen ? (
-              <div className="absolute left-0 right-0 z-40 mt-2 max-h-72 overflow-auto rounded-tn-xl border border-zinc-200 bg-white p-2 text-sm shadow-tn-soft dark:border-white/10 dark:bg-tn-900">
+              <div className="absolute left-0 right-0 z-40 mt-2 max-h-72 overflow-auto rounded-tn-xl border border-zinc-200/80 bg-white/95 p-2 text-sm shadow-tn-soft backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/95">
                 {recent.length ? (
                   <div className="mb-2">
                     <p className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wide text-zinc-400">
@@ -248,7 +248,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
               type="checkbox"
               checked={featured === 'true'}
               onChange={(e) => patch({ featured: e.target.checked ? 'true' : '' })}
-              className="h-4 w-4 rounded border-zinc-300 text-sky-600 focus:ring-sky-500"
+              className="h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
             />
             Featured only
           </label>
@@ -257,7 +257,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
               type="checkbox"
               checked={trending === 'true'}
               onChange={(e) => patch({ trending: e.target.checked ? 'true' : '' })}
-              className="h-4 w-4 rounded border-zinc-300 text-sky-600 focus:ring-sky-500"
+              className="h-4 w-4 rounded border-zinc-300 text-teal-600 focus:ring-teal-500"
             />
             Trending only
           </label>
@@ -288,12 +288,12 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
             aria-label="Close filters"
             onClick={() => setDrawerOpen(false)}
           />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-y-auto rounded-t-3xl border border-zinc-200 bg-white p-5 shadow-2xl dark:border-white/10 dark:bg-tn-900">
+          <div className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-y-auto rounded-t-3xl border border-zinc-200/80 bg-white/98 p-5 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/96">
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-semibold text-zinc-900 dark:text-white">Filters</p>
               <button
                 type="button"
-                className="text-sm font-semibold text-sky-600 dark:text-sky-300"
+                className="text-sm font-semibold text-teal-600 dark:text-teal-300"
                 onClick={() => setDrawerOpen(false)}
               >
                 Done
@@ -359,7 +359,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
                   type="checkbox"
                   checked={featured === 'true'}
                   onChange={(e) => patch({ featured: e.target.checked ? 'true' : '' })}
-                  className="h-4 w-4 rounded border-zinc-300 text-sky-600"
+                  className="h-4 w-4 rounded border-zinc-300 text-teal-600"
                 />
                 Featured only
               </label>
@@ -368,7 +368,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
                   type="checkbox"
                   checked={trending === 'true'}
                   onChange={(e) => patch({ trending: e.target.checked ? 'true' : '' })}
-                  className="h-4 w-4 rounded border-zinc-300 text-sky-600"
+                  className="h-4 w-4 rounded border-zinc-300 text-teal-600"
                 />
                 Trending only
               </label>

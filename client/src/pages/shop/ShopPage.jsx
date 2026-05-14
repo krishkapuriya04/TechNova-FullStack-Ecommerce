@@ -88,7 +88,7 @@ export function ShopPage() {
         canonicalPath={ROUTES.SHOP}
         description="Browse smartphones, laptops, gaming gear, audio, and accessories with live inventory and filters."
       />
-      <div className="tn-section-y bg-gradient-to-b from-zinc-50 via-white to-zinc-100 dark:from-tn-void dark:via-tn-950 dark:to-slate-950">
+      <div className="tn-section-y bg-gradient-to-b from-zinc-100 via-white to-zinc-100 dark:from-black dark:via-tn-950 dark:to-black">
       <div className="tn-container space-y-8">
         <SectionTitle
           eyebrow="Catalog"
@@ -100,7 +100,7 @@ export function ShopPage() {
 
         <div className="grid gap-10 xl:grid-cols-[15rem_minmax(0,1fr)] xl:items-start">
           <aside className="hidden xl:block">
-            <div className="sticky top-24 rounded-tn-2xl border border-zinc-200/90 bg-white/90 p-5 shadow-tn-card backdrop-blur-md dark:border-white/10 dark:bg-slate-950/60">
+            <div className="sticky top-24 rounded-tn-3xl border border-zinc-200/70 bg-white/75 p-6 shadow-tn-card backdrop-blur-2xl dark:border-white/[0.08] dark:bg-zinc-950/55">
               <ShopCategoryNav />
             </div>
           </aside>
@@ -122,7 +122,7 @@ export function ShopPage() {
             {loading && data ? <PageLoader label="Updating results…" /> : null}
 
             {emptyResults ? (
-              <div className="rounded-tn-2xl border border-dashed border-zinc-300/80 bg-white/70 px-8 py-16 text-center dark:border-white/15 dark:bg-tn-900/50">
+              <div className="rounded-tn-2xl border border-dashed border-zinc-300/80 bg-white/80 px-8 py-16 text-center shadow-inner backdrop-blur-md dark:border-white/12 dark:bg-zinc-950/50">
                 <p className="text-lg font-semibold text-zinc-900 dark:text-white">No matches for this search</p>
                 <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
                   Try clearing filters, browsing categories from the sidebar, or searching for a brand like Apple or
@@ -171,7 +171,7 @@ export function ShopPage() {
                       next.set('page', String(data.meta.page - 1))
                       setParams(next, { replace: true })
                     }}
-                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-sky-400 enabled:hover:text-sky-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
+                    className="rounded-full border border-zinc-200/90 bg-white/90 px-5 py-2 text-sm font-semibold text-zinc-800 shadow-sm transition enabled:hover:border-teal-400/70 enabled:hover:text-teal-800 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-zinc-950/60 dark:text-zinc-100 dark:enabled:hover:border-teal-400/50 dark:enabled:hover:text-teal-200"
                   >
                     Previous
                   </button>
@@ -183,7 +183,7 @@ export function ShopPage() {
                       next.set('page', String(data.meta.page + 1))
                       setParams(next, { replace: true })
                     }}
-                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-sky-400 enabled:hover:text-sky-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
+                    className="rounded-full border border-zinc-200/90 bg-white/90 px-5 py-2 text-sm font-semibold text-zinc-800 shadow-sm transition enabled:hover:border-teal-400/70 enabled:hover:text-teal-800 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:bg-zinc-950/60 dark:text-zinc-100 dark:enabled:hover:border-teal-400/50 dark:enabled:hover:text-teal-200"
                   >
                     Next
                   </button>

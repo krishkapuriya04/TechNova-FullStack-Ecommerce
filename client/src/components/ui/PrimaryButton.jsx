@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 
 const sizeStyles = {
-  md: 'rounded-tn px-5 py-2.5 text-sm font-semibold',
-  sm: 'rounded-tn-sm px-4 py-2 text-xs font-semibold',
+  md: 'rounded-full px-6 py-2.5 text-sm font-semibold tracking-wide',
+  sm: 'rounded-full px-4 py-2 text-xs font-semibold tracking-wide',
 }
 
 export function PrimaryButton({
@@ -15,10 +15,10 @@ export function PrimaryButton({
 }) {
   const base = [
     'inline-flex items-center justify-center gap-2',
-    'bg-sky-600 text-white shadow-md shadow-sky-900/20',
-    'tn-transition-base hover:bg-sky-500 hover:shadow-lg hover:shadow-sky-900/25',
-    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
-    'active:scale-[0.98]',
+    'bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-900/20',
+    'tn-transition-base hover:brightness-[1.06] hover:shadow-xl hover:shadow-teal-900/25',
+    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-400',
+    'active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50',
     sizeStyles[size],
     className,
   ].join(' ')

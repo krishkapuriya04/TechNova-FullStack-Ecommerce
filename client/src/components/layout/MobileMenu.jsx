@@ -12,10 +12,10 @@ import { useCart } from '@/hooks/useCart.js'
 
 const linkClass = ({ isActive }) =>
   [
-    'block rounded-tn px-4 py-3 text-base font-medium tn-transition-base',
+    'block rounded-xl px-4 py-3.5 text-base font-medium tn-transition-base',
     isActive
-      ? 'bg-sky-500/15 text-sky-700 dark:text-sky-200'
-      : 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/5',
+      ? 'bg-teal-500/15 text-teal-900 ring-1 ring-teal-500/25 dark:text-teal-100 dark:ring-teal-400/30'
+      : 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/[0.06]',
   ].join(' ')
 
 export function MobileMenu({ open, onClose }) {
@@ -49,7 +49,7 @@ export function MobileMenu({ open, onClose }) {
             animate={reduceMotion ? undefined : { x: 0 }}
             exit={reduceMotion ? undefined : { x: '100%' }}
             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-            className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col border-l border-zinc-200 bg-white shadow-2xl dark:border-white/10 dark:bg-tn-950"
+            className="absolute right-0 top-0 flex h-full w-[min(100%,22rem)] flex-col border-l border-zinc-200/70 bg-white/95 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/95"
           >
             <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-4 dark:border-white/10">
               <p className="text-sm font-semibold text-zinc-900 dark:text-white">Menu</p>
@@ -74,7 +74,7 @@ export function MobileMenu({ open, onClose }) {
                       <span className="inline-flex items-center gap-2">
                         {item.label}
                         {bootstrapped && isAuthenticated && itemCount > 0 ? (
-                          <span className="min-w-[1.25rem] rounded-full bg-sky-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-sky-400 dark:text-tn-950">
+                          <span className="min-w-[1.25rem] rounded-full bg-gradient-to-r from-teal-600 to-cyan-500 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white shadow-sm">
                             {itemCount > 99 ? '99+' : itemCount}
                           </span>
                         ) : null}
@@ -132,7 +132,7 @@ export function MobileMenuButton({ open, onClick }) {
   return (
     <button
       type="button"
-      className="inline-flex h-10 w-10 items-center justify-center rounded-tn border border-zinc-200 text-zinc-800 transition hover:border-sky-300/50 hover:bg-zinc-50 md:hidden dark:border-white/10 dark:text-zinc-100 dark:hover:border-sky-400/30 dark:hover:bg-white/5"
+      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200/90 bg-white/90 text-zinc-800 shadow-sm transition hover:border-teal-400/50 hover:bg-zinc-50 md:hidden dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-100 dark:hover:border-teal-400/40 dark:hover:bg-white/[0.07]"
       aria-controls="mobile-navigation"
       aria-expanded={open}
       onClick={onClick}

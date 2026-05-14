@@ -11,6 +11,11 @@
   }
 
   body {
-    @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-tn-void dark:text-zinc-100 font-sans transition-colors duration-200 ease-out;
+    @apply bg-zinc-100 font-sans text-zinc-900 antialiased transition-colors duration-300 ease-out dark:bg-black dark:text-zinc-100;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+  }
+
+  ::selection {
+    @apply bg-teal-500/25 text-teal-950 dark:bg-teal-400/25 dark:text-white;
   }
 }

@@ -1,51 +1,68 @@
 /**
- * TechNova design tokens — consumed by Tailwind v4 @theme.
- * Pair with `dark` class on <html> for premium dark aesthetics.
- * Accent: electric sky/cyan — reserve violet tints for rare emphasis only.
+ * TechNova luxury design system — Tailwind v4 @theme.
+ * Aesthetic: premium black, electric teal/cyan (Arc / Nothing-adjacent), glass depth.
+ * Avoid violet-heavy accents; reserve warmth for rare highlights only.
  */
 
 @theme {
-  /* Surfaces — rich black / deep navy */
-  --color-tn-void: #020617;
-  --color-tn-950: #0a0f1a;
-  --color-tn-900: #0f172a;
-  --color-tn-850: #111c2f;
-  --color-tn-800: #172554;
-  --color-tn-700: #1e2a45;
-  --color-tn-muted: #64748b;
-  --color-tn-ink: #f8fafc;
+  /* Surfaces — true premium blacks & graphite */
+  --color-tn-void: #030303;
+  --color-tn-950: #0a0a0b;
+  --color-tn-900: #111113;
+  --color-tn-850: #161618;
+  --color-tn-800: #1c1c1f;
+  --color-tn-700: #27272a;
+  --color-tn-muted: #71717a;
+  --color-tn-ink: #fafafa;
 
-  /* Accent + glow (sky / electric blue) */
-  --color-tn-accent: #38bdf8;
-  --color-tn-accent-strong: #0ea5e9;
-  --color-tn-accent-soft: #0c4a6e;
-  --color-tn-violet: #7dd3fc;
+  /* Electric accent — teal / cyan (not purple) */
+  --color-tn-accent: #2dd4bf;
+  --color-tn-accent-strong: #14b8a6;
+  --color-tn-accent-soft: #0f766e;
+  --color-tn-electric: #22d3ee;
+  --color-tn-violet: #5eead4;
 
-  /* Radii */
+  /* Radii — softer, more product-luxury */
   --radius-tn-sm: 0.5rem;
-  --radius-tn: 0.75rem;
-  --radius-tn-lg: 1rem;
-  --radius-tn-xl: 1.25rem;
-  --radius-tn-2xl: 1.5rem;
+  --radius-tn: 0.875rem;
+  --radius-tn-lg: 1.125rem;
+  --radius-tn-xl: 1.375rem;
+  --radius-tn-2xl: 1.75rem;
+  --radius-tn-3xl: 2rem;
 
-  /* Shadows */
-  --shadow-tn-soft: 0 22px 55px -22px rgb(0 0 0 / 0.5);
-  --shadow-tn-card: 0 14px 44px -18px rgb(0 0 0 / 0.38);
-  --shadow-tn-glow: 0 0 52px -10px rgb(14 165 233 / 0.35);
-  --shadow-tn-glow-sm: 0 0 36px -10px rgb(56 189 248 / 0.28);
+  /* Shadows — layered depth */
+  --shadow-tn-soft: 0 28px 64px -28px rgb(0 0 0 / 0.55);
+  --shadow-tn-card: 0 18px 48px -20px rgb(0 0 0 / 0.42);
+  --shadow-tn-lift: 0 32px 72px -28px rgb(0 0 0 / 0.5);
+  --shadow-tn-glow: 0 0 64px -12px rgb(45 212 191 / 0.28);
+  --shadow-tn-glow-sm: 0 0 40px -14px rgb(34 211 238 / 0.22);
 
-  /* Type scale */
-  --text-tn-display: clamp(2.25rem, 4vw + 1rem, 3.75rem);
-  --text-tn-lead: clamp(1rem, 0.6vw + 0.95rem, 1.125rem);
+  /* Type */
+  --text-tn-display: clamp(2.5rem, 5vw + 1rem, 4.25rem);
+  --text-tn-display-tight: clamp(2.25rem, 4.5vw + 0.75rem, 3.5rem);
+  --text-tn-lead: clamp(1.05rem, 0.5vw + 1rem, 1.2rem);
 
-  /* Layout */
-  --spacing-tn-section: clamp(3rem, 6vw, 5rem);
+  /* Layout rhythm */
+  --spacing-tn-section: clamp(3.5rem, 7vw, 6rem);
   --max-width-tn: 72rem;
+
+  /* Motion (for arbitrary duration utilities) */
+  --ease-tn-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes tn-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @layer utilities {
   .tn-container {
-    @apply mx-auto w-full max-w-tn px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full px-4 sm:px-6 lg:px-8;
+    max-width: var(--max-width-tn);
   }
 
   .tn-section-y {
@@ -54,33 +71,91 @@
 
   .tn-glow-ring {
     box-shadow:
-      0 0 0 1px rgb(14 165 233 / 0.14),
+      0 0 0 1px rgb(45 212 191 / 0.12),
       var(--shadow-tn-glow-sm);
   }
 
   .dark .tn-glow-ring {
     box-shadow:
-      0 0 0 1px rgb(56 189 248 / 0.2),
+      0 0 0 1px rgb(45 212 191 / 0.18),
       var(--shadow-tn-glow);
   }
 
   .tn-transition-base {
-    @apply transition-colors duration-200 ease-out;
+    @apply transition-all duration-300 ease-out;
   }
 
   .tn-transition-transform {
-    @apply transition-transform duration-200 ease-out;
+    @apply transition-transform duration-500 ease-out;
   }
 
   .tn-surface {
-    @apply rounded-tn-lg border border-zinc-200/90 bg-white/90 shadow-tn-card backdrop-blur-md dark:border-white/8 dark:bg-tn-850/75;
+    @apply rounded-tn-xl border border-zinc-200/70 bg-white/85 shadow-tn-card backdrop-blur-xl dark:border-white/[0.06] dark:bg-zinc-950/70;
   }
 
   .tn-surface-elevated {
-    @apply rounded-tn-xl border border-zinc-200/95 bg-white shadow-tn-soft dark:border-white/10 dark:bg-tn-900/92;
+    @apply rounded-tn-2xl border border-zinc-200/80 bg-white shadow-tn-soft dark:border-white/[0.08] dark:bg-zinc-950/90;
   }
 
   .tn-glass-panel {
-    @apply rounded-tn-2xl border border-white/15 bg-white/10 shadow-tn-card backdrop-blur-2xl dark:border-white/10 dark:bg-slate-950/55;
+    @apply rounded-tn-2xl border border-white/20 bg-white/10 shadow-tn-card backdrop-blur-2xl dark:border-white/[0.08] dark:bg-zinc-950/55;
+  }
+
+  .tn-luxury-glass {
+    @apply rounded-tn-2xl border border-white/15 bg-white/[0.07] shadow-tn-card backdrop-blur-2xl dark:border-white/[0.07] dark:bg-black/40;
+  }
+
+  .tn-mesh-hero-light {
+    background-image:
+      radial-gradient(ellipse 100% 80% at 50% -30%, rgb(20 184 166 / 0.12), transparent 55%),
+      radial-gradient(ellipse 60% 50% at 100% 0%, rgb(34 211 238 / 0.1), transparent 50%),
+      radial-gradient(ellipse 50% 40% at 0% 100%, rgb(45 212 191 / 0.08), transparent 45%);
+  }
+
+  .tn-mesh-hero-dark {
+    background-image:
+      radial-gradient(ellipse 90% 70% at 50% -20%, rgb(45 212 191 / 0.14), transparent 55%),
+      radial-gradient(ellipse 50% 45% at 100% 10%, rgb(34 211 238 / 0.1), transparent 50%),
+      radial-gradient(ellipse 45% 40% at 0% 80%, rgb(20 184 166 / 0.06), transparent 50%);
+  }
+
+  .tn-grid-faint {
+    background-image:
+      linear-gradient(rgb(0 0 0 / 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(0 0 0 / 0.03) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .dark .tn-grid-faint {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  }
+
+  .tn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tn-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      rgb(255 255 255 / 0.14) 45%,
+      transparent 90%
+    );
+    animation: tn-shimmer 1.8s ease-in-out infinite;
+  }
+
+  .dark .tn-shimmer::after {
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      rgb(255 255 255 / 0.06) 45%,
+      transparent 90%
+    );
   }
 }

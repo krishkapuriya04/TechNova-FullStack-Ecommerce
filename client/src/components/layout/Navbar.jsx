@@ -11,14 +11,14 @@ import { useCart } from '@/hooks/useCart.js'
 
 const linkClass = ({ isActive }) =>
   [
-    'rounded-tn px-3 py-2 text-sm font-medium tn-transition-base',
+    'rounded-full px-3.5 py-2 text-sm font-medium tn-transition-base',
     isActive
-      ? 'bg-sky-500/12 text-sky-800 dark:text-sky-200'
-      : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100',
+      ? 'bg-teal-500/12 text-teal-900 shadow-sm ring-1 ring-teal-500/20 dark:text-teal-100 dark:ring-teal-400/25'
+      : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-white/[0.06] dark:hover:text-white',
   ].join(' ')
 
 const authLinkClass =
-  'rounded-tn px-3 py-2 text-sm font-semibold text-sky-800 transition hover:bg-sky-500/10 dark:text-sky-200 dark:hover:bg-white/5'
+  'rounded-full px-3.5 py-2 text-sm font-semibold text-teal-800 transition hover:bg-teal-500/10 dark:text-teal-100 dark:hover:bg-white/[0.06]'
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -36,18 +36,16 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-zinc-200/90 bg-white/85 shadow-sm backdrop-blur-lg dark:border-white/5 dark:bg-tn-950/80">
+      <header className="sticky top-0 z-50 border-b border-zinc-200/60 bg-white/75 shadow-[0_1px_0_rgb(0_0_0/0.03)] backdrop-blur-2xl dark:border-white/[0.06] dark:bg-black/45 dark:shadow-[0_1px_0_rgb(255_255_255/0.04)]">
         <div className="tn-container flex h-16 items-center justify-between gap-4">
           <NavLink
             to={ROUTES.HOME}
-            className="group flex items-center gap-2 rounded-tn outline-none ring-sky-500/35 focus-visible:ring-2"
+            className="group flex items-center gap-2.5 rounded-full pr-2 outline-none ring-teal-500/30 focus-visible:ring-2"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-tn bg-gradient-to-br from-slate-800 via-slate-900 to-sky-700 text-sm font-bold text-white shadow-md tn-transition-transform group-hover:scale-[1.03]">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-teal-700 text-sm font-bold text-white shadow-lg ring-1 ring-white/15 tn-transition-transform group-hover:scale-[1.04]">
               TN
             </span>
-            <span className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
-              {APP_NAME}
-            </span>
+            <span className="text-lg font-semibold tracking-tight text-zinc-950 dark:text-white">{APP_NAME}</span>
           </NavLink>
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
@@ -57,7 +55,7 @@ export function Navbar() {
                   <span className="inline-flex items-center gap-2">
                     {item.label}
                     {bootstrapped && isAuthenticated && itemCount > 0 ? (
-                      <span className="min-w-[1.25rem] rounded-full bg-sky-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-sky-400 dark:text-tn-950">
+                      <span className="min-w-[1.25rem] rounded-full bg-gradient-to-r from-teal-600 to-cyan-500 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white shadow-sm">
                         {itemCount > 99 ? '99+' : itemCount}
                       </span>
                     ) : null}
@@ -73,7 +71,7 @@ export function Navbar() {
 
           <div className="hidden items-center gap-2 md:flex" aria-label="Account">
             {!bootstrapped ? (
-              <span className="h-8 w-20 animate-pulse rounded-tn bg-zinc-200/80 dark:bg-white/10" />
+              <span className="h-8 w-20 animate-pulse rounded-full bg-zinc-200/80 dark:bg-white/10" />
             ) : isAuthenticated ? (
               <>
                 <NavLink to={ROUTES.PROFILE} className={authLinkClass}>
@@ -87,7 +85,7 @@ export function Navbar() {
                 <button
                   type="button"
                   onClick={logout}
-                  className="rounded-tn border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:border-zinc-300 dark:border-white/10 dark:text-zinc-100 dark:hover:border-white/20"
+                  className="rounded-full border border-zinc-200/90 px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:border-zinc-300 dark:border-white/10 dark:text-zinc-100 dark:hover:border-white/20"
                 >
                   Log out
                 </button>
@@ -99,7 +97,7 @@ export function Navbar() {
                 </NavLink>
                 <NavLink
                   to={ROUTES.AUTH_REGISTER}
-                  className="rounded-tn bg-sky-600 px-3 py-2 text-xs font-semibold text-white shadow-md transition hover:bg-sky-500"
+                  className="rounded-full bg-gradient-to-r from-teal-600 to-cyan-500 px-3.5 py-2 text-xs font-semibold text-white shadow-md transition hover:brightness-105"
                 >
                   Register
                 </NavLink>
@@ -108,10 +106,10 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
-          <div className="hidden items-center gap-2 md:flex" aria-label="Tools">
-            <NotificationBell />
-            <ThemeToggle />
-          </div>
+            <div className="hidden items-center gap-2 md:flex" aria-label="Tools">
+              <NotificationBell />
+              <ThemeToggle />
+            </div>
             <MobileMenuButton open={mobileOpen} onClick={() => setMobileOpen((o) => !o)} />
           </div>
         </div>

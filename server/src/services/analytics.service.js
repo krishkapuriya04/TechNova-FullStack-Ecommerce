@@ -117,3 +117,109 @@ export async function getOrdersTrend(days = 14) {
     revenue: Math.round(r.revenue * 100) / 100,
   }))
 }
+
+const LOW_STOCK_THRESHOLD = 8
+
+export async function getInventorySummary() {
+  const [lowStock, outOfStock, totalSkus] = await Promise.all([
+    Product.countDocuments({ stock: { $gt: 0, $lte: LOW_STOCK_THRESHOLD } }),
+    Product.countDocuments({ stock: 0 }),
+    Product.countDocuments(),
+  ])
+  return { lowStock, outOfStock, totalSkus, lowStockThreshold: LOW_STOCK_THRESHOLD }
+}
+
+export async function getLowStockProducts(limit = 8) {
+  const docs = await Product.find({ stock: { $gt: 0, $lte: LOW_STOCK_THRESHOLD } })
+    .sort({ stock: 1, updatedAt: -1 })
+    .limit(limit)
+    .select('title slug stock category brand')
+    .lean()
+  return docs.map((p) => ({
+    id: p._id.toString(),
+    title: p.title,
+    slug: p.slug,
+    stock: p.stock,
+    category: p.category,
+    brand: p.brand,
+  }))
+}
+
+export async function getTopSellingProducts(limit = 6) {
+  const rows = await Order.aggregate([
+    { $match: { orderStatus: { $ne: 'cancelled' } } },
+    { $unwind: '$orderItems' },
+    {
+      $group: {
+        _id: '$orderItems.slug',
+        title: { $first: '$orderItems.title' },
+        units: { $sum: '$orderItems.quantity' },
+        revenue: { $sum: '$orderItems.lineTotal' },
+      },
+    },
+    { $sort: { units: -1 } },
+    { $limit: limit },
+  ])
+  return rows.map((r) => ({
+    slug: r._id,
+    title: r.title,
+    unitsSold: r.units,
+    revenue: Math.round(r.revenue * 100) / 100,
+  }))
+}
+
+export async function getTrendingCatalogSnapshot(limit = 6) {
+  const docs = await Product.find({ trending: true })
+    .sort({ 'ratings.average': -1, updatedAt: -1 })
+    .limit(limit)
+    .select('title slug category brand stock ratings images')
+    .lean()
+  return docs.map((p) => ({
+    id: p._id.toString(),
+    title: p.title,
+    slug: p.slug,
+    category: p.category,
+    brand: p.brand,
+    stock: p.stock,
+    ratings: p.ratings,
+    thumb: p.images?.[0] ?? '',
+  }))
+}
+
+export async function getRecentActivities(limit = 12) {
+  const [orderRows, userRows] = await Promise.all([
+    Order.find({})
+      .sort({ createdAt: -1 })
+      .limit(Math.ceil(limit / 2))
+      .populate('user', 'name email')
+      .select('totalPrice orderStatus createdAt user')
+      .lean(),
+    User.find({})
+      .sort({ createdAt: -1 })
+      .limit(Math.ceil(limit / 2))
+      .select('name email role createdAt')
+      .lean(),
+  ])
+
+  const activities = []
+  for (const o of orderRows) {
+    activities.push({
+      id: `ord-${o._id}`,
+      type: 'order',
+      label: `Order ${o.orderStatus}`,
+      detail: `${o.user?.name ?? 'Customer'} · $${Math.round(o.totalPrice * 100) / 100}`,
+      at: o.createdAt,
+    })
+  }
+  for (const u of userRows) {
+    activities.push({
+      id: `usr-${u._id}`,
+      type: 'user',
+      label: 'New account',
+      detail: `${u.name} (${u.role})`,
+      at: u.createdAt,
+    })
+  }
+  activities.sort((a, b) => new Date(b.at) - new Date(a.at))
+  return activities.slice(0, limit)
+}

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import { Order } from '../models/Order.js'
+import { User } from '../models/User.js'
 import { HttpStatus } from '../constants/httpStatus.js'
 import { AppError } from '../utils/AppError.js'
 import { sendSuccess } from '../utils/apiResponse.js'
@@ -31,6 +32,8 @@ function mapAdminOrderDetail(doc) {
     shippingAddress: doc.shippingAddress,
     paymentMethod: doc.paymentMethod,
     subtotal: doc.subtotal,
+    discountAmount: doc.discountAmount ?? 0,
+    couponCode: doc.couponCode ?? '',
     shippingFee: doc.shippingFee,
     tax: doc.tax,
     totalPrice: doc.totalPrice,
@@ -45,9 +48,26 @@ export async function listAdminOrders(req, res) {
   const limit = Math.min(Number(req.query.limit) || 20, 100)
   const skip = (page - 1) * limit
   const status = req.query.status
+  const search = (req.query.search ?? '').trim()
+
   const filter = {}
   if (status && ['pending', 'processing', 'shipped', 'delivered', 'cancelled'].includes(status)) {
     filter.orderStatus = status
+  }
+
+  if (search) {
+    const rx = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+    const matchingUsers = await User.find({ $or: [{ name: rx }, { email: rx }] }).select('_id').lean()
+    const userIds = matchingUsers.map((u) => u._id)
+    const orClauses = [
+      { user: { $in: userIds } },
+      { orderItems: { $elemMatch: { title: rx } } },
+      { orderItems: { $elemMatch: { slug: rx } } },
+    ]
+    if (mongoose.isValidObjectId(search)) {
+      orClauses.push({ _id: new mongoose.Types.ObjectId(search) })
+    }
+    filter.$or = orClauses
   }
 
   const [items, total] = await Promise.all([

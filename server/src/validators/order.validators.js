@@ -13,6 +13,7 @@ export const createOrderValidators = [
     .optional()
     .matches(/^[0-9]{4}$/)
     .withMessage('Card last 4 must be 4 digits'),
+  body('couponCode').optional({ checkFalsy: true }).trim().isLength({ min: 3, max: 32 }),
 ]
 
 export const orderIdValidators = [param('id').isMongoId().withMessage('Invalid order id')]

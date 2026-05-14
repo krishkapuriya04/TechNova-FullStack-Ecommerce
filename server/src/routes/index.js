@@ -7,6 +7,8 @@ import healthRoutes from './health.routes.js'
 import orderRoutes from './order.routes.js'
 import productRoutes from './product.routes.js'
 import wishlistRoutes from './wishlist.routes.js'
+import couponRoutes from './coupon.routes.js'
+import reviewRoutes from './review.routes.js'
 
 const router = Router()
 
@@ -17,6 +19,8 @@ router.use('/products', productRoutes)
 router.use('/cart', cartRoutes)
 router.use('/wishlist', wishlistRoutes)
 router.use('/orders', orderRoutes)
+router.use('/coupons', couponRoutes)
+router.use('/reviews', reviewRoutes)
 
 /**
  * Mount versioned API: /api/v1/*

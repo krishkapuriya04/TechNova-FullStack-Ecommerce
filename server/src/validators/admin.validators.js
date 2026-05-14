@@ -7,11 +7,17 @@ export const listAdminProductsValidators = [
 ]
 
 export const listAdminOrdersValidators = [
-  query('page').optional().toInt().isInt({ min: 1 }),
-  query('limit').optional().toInt().isInt({ min: 1, max: 100 }),
+  query('page').optional({ checkFalsy: true }).toInt().isInt({ min: 1 }),
+  query('limit').optional({ checkFalsy: true }).toInt().isInt({ min: 1, max: 100 }),
   query('status')
-    .optional()
+    .optional({ checkFalsy: true })
     .isIn(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
+  query('search').optional({ checkFalsy: true }).isString().trim().isLength({ max: 120 }),
+]
+
+export const adminProductStockValidators = [
+  param('id').isMongoId().withMessage('Invalid product id'),
+  body('stock').isInt({ min: 0 }).toInt(),
 ]
 
 export const adminOrderIdValidators = [param('id').isMongoId().withMessage('Invalid order id')]
@@ -39,4 +45,10 @@ export const adminUserIdValidators = [param('id').isMongoId().withMessage('Inval
 export const updateUserRoleValidators = [
   param('id').isMongoId().withMessage('Invalid user id'),
   body('role').isIn(['user', 'admin']).withMessage('Invalid role'),
+]
+
+export const listAdminReviewsValidators = [
+  query('page').optional({ checkFalsy: true }).toInt().isInt({ min: 1 }),
+  query('limit').optional({ checkFalsy: true }).toInt().isInt({ min: 1, max: 100 }),
+  query('search').optional({ checkFalsy: true }).isString().trim().isLength({ max: 120 }),
 ]

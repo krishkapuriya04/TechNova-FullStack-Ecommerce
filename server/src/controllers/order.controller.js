@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import { Cart } from '../models/Cart.js'
+import { Coupon } from '../models/Coupon.js'
 import { Order } from '../models/Order.js'
 import { Product } from '../models/Product.js'
 import { HttpStatus } from '../constants/httpStatus.js'
@@ -7,6 +8,7 @@ import { AppError } from '../utils/AppError.js'
 import { sendCreated, sendSuccess } from '../utils/apiResponse.js'
 import { lineSubtotal } from '../utils/cartCalculations.js'
 import { computeOrderTotals } from '../utils/orderTotals.js'
+import { computeCouponDiscount } from '../utils/couponApply.js'
 
 function formatOrder(order) {
   if (!order) return null
@@ -17,6 +19,8 @@ function formatOrder(order) {
     shippingAddress: order.shippingAddress,
     paymentMethod: order.paymentMethod,
     subtotal: order.subtotal,
+    discountAmount: order.discountAmount ?? 0,
+    couponCode: order.couponCode ?? '',
     shippingFee: order.shippingFee,
     tax: order.tax,
     totalPrice: order.totalPrice,
@@ -58,7 +62,23 @@ export async function createOrder(req, res) {
     })
   }
 
-  const totals = computeOrderTotals(subtotal)
+  let discountAmount = 0
+  let couponCodeStored = ''
+  let couponIdForUsage = null
+  const rawCoupon = typeof req.body.couponCode === 'string' ? req.body.couponCode.trim() : ''
+  if (rawCoupon) {
+    const coupon = await Coupon.findOne({ code: rawCoupon.toUpperCase() })
+    if (coupon) {
+      const d = computeCouponDiscount(subtotal, coupon)
+      if (d > 0) {
+        discountAmount = d
+        couponCodeStored = coupon.code
+        couponIdForUsage = coupon._id
+      }
+    }
+  }
+
+  const totals = computeOrderTotals(subtotal, { discountAmount })
   const paymentMethod = req.body.paymentMethod
   if (paymentMethod === 'card' && !req.body.cardLast4) {
     throw new AppError('Enter the last 4 digits of your card', HttpStatus.BAD_REQUEST)
@@ -70,6 +90,7 @@ export async function createOrder(req, res) {
     orderItems,
     shippingAddress: req.body.shippingAddress,
     paymentMethod,
+    couponCode: couponCodeStored,
     ...totals,
     paymentStatus,
   })
@@ -96,6 +117,10 @@ export async function createOrder(req, res) {
 
   cart.items = []
   await cart.save()
+
+  if (couponIdForUsage) {
+    await Coupon.updateOne({ _id: couponIdForUsage }, { $inc: { usageCount: 1 } })
+  }
 
   sendCreated(res, { order: formatOrder(order) }, 'Order placed successfully')
 }

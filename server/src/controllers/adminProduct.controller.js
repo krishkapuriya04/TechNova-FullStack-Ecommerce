@@ -1,4 +1,7 @@
+import mongoose from 'mongoose'
 import { Product } from '../models/Product.js'
+import { HttpStatus } from '../constants/httpStatus.js'
+import { AppError } from '../utils/AppError.js'
 import { sendSuccess } from '../utils/apiResponse.js'
 
 export async function listAdminProducts(req, res) {
@@ -36,5 +39,30 @@ export async function listAdminProducts(req, res) {
       updatedAt: doc.updatedAt,
     })),
     meta: { page, limit, total, pages: Math.ceil(total / limit) || 1 },
+  })
+}
+
+export async function updateProductStock(req, res) {
+  const { id } = req.params
+  if (!mongoose.isValidObjectId(id)) {
+    throw new AppError('Invalid product id', HttpStatus.BAD_REQUEST)
+  }
+  const stock = Number(req.body.stock)
+  if (!Number.isInteger(stock) || stock < 0) {
+    throw new AppError('Invalid stock value', HttpStatus.BAD_REQUEST)
+  }
+  const product = await Product.findById(id)
+  if (!product) {
+    throw new AppError('Product not found', HttpStatus.NOT_FOUND)
+  }
+  product.stock = stock
+  await product.save()
+  sendSuccess(res, {
+    product: {
+      id: product._id.toString(),
+      title: product.title,
+      slug: product.slug,
+      stock: product.stock,
+    },
   })
 }

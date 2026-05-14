@@ -2,6 +2,7 @@ import '../config/env.js'
 import { connectDatabase, disconnectDatabase } from '../config/database.js'
 import { Product } from '../models/Product.js'
 import { User } from '../models/User.js'
+import { Coupon } from '../models/Coupon.js'
 import { generateBulkCatalog } from './lib/generateBulkCatalog.js'
 
 const ADMIN_EMAIL = 'admin@technova.dev'
@@ -38,6 +39,33 @@ async function seed() {
     console.log(`[seed] Created admin user (${ADMIN_EMAIL})`)
   } else {
     console.log('[seed] Admin user already exists — skipping')
+  }
+
+  const couponCount = await Coupon.countDocuments()
+  if (couponCount === 0) {
+    const soon = new Date()
+    soon.setDate(soon.getDate() + 45)
+    await Coupon.insertMany([
+      {
+        code: 'TECH10',
+        discountType: 'percent',
+        discountValue: 10,
+        minimumOrder: 75,
+        expiryDate: soon,
+        active: true,
+      },
+      {
+        code: 'FLAT15',
+        discountType: 'fixed',
+        discountValue: 15,
+        minimumOrder: 120,
+        expiryDate: soon,
+        active: true,
+      },
+    ])
+    console.log('[seed] Inserted starter coupons')
+  } else {
+    console.log('[seed] Coupons already present — skipping')
   }
 
   await disconnectDatabase()

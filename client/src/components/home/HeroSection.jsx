@@ -7,7 +7,7 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
 import { SecondaryButton } from '@/components/ui/SecondaryButton.jsx'
 import { ProductImage } from '@/components/ui/ProductImage.jsx'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion.js'
-import { fetchProducts } from '@/services/productService.js'
+import { fetchProducts, isCancelledRequest } from '@/services/productService.js'
 import { productPath } from '@/constants/routes.js'
 import { formatCurrency } from '@/utils/formatCurrency.js'
 
@@ -17,17 +17,23 @@ export function HeroSection() {
 
   useEffect(() => {
     let active = true
+    const controller = new AbortController()
     async function load() {
       try {
-        const payload = await fetchProducts({ featured: 'true', limit: '3', sort: 'rating' })
+        const payload = await fetchProducts(
+          { featured: 'true', limit: '3', sort: 'rating' },
+          { signal: controller.signal },
+        )
         if (active) setSpotlights(payload.products ?? [])
-      } catch {
-        if (active) setSpotlights([])
+      } catch (err) {
+        if (!active || isCancelledRequest(err)) return
+        setSpotlights([])
       }
     }
     load()
     return () => {
       active = false
+      controller.abort()
     }
   }, [])
 

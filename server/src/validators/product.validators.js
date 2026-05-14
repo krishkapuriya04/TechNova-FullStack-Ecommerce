@@ -3,16 +3,16 @@ import { body, param, query } from 'express-validator'
 const mongoId = param('id').isMongoId().withMessage('Invalid product id')
 
 export const listProductValidators = [
-  query('page').optional().toInt().isInt({ min: 1 }),
-  query('limit').optional().toInt().isInt({ min: 1, max: 50 }),
-  query('search').optional().isString().trim().isLength({ max: 120 }),
-  query('category').optional().isString().trim().isLength({ max: 64 }),
-  query('featured').optional().isIn(['true', 'false']),
-  query('trending').optional().isIn(['true', 'false']),
-  query('excludeId').optional().isMongoId(),
-  query('minPrice').optional().toFloat().isFloat({ min: 0 }),
-  query('maxPrice').optional().toFloat().isFloat({ min: 0 }),
-  query('sort').optional().isIn(['newest', 'price_asc', 'price_desc', 'rating']),
+  query('page').optional({ checkFalsy: true }).toInt().isInt({ min: 1 }),
+  query('limit').optional({ checkFalsy: true }).toInt().isInt({ min: 1, max: 50 }),
+  query('search').optional({ checkFalsy: true }).isString().trim().isLength({ max: 120 }),
+  query('category').optional({ checkFalsy: true }).isString().trim().isLength({ max: 64 }),
+  query('featured').optional({ checkFalsy: true }).isIn(['true', 'false']),
+  query('trending').optional({ checkFalsy: true }).isIn(['true', 'false']),
+  query('excludeId').optional({ checkFalsy: true }).isMongoId(),
+  query('minPrice').optional({ checkFalsy: true }).toFloat().isFloat({ min: 0 }),
+  query('maxPrice').optional({ checkFalsy: true }).toFloat().isFloat({ min: 0 }),
+  query('sort').optional({ checkFalsy: true }).isIn(['newest', 'price_asc', 'price_desc', 'rating']),
 ]
 
 export const idParamValidators = [mongoId]

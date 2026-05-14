@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchProducts } from '@/services/productService.js'
+import { fetchProducts, isCancelledRequest } from '@/services/productService.js'
 import { SectionTitle } from '@/components/ui/SectionTitle.jsx'
 import { ProductCard } from '@/components/ui/ProductCard.jsx'
 import { ProductGridSkeleton } from '@/components/ui/LoadingSkeleton.jsx'
@@ -13,15 +13,20 @@ export function TrendingProductsSection() {
 
   useEffect(() => {
     let active = true
+    const controller = new AbortController()
 
     async function load() {
       setLoading(true)
       setError('')
       try {
-        const payload = await fetchProducts({ trending: 'true', limit: '12', sort: 'rating' })
-        if (active) setProducts(payload.products)
+        const payload = await fetchProducts(
+          { trending: 'true', limit: '12', sort: 'rating' },
+          { signal: controller.signal },
+        )
+        if (active) setProducts(payload.products ?? [])
       } catch (err) {
-        if (active) setError(getErrorMessage(err, 'Unable to load trending products'))
+        if (!active || isCancelledRequest(err)) return
+        setError(getErrorMessage(err, 'Unable to load trending products'))
       } finally {
         if (active) setLoading(false)
       }
@@ -30,6 +35,7 @@ export function TrendingProductsSection() {
     load()
     return () => {
       active = false
+      controller.abort()
     }
   }, [])
 
@@ -48,6 +54,10 @@ export function TrendingProductsSection() {
         ) : null}
         {loading ? (
           <ProductGridSkeleton count={4} />
+        ) : products.length === 0 && !error ? (
+          <p className="rounded-tn-lg border border-zinc-200/80 bg-zinc-50/80 px-4 py-6 text-center text-sm text-zinc-600 dark:border-white/10 dark:bg-tn-900/50 dark:text-zinc-400">
+            No trending products yet. Seed the catalog or mark items as trending in Admin → Products.
+          </p>
         ) : (
           <ProductCarousel className="px-0.5">
             {products.map((product) => (

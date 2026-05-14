@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { fetchProductBySlug, fetchProducts } from '@/services/productService.js'
+import { fetchProductBySlug, fetchProducts, isCancelledRequest } from '@/services/productService.js'
 import { ROUTES, productPath } from '@/constants/routes.js'
 import { PageLoader } from '@/components/ui/PageLoader.jsx'
 import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
@@ -71,11 +71,13 @@ export function ProductDetailsPage() {
 
   useEffect(() => {
     let active = true
+    const controller = new AbortController()
+
     async function load() {
       setLoading(true)
       setError('')
       try {
-        const doc = await fetchProductBySlug(slug)
+        const doc = await fetchProductBySlug(slug, { signal: controller.signal })
         if (active) {
           setProduct(doc)
           setActiveImage(0)
@@ -83,7 +85,8 @@ export function ProductDetailsPage() {
           recordProductView(doc)
         }
       } catch (err) {
-        if (active) setError(getErrorMessage(err, 'Product unavailable'))
+        if (!active || isCancelledRequest(err)) return
+        setError(getErrorMessage(err, 'Product unavailable'))
       } finally {
         if (active) setLoading(false)
       }
@@ -91,33 +94,42 @@ export function ProductDetailsPage() {
     load()
     return () => {
       active = false
+      controller.abort()
     }
   }, [slug])
 
   useEffect(() => {
     if (!product?.id) return undefined
     let active = true
+    const controller = new AbortController()
 
     async function loadRecos() {
       try {
         const [rel, trend] = await Promise.all([
-          fetchProducts({
-            category: product.category,
-            excludeId: product.id,
-            limit: '4',
-            sort: 'rating',
-          }),
-          fetchProducts({
-            trending: 'true',
-            excludeId: product.id,
-            limit: '4',
-            sort: 'newest',
-          }),
+          fetchProducts(
+            {
+              category: product.category,
+              excludeId: product.id,
+              limit: '4',
+              sort: 'rating',
+            },
+            { signal: controller.signal },
+          ),
+          fetchProducts(
+            {
+              trending: 'true',
+              excludeId: product.id,
+              limit: '4',
+              sort: 'newest',
+            },
+            { signal: controller.signal },
+          ),
         ])
         if (!active) return
         setRelated(rel.products ?? [])
         setTrending(trend.products ?? [])
-      } catch {
+      } catch (err) {
+        if (!active || isCancelledRequest(err)) return
         if (active) {
           setRelated([])
           setTrending([])
@@ -128,6 +140,7 @@ export function ProductDetailsPage() {
     loadRecos()
     return () => {
       active = false
+      controller.abort()
     }
   }, [product?.id, product?.category])
 

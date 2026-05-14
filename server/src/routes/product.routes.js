@@ -12,8 +12,30 @@ import { asyncHandler } from '../utils/asyncHandler.js'
 
 const router = Router()
 
+/** Shorthand list routes — must stay above `/:id` so "trending" is not parsed as an id. */
+function mergeQuery(extra) {
+  return (req, _res, next) => {
+    req.query = { ...req.query, ...extra }
+    next()
+  }
+}
+
 router.get(
   '/',
+  validate(listProductValidators),
+  asyncHandler(productController.getProducts),
+)
+
+router.get(
+  '/trending',
+  mergeQuery({ trending: 'true' }),
+  validate(listProductValidators),
+  asyncHandler(productController.getProducts),
+)
+
+router.get(
+  '/featured',
+  mergeQuery({ featured: 'true' }),
   validate(listProductValidators),
   asyncHandler(productController.getProducts),
 )

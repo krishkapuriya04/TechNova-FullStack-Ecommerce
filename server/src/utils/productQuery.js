@@ -8,16 +8,22 @@ export function buildProductFilter(query) {
   }
 
   if (query.search) {
-    const term = query.search.trim()
-    filter.$or = [
-      { title: new RegExp(term, 'i') },
-      { brand: new RegExp(term, 'i') },
-      { category: new RegExp(term, 'i') },
-    ]
+    const term = String(query.search).trim()
+    if (term) {
+      const safe = escapeRegex(term)
+      filter.$or = [
+        { title: new RegExp(safe, 'i') },
+        { brand: new RegExp(safe, 'i') },
+        { category: new RegExp(safe, 'i') },
+      ]
+    }
   }
 
   if (query.category) {
-    filter.category = new RegExp(`^${escapeRegex(query.category.trim())}$`, 'i')
+    const c = String(query.category).trim()
+    if (c) {
+      filter.category = new RegExp(`^${escapeRegex(c)}$`, 'i')
+    }
   }
 
   if (query.featured === 'true' || query.featured === true) {
@@ -32,8 +38,13 @@ export function buildProductFilter(query) {
     filter.trending = false
   }
 
-  const min = query.minPrice
-  const max = query.maxPrice
+  const minRaw = query.minPrice != null ? Number(query.minPrice) : NaN
+  const maxRaw = query.maxPrice != null ? Number(query.maxPrice) : NaN
+  let min = Number.isFinite(minRaw) && minRaw >= 0 ? minRaw : null
+  let max = Number.isFinite(maxRaw) && maxRaw >= 0 ? maxRaw : null
+  if (min != null && max != null && min > max) {
+    ;[min, max] = [max, min]
+  }
   if (min != null || max != null) {
     filter.effectivePrice = {}
     if (min != null) filter.effectivePrice.$gte = min
@@ -58,5 +69,5 @@ export function buildProductSort(sort) {
 }
 
 function escapeRegex(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }

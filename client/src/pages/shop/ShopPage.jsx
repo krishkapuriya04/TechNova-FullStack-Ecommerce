@@ -1,6 +1,6 @@
 import { startTransition, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchProducts } from '@/services/productService.js'
+import { fetchProducts, isCancelledRequest } from '@/services/productService.js'
 import { SectionTitle } from '@/components/ui/SectionTitle.jsx'
 import { ProductGridSkeleton } from '@/components/ui/LoadingSkeleton.jsx'
 import { PageLoader } from '@/components/ui/PageLoader.jsx'
@@ -21,6 +21,7 @@ export function ShopPage() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [retryTick, setRetryTick] = useState(0)
 
   const [searchInput, setSearchInput] = useState(() => params.get('search') ?? '')
   const debouncedSearch = useDebounce(searchInput, 400)
@@ -53,15 +54,19 @@ export function ShopPage() {
 
   useEffect(() => {
     let active = true
+    const controller = new AbortController()
 
     async function load() {
       setLoading(true)
       setError('')
       try {
-        const payload = await fetchProducts(Object.fromEntries(params.entries()))
+        const payload = await fetchProducts(Object.fromEntries(new URLSearchParams(queryKey).entries()), {
+          signal: controller.signal,
+        })
         if (active) setData(payload)
       } catch (err) {
-        if (active) setError(getErrorMessage(err, 'Unable to load products'))
+        if (!active || isCancelledRequest(err)) return
+        setError(getErrorMessage(err, 'Unable to load products'))
       } finally {
         if (active) setLoading(false)
       }
@@ -70,8 +75,9 @@ export function ShopPage() {
     load()
     return () => {
       active = false
+      controller.abort()
     }
-  }, [queryKey, params])
+  }, [queryKey, retryTick])
 
   const emptyResults = Boolean(data) && !loading && data.meta.total === 0
 
@@ -103,9 +109,14 @@ export function ShopPage() {
             {loading && !data ? <ProductGridSkeleton count={8} /> : null}
 
             {error ? (
-              <p className="rounded-tn-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200">
-                {error}
-              </p>
+              <div className="rounded-tn-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200">
+                <p>{error}</p>
+                <div className="mt-3">
+                  <PrimaryButton type="button" size="sm" onClick={() => setRetryTick((t) => t + 1)}>
+                    Retry
+                  </PrimaryButton>
+                </div>
+              </div>
             ) : null}
 
             {loading && data ? <PageLoader label="Updating results…" /> : null}

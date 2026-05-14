@@ -1,4 +1,5 @@
 import { HttpStatus } from '../constants/httpStatus.js'
+import { env } from '../config/env.js'
 import { Product } from '../models/Product.js'
 import { AppError } from '../utils/AppError.js'
 import { sendCreated, sendSuccess } from '../utils/apiResponse.js'
@@ -15,6 +16,19 @@ export async function getProducts(req, res) {
 
   const filter = buildProductFilter(req.query)
   const sort = buildProductSort(req.query.sort)
+
+  if (!env.isProduction) {
+    console.log('[products] list', {
+      page,
+      limit,
+      sort: req.query.sort ?? 'newest',
+      trending: filter.trending,
+      featured: filter.featured,
+      hasSearch: Boolean(filter.$or),
+      hasCategory: Boolean(filter.category),
+      priceFilter: Boolean(filter.effectivePrice),
+    })
+  }
 
   const [items, total] = await Promise.all([
     Product.find(filter).sort(sort).skip(skip).limit(limit).lean(),

@@ -28,7 +28,7 @@ export function LoginPage() {
       <Seo title="Sign in" canonicalPath={ROUTES.AUTH_LOGIN} noindex description="Sign in to your TechNova account." />
       <div className="w-full rounded-tn-2xl border border-zinc-200/80 bg-white/90 p-8 shadow-tn-soft backdrop-blur dark:border-white/10 dark:bg-tn-900/80">
       <div className="space-y-2 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-300">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600 dark:text-sky-300">
           Welcome back
         </p>
         <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Sign in to TechNova</h1>
@@ -49,7 +49,7 @@ export function LoginPage() {
             required
             value={form.email}
             onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-indigo-500/30 focus:border-indigo-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
+            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
           />
         </div>
         <div>
@@ -66,7 +66,7 @@ export function LoginPage() {
             required
             value={form.password}
             onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-indigo-500/30 focus:border-indigo-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
+            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
           />
         </div>
         <PrimaryButton type="submit" className="w-full justify-center" disabled={loading}>
@@ -76,7 +76,7 @@ export function LoginPage() {
 
       <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
         New here?{' '}
-        <Link className="font-semibold text-indigo-600 dark:text-indigo-300" to={ROUTES.AUTH_REGISTER}>
+        <Link className="font-semibold text-sky-600 dark:text-sky-300" to={ROUTES.AUTH_REGISTER}>
           Create an account
         </Link>
       </p>

@@ -94,7 +94,7 @@ export function AdminUsersPage() {
           placeholder="Search name or email…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md rounded-tn border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-white outline-none ring-indigo-400/30 focus:ring-2 sm:w-80"
+          className="w-full max-w-md rounded-tn border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-white outline-none ring-sky-400/30 focus:ring-2 sm:w-80"
         />
         {meta ? (
           <p className="text-xs text-zinc-500">

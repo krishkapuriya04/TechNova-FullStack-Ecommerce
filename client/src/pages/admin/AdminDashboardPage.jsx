@@ -129,7 +129,7 @@ export function AdminDashboardPage() {
               </div>
               <Link
                 to={ROUTES.ADMIN_ORDERS}
-                className="mt-4 inline-block text-xs font-semibold text-indigo-300 hover:text-indigo-200"
+                className="mt-4 inline-block text-xs font-semibold text-sky-300 hover:text-sky-200"
               >
                 Manage orders →
               </Link>
@@ -165,7 +165,7 @@ export function AdminDashboardPage() {
               </div>
               <Link
                 to={ROUTES.ADMIN_USERS}
-                className="mt-4 inline-block text-xs font-semibold text-indigo-300 hover:text-indigo-200"
+                className="mt-4 inline-block text-xs font-semibold text-sky-300 hover:text-sky-200"
               >
                 Manage users →
               </Link>

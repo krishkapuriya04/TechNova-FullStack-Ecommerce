@@ -41,7 +41,7 @@ export function ProfilePage() {
         </div>
         <p className="mt-4 text-xs text-zinc-500">
           Need admin tooling?{' '}
-          <Link className="font-semibold text-indigo-600 dark:text-indigo-300" to={ROUTES.ADMIN}>
+          <Link className="font-semibold text-sky-600 dark:text-sky-300" to={ROUTES.ADMIN}>
             Open admin placeholder
           </Link>
         </p>

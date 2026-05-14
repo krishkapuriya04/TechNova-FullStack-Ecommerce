@@ -12,7 +12,7 @@ export function ShippingAddressForm({ value, errors, disabled, onChange }) {
           disabled={disabled}
           value={value[name] ?? ''}
           onChange={(e) => onChange(name, e.target.value)}
-          className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-indigo-500/30 focus:border-indigo-400 focus:ring-2 disabled:opacity-60 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
+          className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 disabled:opacity-60 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
           {...props}
         />
         {err ? <p className="mt-1 text-xs text-red-600 dark:text-red-400">{err}</p> : null}

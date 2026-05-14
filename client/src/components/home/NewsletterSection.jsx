@@ -46,7 +46,7 @@ export function NewsletterSection() {
               placeholder={newsletterContent.placeholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full flex-1 rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 shadow-inner outline-none ring-indigo-500/30 placeholder:text-zinc-400 focus:border-indigo-400 focus:ring-2 dark:border-white/10 dark:bg-tn-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+              className="w-full flex-1 rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 shadow-inner outline-none ring-sky-500/30 placeholder:text-zinc-400 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
             />
             <PrimaryButton type="submit" className="sm:w-auto sm:min-w-[9rem]">
               {newsletterContent.buttonLabel}

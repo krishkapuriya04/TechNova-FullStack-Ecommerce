@@ -15,8 +15,9 @@ export function PrimaryButton({
 }) {
   const base = [
     'inline-flex items-center justify-center gap-2',
-    'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-tn-glow-sm',
-    'tn-transition-base hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400',
+    'bg-sky-600 text-white shadow-md shadow-sky-900/20',
+    'tn-transition-base hover:bg-sky-500 hover:shadow-lg hover:shadow-sky-900/25',
+    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
     'active:scale-[0.98]',
     sizeStyles[size],
     className,

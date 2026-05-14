@@ -53,7 +53,7 @@ export function Footer() {
                   href={item.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-tn border border-zinc-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-700 tn-transition-base hover:border-indigo-300/60 hover:text-indigo-700 dark:border-white/10 dark:text-zinc-200 dark:hover:border-indigo-400/40 dark:hover:text-indigo-200"
+                  className="rounded-tn border border-zinc-200 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-700 tn-transition-base hover:border-sky-300/60 hover:text-sky-700 dark:border-white/10 dark:text-zinc-200 dark:hover:border-sky-400/40 dark:hover:text-sky-200"
                 >
                   {item.label}
                 </a>
@@ -75,7 +75,7 @@ export function Footer() {
                       <li key={link.to}>
                         <Link
                           to={link.to}
-                          className="tn-transition-base hover:text-indigo-600 dark:hover:text-indigo-300"
+                          className="tn-transition-base hover:text-sky-600 dark:hover:text-sky-300"
                         >
                           {link.label}
                         </Link>

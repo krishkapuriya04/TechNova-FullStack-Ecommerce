@@ -13,22 +13,22 @@ export function PaymentSection({
       <fieldset>
         <legend className="text-sm font-semibold text-zinc-900 dark:text-white">Payment method</legend>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          <label className="flex cursor-pointer items-center gap-3 rounded-tn border border-zinc-200 bg-white/80 px-4 py-3 text-sm font-medium text-zinc-800 has-[:checked]:border-indigo-500 has-[:checked]:ring-2 has-[:checked]:ring-indigo-400/30 dark:border-white/10 dark:bg-tn-950/80 dark:text-zinc-100 dark:has-[:checked]:border-indigo-400">
+          <label className="flex cursor-pointer items-center gap-3 rounded-tn border border-zinc-200 bg-white/80 px-4 py-3 text-sm font-medium text-zinc-800 has-[:checked]:border-sky-500 has-[:checked]:ring-2 has-[:checked]:ring-sky-400/30 dark:border-white/10 dark:bg-tn-950/80 dark:text-zinc-100 dark:has-[:checked]:border-sky-400">
             <input
               type="radio"
               name="payment"
-              className="accent-indigo-600"
+              className="accent-sky-600"
               checked={method === PAYMENT_METHOD.COD}
               disabled={disabled}
               onChange={() => onMethodChange(PAYMENT_METHOD.COD)}
             />
             Cash on delivery
           </label>
-          <label className="flex cursor-pointer items-center gap-3 rounded-tn border border-zinc-200 bg-white/80 px-4 py-3 text-sm font-medium text-zinc-800 has-[:checked]:border-indigo-500 has-[:checked]:ring-2 has-[:checked]:ring-indigo-400/30 dark:border-white/10 dark:bg-tn-950/80 dark:text-zinc-100 dark:has-[:checked]:border-indigo-400">
+          <label className="flex cursor-pointer items-center gap-3 rounded-tn border border-zinc-200 bg-white/80 px-4 py-3 text-sm font-medium text-zinc-800 has-[:checked]:border-sky-500 has-[:checked]:ring-2 has-[:checked]:ring-sky-400/30 dark:border-white/10 dark:bg-tn-950/80 dark:text-zinc-100 dark:has-[:checked]:border-sky-400">
             <input
               type="radio"
               name="payment"
-              className="accent-indigo-600"
+              className="accent-sky-600"
               checked={method === PAYMENT_METHOD.CARD}
               disabled={disabled}
               onChange={() => onMethodChange(PAYMENT_METHOD.CARD)}
@@ -53,7 +53,7 @@ export function PaymentSection({
               disabled={disabled}
               value={cardLast4}
               onChange={(e) => onCardLast4Change(e.target.value.replace(/\D/g, '').slice(0, 4))}
-              className="w-24 rounded-md border border-white/20 bg-black/30 px-3 py-2 text-center font-mono text-sm outline-none ring-indigo-400/40 focus:ring-2"
+              className="w-24 rounded-md border border-white/20 bg-black/30 px-3 py-2 text-center font-mono text-sm outline-none ring-sky-400/40 focus:ring-2"
             />
           </div>
           {errors.cardLast4 ? (

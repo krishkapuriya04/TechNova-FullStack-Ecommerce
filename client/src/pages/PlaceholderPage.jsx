@@ -7,7 +7,7 @@ export function PlaceholderPage() {
 
   return (
     <div className="mx-auto max-w-xl px-4 py-20 text-center">
-      <p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">Coming soon</p>
+      <p className="text-sm font-medium text-sky-600 dark:text-sky-300">Coming soon</p>
       <h1 className="mt-2 text-2xl font-semibold text-zinc-900 capitalize dark:text-white">
         {location.pathname.replace(/\//g, ' ').trim() || 'Page'}
       </h1>

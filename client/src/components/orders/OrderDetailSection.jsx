@@ -9,7 +9,7 @@ export function OrderDetailSection({ order }) {
     <div className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-300">
             Order
           </p>
           <h1 className="mt-2 font-mono text-xl font-semibold text-zinc-900 dark:text-white sm:text-2xl">
@@ -41,7 +41,7 @@ export function OrderDetailSection({ order }) {
                 {line.slug ? (
                   <Link
                     to={productPath(line.slug)}
-                    className="font-medium text-zinc-900 transition hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300"
+                    className="font-medium text-zinc-900 transition hover:text-sky-600 dark:text-white dark:hover:text-sky-300"
                   >
                     {line.title}
                   </Link>

@@ -29,7 +29,7 @@ export function RegisterPage() {
       <Seo title="Create account" canonicalPath={ROUTES.AUTH_REGISTER} noindex description="Create a TechNova shopper account." />
       <div className="w-full rounded-tn-2xl border border-zinc-200/80 bg-white/90 p-8 shadow-tn-soft backdrop-blur dark:border-white/10 dark:bg-tn-900/80">
       <div className="space-y-2 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-300">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600 dark:text-sky-300">
           Join TechNova
         </p>
         <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Create your account</h1>
@@ -48,7 +48,7 @@ export function RegisterPage() {
             required
             value={form.name}
             onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-indigo-500/30 focus:border-indigo-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
+            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
           />
         </div>
         <div>
@@ -62,7 +62,7 @@ export function RegisterPage() {
             required
             value={form.email}
             onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-indigo-500/30 focus:border-indigo-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
+            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
           />
         </div>
         <div>
@@ -79,7 +79,7 @@ export function RegisterPage() {
             required
             value={form.password}
             onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-indigo-500/30 focus:border-indigo-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
+            className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-950 dark:text-zinc-100"
           />
         </div>
         <PrimaryButton type="submit" className="w-full justify-center" disabled={loading}>
@@ -89,7 +89,7 @@ export function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
         Already have an account?{' '}
-        <Link className="font-semibold text-indigo-600 dark:text-indigo-300" to={ROUTES.AUTH_LOGIN}>
+        <Link className="font-semibold text-sky-600 dark:text-sky-300" to={ROUTES.AUTH_LOGIN}>
           Sign in
         </Link>
       </p>

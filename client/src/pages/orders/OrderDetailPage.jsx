@@ -42,7 +42,7 @@ export function OrderDetailPage() {
       <div className="tn-container tn-section-y space-y-4 text-center">
         <p className="text-lg font-semibold text-zinc-900 dark:text-white">Order unavailable</p>
         {error ? <p className="text-sm text-zinc-600 dark:text-zinc-400">{error}</p> : null}
-        <Link to={ROUTES.ORDERS} className="text-sm font-semibold text-indigo-600 dark:text-indigo-300">
+        <Link to={ROUTES.ORDERS} className="text-sm font-semibold text-sky-600 dark:text-sky-300">
           ← Back to orders
         </Link>
       </div>
@@ -56,7 +56,7 @@ export function OrderDetailPage() {
           <SectionTitle eyebrow="Details" title="Order summary" subtitle="Shipment and payment in one view." />
           <Link
             to={ROUTES.ORDERS}
-            className="text-sm font-semibold text-indigo-600 transition hover:text-indigo-500 dark:text-indigo-300"
+            className="text-sm font-semibold text-sky-600 transition hover:text-sky-500 dark:text-sky-300"
           >
             ← All orders
           </Link>

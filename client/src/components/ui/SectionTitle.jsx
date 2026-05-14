@@ -9,7 +9,7 @@ export function SectionTitle({ eyebrow, title, subtitle, align = 'left' }) {
   return (
     <div className={`mb-10 space-y-3 ${alignClass}`}>
       {eyebrow ? (
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-600 dark:text-indigo-300/90">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-600 dark:text-sky-300/90">
           {eyebrow}
         </p>
       ) : null}
@@ -21,7 +21,7 @@ export function SectionTitle({ eyebrow, title, subtitle, align = 'left' }) {
       ) : null}
       <motion.span
         aria-hidden
-        className={`block h-px rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 ${
+        className={`block h-px rounded-full bg-gradient-to-r from-sky-500 to-cyan-500 ${
           align === 'center' ? 'mx-auto w-16' : 'w-16'
         }`}
         initial={reduceMotion ? undefined : { opacity: 0, scaleX: 0.4 }}

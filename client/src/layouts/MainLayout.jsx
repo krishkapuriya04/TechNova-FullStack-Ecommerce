@@ -12,7 +12,7 @@ export function MainLayout() {
     <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-tn-void">
       <a
         href="#tn-main"
-        className="fixed left-4 top-4 z-[200] -translate-y-24 rounded-tn bg-indigo-600 px-4 py-2 text-sm font-semibold text-white opacity-0 shadow-lg transition focus:translate-y-0 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+        className="fixed left-4 top-4 z-[200] -translate-y-24 rounded-tn bg-sky-600 px-4 py-2 text-sm font-semibold text-white opacity-0 shadow-lg transition focus:translate-y-0 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-sky-300"
       >
         Skip to content
       </a>

@@ -13,7 +13,7 @@ const linkClass = ({ isActive }) =>
   [
     'block rounded-tn px-4 py-3 text-base font-medium tn-transition-base',
     isActive
-      ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-200'
+      ? 'bg-sky-500/15 text-sky-700 dark:text-sky-200'
       : 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/5',
   ].join(' ')
 
@@ -72,7 +72,7 @@ export function MobileMenu({ open, onClose }) {
                       <span className="inline-flex items-center gap-2">
                         {item.label}
                         {bootstrapped && isAuthenticated && itemCount > 0 ? (
-                          <span className="min-w-[1.25rem] rounded-full bg-indigo-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-indigo-400 dark:text-tn-950">
+                          <span className="min-w-[1.25rem] rounded-full bg-sky-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-sky-400 dark:text-tn-950">
                             {itemCount > 99 ? '99+' : itemCount}
                           </span>
                         ) : null}
@@ -130,7 +130,7 @@ export function MobileMenuButton({ open, onClick }) {
   return (
     <button
       type="button"
-      className="inline-flex h-10 w-10 items-center justify-center rounded-tn border border-zinc-200 text-zinc-800 transition hover:border-indigo-300/50 hover:bg-zinc-50 md:hidden dark:border-white/10 dark:text-zinc-100 dark:hover:border-indigo-400/30 dark:hover:bg-white/5"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-tn border border-zinc-200 text-zinc-800 transition hover:border-sky-300/50 hover:bg-zinc-50 md:hidden dark:border-white/10 dark:text-zinc-100 dark:hover:border-sky-400/30 dark:hover:bg-white/5"
       aria-controls="mobile-navigation"
       aria-expanded={open}
       onClick={onClick}

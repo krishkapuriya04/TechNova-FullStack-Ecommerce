@@ -12,12 +12,12 @@ const linkClass = ({ isActive }) =>
   [
     'rounded-tn px-3 py-2 text-sm font-medium tn-transition-base',
     isActive
-      ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-200'
+      ? 'bg-sky-500/12 text-sky-800 dark:text-sky-200'
       : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-zinc-100',
   ].join(' ')
 
 const authLinkClass =
-  'rounded-tn px-3 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-500/10 dark:text-indigo-200 dark:hover:bg-white/5'
+  'rounded-tn px-3 py-2 text-sm font-semibold text-sky-800 transition hover:bg-sky-500/10 dark:text-sky-200 dark:hover:bg-white/5'
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -39,9 +39,9 @@ export function Navbar() {
         <div className="tn-container flex h-16 items-center justify-between gap-4">
           <NavLink
             to={ROUTES.HOME}
-            className="group flex items-center gap-2 rounded-tn outline-none ring-indigo-500/40 focus-visible:ring-2"
+            className="group flex items-center gap-2 rounded-tn outline-none ring-sky-500/35 focus-visible:ring-2"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-tn bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-bold text-white shadow-tn-glow-sm tn-transition-transform group-hover:scale-[1.03]">
+            <span className="flex h-9 w-9 items-center justify-center rounded-tn bg-gradient-to-br from-slate-800 via-slate-900 to-sky-700 text-sm font-bold text-white shadow-md tn-transition-transform group-hover:scale-[1.03]">
               TN
             </span>
             <span className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
@@ -56,7 +56,7 @@ export function Navbar() {
                   <span className="inline-flex items-center gap-2">
                     {item.label}
                     {bootstrapped && isAuthenticated && itemCount > 0 ? (
-                      <span className="min-w-[1.25rem] rounded-full bg-indigo-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-indigo-400 dark:text-tn-950">
+                      <span className="min-w-[1.25rem] rounded-full bg-sky-600 px-1.5 py-0.5 text-center text-[10px] font-bold leading-none text-white dark:bg-sky-400 dark:text-tn-950">
                         {itemCount > 99 ? '99+' : itemCount}
                       </span>
                     ) : null}
@@ -98,7 +98,7 @@ export function Navbar() {
                 </NavLink>
                 <NavLink
                   to={ROUTES.AUTH_REGISTER}
-                  className="rounded-tn bg-gradient-to-r from-indigo-500 to-violet-600 px-3 py-2 text-xs font-semibold text-white shadow-tn-glow-sm hover:brightness-110"
+                  className="rounded-tn bg-sky-600 px-3 py-2 text-xs font-semibold text-white shadow-md transition hover:bg-sky-500"
                 >
                   Register
                 </NavLink>

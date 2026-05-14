@@ -15,7 +15,7 @@ export class ErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 bg-zinc-50 px-6 py-16 text-center dark:bg-tn-void">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-300">
             Something went wrong
           </p>
           <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">We could not load this view</h1>

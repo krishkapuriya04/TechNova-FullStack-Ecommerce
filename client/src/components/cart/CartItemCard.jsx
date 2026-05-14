@@ -24,7 +24,7 @@ export function CartItemCard({ item, disabled, onIncrement, onDecrement, onRemov
           {detailTo ? (
             <Link
               to={detailTo}
-              className="block truncate text-base font-semibold text-zinc-900 transition hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300"
+              className="block truncate text-base font-semibold text-zinc-900 transition hover:text-sky-600 dark:text-white dark:hover:text-sky-300"
             >
               {product.title}
             </Link>

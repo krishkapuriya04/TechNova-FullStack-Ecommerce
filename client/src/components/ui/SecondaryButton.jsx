@@ -15,10 +15,11 @@ export function SecondaryButton({
 }) {
   const base = [
     'inline-flex items-center justify-center gap-2 border',
-    'border-zinc-200 bg-white/90 text-zinc-900 shadow-sm',
-    'dark:border-white/10 dark:bg-tn-850/80 dark:text-zinc-100',
-    'tn-transition-base hover:border-indigo-300/60 hover:bg-zinc-50 dark:hover:border-indigo-400/40 dark:hover:bg-tn-800/90',
-    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400',
+    'border-zinc-200 bg-white/95 text-zinc-900 shadow-sm',
+    'dark:border-white/12 dark:bg-tn-850/85 dark:text-zinc-100',
+    'tn-transition-base hover:border-sky-300/70 hover:bg-zinc-50 hover:shadow-md',
+    'dark:hover:border-sky-500/35 dark:hover:bg-tn-800/95',
+    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
     'active:scale-[0.98]',
     sizeStyles[size],
     className,

@@ -12,7 +12,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-tn border border-zinc-200 bg-white text-zinc-800 shadow-sm tn-transition-base hover:border-indigo-300/60 hover:text-indigo-700 dark:border-white/10 dark:bg-tn-850 dark:text-zinc-100 dark:hover:border-indigo-400/40 dark:hover:text-indigo-200"
+      className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-tn border border-zinc-200 bg-white text-zinc-800 shadow-sm tn-transition-base hover:border-sky-300/60 hover:text-sky-700 dark:border-white/10 dark:bg-tn-850 dark:text-zinc-100 dark:hover:border-sky-400/40 dark:hover:text-sky-200"
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       <AnimatePresence initial={false} mode="popLayout">

@@ -20,7 +20,7 @@ export function AdminSidebar({ onNavigate, variant = 'desktop' }) {
   return (
     <aside className={root}>
       <div className="mb-8 px-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-300/90">TechNova</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-300/90">TechNova</p>
         <p className="mt-1 text-lg font-semibold text-white">Admin</p>
       </div>
       <nav className="flex flex-1 flex-col gap-1" aria-label="Admin">
@@ -38,7 +38,7 @@ export function AdminSidebar({ onNavigate, variant = 'desktop' }) {
       </nav>
       <NavLink
         to={ROUTES.HOME}
-        className="mt-4 rounded-tn border border-white/10 px-3 py-2 text-center text-xs font-semibold text-zinc-300 transition hover:border-indigo-400/40 hover:text-white"
+        className="mt-4 rounded-tn border border-white/10 px-3 py-2 text-center text-xs font-semibold text-zinc-300 transition hover:border-sky-400/40 hover:text-white"
         onClick={onNavigate}
       >
         ← Storefront

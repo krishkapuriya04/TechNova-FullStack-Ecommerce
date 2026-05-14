@@ -92,7 +92,7 @@ export function AdminProductsPage() {
           placeholder="Search title, slug, brand…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md rounded-tn border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-white outline-none ring-indigo-400/30 focus:ring-2 sm:w-80"
+          className="w-full max-w-md rounded-tn border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-white outline-none ring-sky-400/30 focus:ring-2 sm:w-80"
         />
         {meta ? (
           <p className="text-xs text-zinc-500">
@@ -128,7 +128,7 @@ export function AdminProductsPage() {
                       <p className="font-medium text-white">{p.title}</p>
                       <Link
                         to={productPath(p.slug)}
-                        className="text-xs text-indigo-300 hover:text-indigo-200"
+                        className="text-xs text-sky-300 hover:text-sky-200"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -143,7 +143,7 @@ export function AdminProductsPage() {
                       <button
                         type="button"
                         onClick={() => openEdit(p)}
-                        className="mr-3 text-xs font-semibold text-indigo-300 hover:text-indigo-200"
+                        className="mr-3 text-xs font-semibold text-sky-300 hover:text-sky-200"
                       >
                         Edit
                       </button>

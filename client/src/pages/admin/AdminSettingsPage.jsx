@@ -31,7 +31,7 @@ export function AdminSettingsPage() {
         {cards.map((c) => (
           <article
             key={c.title}
-            className="rounded-tn-2xl border border-white/10 bg-white/5 p-5 shadow-inner backdrop-blur-md transition hover:border-indigo-400/25"
+            className="rounded-tn-2xl border border-white/10 bg-white/5 p-5 shadow-inner backdrop-blur-md transition hover:border-sky-400/25"
           >
             <h2 className="text-base font-semibold text-white">{c.title}</h2>
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">{c.body}</p>

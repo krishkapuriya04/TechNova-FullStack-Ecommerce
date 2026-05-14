@@ -4,7 +4,7 @@ import { orderDetailPath } from '@/constants/routes.js'
 
 export function OrderCard({ order }) {
   return (
-    <article className="flex flex-col gap-4 rounded-tn-xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm transition hover:border-indigo-300/50 dark:border-white/10 dark:bg-tn-900/80 dark:hover:border-indigo-400/30 sm:flex-row sm:items-center">
+    <article className="flex flex-col gap-4 rounded-tn-xl border border-zinc-200/80 bg-white/90 p-5 shadow-sm transition hover:border-sky-300/50 dark:border-white/10 dark:bg-tn-900/80 dark:hover:border-sky-400/30 sm:flex-row sm:items-center">
       <div className="h-20 w-24 shrink-0 overflow-hidden rounded-tn border border-zinc-200/80 bg-zinc-100 dark:border-white/10 dark:bg-tn-950">
         {order.previewImage ? (
           <img src={order.previewImage} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -31,7 +31,7 @@ export function OrderCard({ order }) {
         <p className="text-lg font-bold text-zinc-900 dark:text-white">{formatOrderMoney(order.totalPrice)}</p>
         <Link
           to={orderDetailPath(order.id)}
-          className="text-sm font-semibold text-indigo-600 transition hover:text-indigo-500 dark:text-indigo-300"
+          className="text-sm font-semibold text-sky-600 transition hover:text-sky-500 dark:text-sky-300"
         >
           View details →
         </Link>

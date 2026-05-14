@@ -86,7 +86,7 @@ export function WishlistCard({ product }) {
       <div className="flex flex-1 flex-col gap-3 p-5">
         {detailTo ? (
           <Link to={detailTo} className="block">
-            <h3 className="text-base font-semibold text-zinc-900 transition hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+            <h3 className="text-base font-semibold text-zinc-900 transition hover:text-sky-600 dark:text-white dark:hover:text-sky-300">
               {product.title}
             </h3>
           </Link>

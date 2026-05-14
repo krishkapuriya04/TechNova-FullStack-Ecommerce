@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader.jsx'
+import { AdminOrderDetailModal } from '@/components/admin/AdminOrderDetailModal.jsx'
 import { Skeleton } from '@/components/ui/LoadingSkeleton.jsx'
+import { useDebounce } from '@/hooks/useDebounce.js'
 import * as adminService from '@/services/adminService.js'
 import { formatOrderMoney, formatShortDate, orderStatusBadgeClass, paymentStatusBadgeClass } from '@/utils/ecommerce.js'
 import { getErrorMessage } from '@/utils/apiError.js'
@@ -11,10 +13,15 @@ const PAYMENT_STATUSES = ['pending', 'paid', 'failed']
 
 export function AdminOrdersPage() {
   const [status, setStatus] = useState('')
+  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 400)
   const [page, setPage] = useState(1)
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [busyId, setBusyId] = useState(null)
+  const [detailId, setDetailId] = useState(null)
+  const [detailOrder, setDetailOrder] = useState(null)
+  const [detailLoading, setDetailLoading] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -23,6 +30,7 @@ export function AdminOrdersPage() {
         page,
         limit: 15,
         ...(status ? { status } : {}),
+        ...(debouncedSearch ? { search: debouncedSearch } : {}),
       })
       setData(payload)
     } catch (err) {
@@ -30,7 +38,7 @@ export function AdminOrdersPage() {
     } finally {
       setLoading(false)
     }
-  }, [page, status])
+  }, [page, status, debouncedSearch])
 
   useEffect(() => {
     const h = window.setTimeout(() => {
@@ -40,11 +48,32 @@ export function AdminOrdersPage() {
   }, [load])
 
   useEffect(() => {
+    const h = window.setTimeout(() => setPage(1), 0)
+    return () => window.clearTimeout(h)
+  }, [status, debouncedSearch])
+
+  const loadDetail = useCallback(async (id) => {
+    setDetailLoading(true)
+    try {
+      const order = await adminService.fetchAdminOrder(id)
+      setDetailOrder(order)
+    } catch (err) {
+      toast.error(getErrorMessage(err, 'Unable to load order'))
+    } finally {
+      setDetailLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!detailId) {
+      const h = window.setTimeout(() => setDetailOrder(null), 0)
+      return () => window.clearTimeout(h)
+    }
     const h = window.setTimeout(() => {
-      setPage(1)
+      void loadDetail(detailId)
     }, 0)
     return () => window.clearTimeout(h)
-  }, [status])
+  }, [detailId, loadDetail])
 
   async function patchOrderStatus(id, orderStatus) {
     setBusyId(id)
@@ -52,6 +81,7 @@ export function AdminOrdersPage() {
       await adminService.updateAdminOrderStatus(id, orderStatus)
       toast.success('Order status updated')
       load()
+      if (detailId === id) loadDetail(id)
     } catch (err) {
       toast.error(getErrorMessage(err, 'Update failed'))
     } finally {
@@ -65,6 +95,7 @@ export function AdminOrdersPage() {
       await adminService.updateAdminPaymentStatus(id, paymentStatus)
       toast.success('Payment status updated')
       load()
+      if (detailId === id) loadDetail(id)
     } catch (err) {
       toast.error(getErrorMessage(err, 'Update failed'))
     } finally {
@@ -75,14 +106,18 @@ export function AdminOrdersPage() {
   const meta = data?.meta
 
   return (
-    <div>
+    <div className="relative">
+      {loading && data ? (
+        <div className="pointer-events-none absolute inset-0 z-[5] flex items-start justify-center bg-black/20 pt-24 backdrop-blur-[1px]" aria-hidden />
+      ) : null}
+
       <AdminPageHeader
         eyebrow="Fulfillment"
         title="Orders"
-        subtitle="Filter by fulfillment state and reconcile payment flags before finance integrations land."
+        subtitle="Search by customer, line item, or Mongo id — update fulfillment and payment in one surface."
       />
 
-      <div className="mb-6 flex flex-wrap items-center gap-3">
+      <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:flex-wrap lg:items-end">
         <label className="text-xs font-semibold text-zinc-400">
           Filter
           <select
@@ -98,8 +133,15 @@ export function AdminOrdersPage() {
             ))}
           </select>
         </label>
+        <input
+          type="search"
+          placeholder="Search email, name, product title, order id…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full max-w-md rounded-tn border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-white outline-none ring-sky-400/30 focus:ring-2 lg:ml-4"
+        />
         {meta ? (
-          <span className="text-xs text-zinc-500">
+          <span className="text-xs text-zinc-500 lg:ml-auto">
             {meta.total} orders · page {meta.page}/{meta.pages}
           </span>
         ) : null}
@@ -114,7 +156,7 @@ export function AdminOrdersPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[56rem] text-left text-sm">
+            <table className="w-full min-w-[60rem] text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-500">
                   <th className="px-4 py-3">Customer</th>
@@ -122,6 +164,7 @@ export function AdminOrdersPage() {
                   <th className="px-4 py-3">Order status</th>
                   <th className="px-4 py-3">Payment</th>
                   <th className="px-4 py-3">Placed</th>
+                  <th className="px-4 py-3 text-right">Detail</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -133,7 +176,9 @@ export function AdminOrdersPage() {
                     </td>
                     <td className="px-4 py-3 font-semibold text-white">{formatOrderMoney(o.totalPrice)}</td>
                     <td className="px-4 py-3">
-                      <span className={`mr-2 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${orderStatusBadgeClass(o.orderStatus)}`}>
+                      <span
+                        className={`mr-2 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${orderStatusBadgeClass(o.orderStatus)}`}
+                      >
                         {o.orderStatus}
                       </span>
                       <select
@@ -150,7 +195,9 @@ export function AdminOrdersPage() {
                       </select>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`mr-2 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${paymentStatusBadgeClass(o.paymentStatus)}`}>
+                      <span
+                        className={`mr-2 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${paymentStatusBadgeClass(o.paymentStatus)}`}
+                      >
                         {o.paymentStatus}
                       </span>
                       <select
@@ -167,6 +214,15 @@ export function AdminOrdersPage() {
                       </select>
                     </td>
                     <td className="px-4 py-3 text-xs text-zinc-500">{formatShortDate(o.createdAt)}</td>
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        type="button"
+                        onClick={() => setDetailId(o.id)}
+                        className="text-xs font-semibold text-sky-300 hover:text-sky-200"
+                      >
+                        View
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -197,6 +253,15 @@ export function AdminOrdersPage() {
             Next
           </button>
         </div>
+      ) : null}
+
+      {detailId ? (
+        <AdminOrderDetailModal
+          order={detailOrder}
+          loading={detailLoading}
+          onClose={() => { setDetailId(null); setDetailOrder(null) }}
+          onRefresh={() => loadDetail(detailId)}
+        />
       ) : null}
     </div>
   )

@@ -1,19 +1,30 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import { AdminPageHeader, AdminStatCard } from '@/components/admin/AdminPageHeader.jsx'
 import { AdminRevenueChart } from '@/components/admin/charts/AdminRevenueChart.jsx'
 import { AdminOrdersBarChart } from '@/components/admin/charts/AdminOrdersBarChart.jsx'
 import { AdminSalesOverviewChart } from '@/components/admin/charts/AdminSalesOverviewChart.jsx'
+import {
+  AdminDashboardActivity,
+  AdminDashboardLowStockList,
+  AdminDashboardQuickActions,
+  AdminDashboardStatRow,
+  AdminDashboardTopSelling,
+  AdminDashboardTrending,
+} from '@/components/admin/AdminDashboardOpsPanels.jsx'
 import { Skeleton } from '@/components/ui/LoadingSkeleton.jsx'
 import { ROUTES } from '@/constants/routes.js'
 import * as adminService from '@/services/adminService.js'
 import { formatOrderMoney, formatShortDate } from '@/utils/ecommerce.js'
 import { getErrorMessage } from '@/utils/apiError.js'
+import { useNotifications } from '@/hooks/useNotifications.js'
 
 export function AdminDashboardPage() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const { push } = useNotifications()
+  const stockAlertSent = useRef(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -34,6 +45,16 @@ export function AdminDashboardPage() {
     return () => window.clearTimeout(h)
   }, [load])
 
+  useEffect(() => {
+    if (!data?.lowStockProducts?.length || stockAlertSent.current) return
+    stockAlertSent.current = true
+    push({
+      type: 'inventory',
+      title: 'Stock alert',
+      message: `${data.lowStockProducts.length} SKU(s) at or below the low-stock threshold`,
+    })
+  }, [data, push])
+
   const chartMonthly =
     data?.monthlySales?.map((row) => ({
       label: row.label,
@@ -48,12 +69,19 @@ export function AdminDashboardPage() {
       orders: row.orders,
     })) ?? []
 
+  const lastMonthSales = useMemo(() => {
+    const rows = data?.monthlySales ?? []
+    if (!rows.length) return { orders: 0, revenue: 0 }
+    const last = rows[rows.length - 1]
+    return { orders: last.orders ?? 0, revenue: last.revenue ?? 0 }
+  }, [data?.monthlySales])
+
   return (
     <div>
       <AdminPageHeader
-        eyebrow="Overview"
-        title="Dashboard"
-        subtitle="Live metrics from MongoDB — revenue excludes cancelled orders."
+        eyebrow="Operations"
+        title="Control center"
+        subtitle="Live MongoDB metrics, fulfillment signals, and catalog health — built for daily admin workflows."
       />
 
       {loading && !data ? (
@@ -66,12 +94,21 @@ export function AdminDashboardPage() {
 
       {data ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <AdminStatCard label="Total revenue" value={formatOrderMoney(data.totalRevenue)} />
-            <AdminStatCard label="Orders" value={String(data.totalOrders)} hint="All-time count" />
-            <AdminStatCard label="Products" value={String(data.totalProducts)} />
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+            <AdminStatCard label="Revenue (all-time)" value={formatOrderMoney(data.totalRevenue)} hint="Excludes cancelled" />
+            <AdminStatCard label="Sales (last month)" value={formatOrderMoney(lastMonthSales.revenue)} hint={`${lastMonthSales.orders} orders`} />
+            <AdminStatCard label="Orders" value={String(data.totalOrders)} hint="Lifetime count" />
             <AdminStatCard label="Users" value={String(data.totalUsers)} />
+            <AdminStatCard label="Products" value={String(data.totalProducts)} />
+            <AdminStatCard
+              label="Low stock SKUs"
+              value={String(data.inventory?.lowStock ?? 0)}
+              hint={`≤ ${data.inventory?.lowStockThreshold ?? 8} units`}
+            />
           </div>
+
+          <AdminDashboardStatRow data={data} />
+          <AdminDashboardQuickActions />
 
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             <div className="rounded-tn-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
@@ -96,9 +133,18 @@ export function AdminDashboardPage() {
             </div>
           </div>
 
+          <div className="mt-10 grid gap-6 xl:grid-cols-3">
+            <AdminDashboardActivity activities={data.activities} />
+            <AdminDashboardTopSelling topSelling={data.topSelling} />
+            <div className="space-y-6">
+              <AdminDashboardTrending trendingSnapshot={data.trendingSnapshot} />
+              <AdminDashboardLowStockList lowStockProducts={data.lowStockProducts} />
+            </div>
+          </div>
+
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             <div className="rounded-tn-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md">
-              <h2 className="text-sm font-semibold text-white">Recent orders</h2>
+              <h2 className="text-sm font-semibold text-white">Latest orders</h2>
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full min-w-[28rem] text-left text-sm">
                   <thead>

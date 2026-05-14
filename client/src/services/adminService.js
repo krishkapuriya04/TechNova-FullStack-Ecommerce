@@ -44,3 +44,38 @@ export async function deleteAdminUser(id) {
   const { data } = await apiClient.delete(`/admin/users/${id}`)
   return data.data
 }
+
+export async function patchAdminProductStock(id, stock) {
+  const { data } = await apiClient.patch(`/admin/products/${id}/stock`, { stock })
+  return data.data.product
+}
+
+export async function fetchAdminCoupons() {
+  const { data } = await apiClient.get('/admin/coupons')
+  return data.data.coupons
+}
+
+export async function createAdminCoupon(body) {
+  const { data } = await apiClient.post('/admin/coupons', body)
+  return data.data.coupon
+}
+
+export async function updateAdminCoupon(id, body) {
+  const { data } = await apiClient.patch(`/admin/coupons/${id}`, body)
+  return data.data.coupon
+}
+
+export async function deleteAdminCoupon(id) {
+  const { data } = await apiClient.delete(`/admin/coupons/${id}`)
+  return data.data
+}
+
+export async function fetchAdminReviews(params) {
+  const { data } = await apiClient.get('/admin/reviews', { params })
+  return data.data
+}
+
+export async function deleteAdminReview(id) {
+  const { data } = await apiClient.delete(`/admin/reviews/${id}`)
+  return data.data
+}

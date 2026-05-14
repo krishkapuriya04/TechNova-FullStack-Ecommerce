@@ -2,20 +2,20 @@ import { AdminPageHeader } from '@/components/admin/AdminPageHeader.jsx'
 
 const cards = [
   {
+    title: 'Newsletter & CRM',
+    body: 'Subscriber exports, consent timelines, and ESP sync will live here. Until APIs land, capture leads via the public newsletter page.',
+  },
+  {
     title: 'Payments',
     body: 'Stripe / Razorpay connectors will mount here with webhook replay and settlement exports.',
   },
   {
     title: 'Coupons & promos',
-    body: 'Rule engine for stackable discounts, usage caps, and channel-specific campaigns.',
-  },
-  {
-    title: 'Invoices & tax',
-    body: 'PDF generation, GST/VAT profiles, and immutable invoice numbers per jurisdiction.',
+    body: 'Operational coupons now live under Admin → Coupons with expiry governance.',
   },
   {
     title: 'Notifications',
-    body: 'Transactional email/SMS with provider abstraction and template versioning.',
+    body: 'Transactional email/SMS with provider abstraction — the in-app bell mirrors critical ops events today.',
   },
 ]
 

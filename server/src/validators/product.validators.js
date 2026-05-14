@@ -61,4 +61,6 @@ export const updateProductValidators = [
   body('featured').optional().isBoolean().toBoolean(),
   body('trending').optional().isBoolean().toBoolean(),
   body('specifications').optional().isArray(),
+  body('specifications.*.name').optional().isString().trim().isLength({ max: 80 }),
+  body('specifications.*.value').optional().isString().trim().isLength({ max: 240 }),
 ]

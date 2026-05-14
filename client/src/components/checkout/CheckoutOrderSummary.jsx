@@ -24,6 +24,12 @@ export function CheckoutOrderSummary({ cart, pricing }) {
           <dt>Subtotal</dt>
           <dd className="font-medium text-zinc-900 dark:text-white">{formatOrderMoney(pricing.subtotal)}</dd>
         </div>
+        {pricing.discountAmount > 0 ? (
+          <div className="flex justify-between text-emerald-700 dark:text-emerald-300">
+            <dt>Discount</dt>
+            <dd className="font-medium">−{formatOrderMoney(pricing.discountAmount)}</dd>
+          </div>
+        ) : null}
         <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
           <dt>Shipping</dt>
           <dd className="font-medium text-zinc-900 dark:text-white">{formatOrderMoney(pricing.shippingFee)}</dd>

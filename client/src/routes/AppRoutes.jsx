@@ -45,6 +45,21 @@ const AdminAnalyticsPage = lazy(() =>
 const AdminSettingsPage = lazy(() =>
   import('@/pages/admin/AdminSettingsPage.jsx').then((m) => ({ default: m.AdminSettingsPage })),
 )
+const AdminCouponsPage = lazy(() =>
+  import('@/pages/admin/AdminCouponsPage.jsx').then((m) => ({ default: m.AdminCouponsPage })),
+)
+const AdminReviewsPage = lazy(() =>
+  import('@/pages/admin/AdminReviewsPage.jsx').then((m) => ({ default: m.AdminReviewsPage })),
+)
+const FaqPage = lazy(() => import('@/pages/support/FaqPage.jsx').then((m) => ({ default: m.FaqPage })))
+const ShippingInfoPage = lazy(() =>
+  import('@/pages/support/ShippingInfoPage.jsx').then((m) => ({ default: m.ShippingInfoPage })),
+)
+const ReturnsPage = lazy(() => import('@/pages/support/ReturnsPage.jsx').then((m) => ({ default: m.ReturnsPage })))
+const ContactPage = lazy(() => import('@/pages/support/ContactPage.jsx').then((m) => ({ default: m.ContactPage })))
+const NewsletterPage = lazy(() =>
+  import('@/pages/support/NewsletterPage.jsx').then((m) => ({ default: m.NewsletterPage })),
+)
 
 const routeFallback = <PageLoader label="Loading view…" />
 
@@ -65,6 +80,8 @@ export function AppRoutes() {
             <Route path="users" element={<AdminUsersPage />} />
             <Route path="analytics" element={<AdminAnalyticsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
+            <Route path="coupons" element={<AdminCouponsPage />} />
+            <Route path="reviews" element={<AdminReviewsPage />} />
           </Route>
         </Route>
 
@@ -72,6 +89,11 @@ export function AppRoutes() {
           <Route path={ROUTES.HOME} element={<HomePage />} />
           <Route path={ROUTES.SHOP} element={<ShopPage />} />
           <Route path={ROUTES.PRODUCT} element={<ProductDetailsPage />} />
+          <Route path={ROUTES.FAQ} element={<FaqPage />} />
+          <Route path={ROUTES.SHIPPING_INFO} element={<ShippingInfoPage />} />
+          <Route path={ROUTES.RETURNS} element={<ReturnsPage />} />
+          <Route path={ROUTES.CONTACT} element={<ContactPage />} />
+          <Route path={ROUTES.NEWSLETTER} element={<NewsletterPage />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path={ROUTES.CART} element={<CartPage />} />

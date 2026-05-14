@@ -14,3 +14,8 @@ export async function fetchCurrentUser() {
   const { data } = await apiClient.get('/auth/me')
   return data.data
 }
+
+export async function updateProfileRequest(payload) {
+  const { data } = await apiClient.patch('/auth/me', payload)
+  return data.data.user
+}

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { primaryNavLinks } from '@/data/navLinks.js'
 import { IconClose, IconMenu } from '@/components/ui/IconSymbols.jsx'
 import { ThemeToggle } from '@/components/layout/ThemeToggle.jsx'
+import { NotificationBell } from '@/components/layout/NotificationBell.jsx'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion.js'
 import { ROUTES } from '@/constants/routes.js'
 import { useAuth } from '@/hooks/useAuth.js'
@@ -53,6 +54,7 @@ export function MobileMenu({ open, onClose }) {
             <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-4 dark:border-white/10">
               <p className="text-sm font-semibold text-zinc-900 dark:text-white">Menu</p>
               <div className="flex items-center gap-2">
+                <NotificationBell />
                 <ThemeToggle />
                 <button
                   type="button"

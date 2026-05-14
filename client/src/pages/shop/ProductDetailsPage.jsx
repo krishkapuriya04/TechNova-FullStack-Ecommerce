@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { fetchProductBySlug, fetchProducts, isCancelledRequest } from '@/services/productService.js'
@@ -17,39 +17,7 @@ import { useCart } from '@/hooks/useCart.js'
 import { useWishlist } from '@/hooks/useWishlist.js'
 import { recordProductView, getRecentlyViewedSnapshots } from '@/hooks/useRecentlyViewed.js'
 import { Seo } from '@/components/seo/Seo.jsx'
-
-function ReviewPreview({ product }) {
-  const avg = product.ratings?.average ?? 0
-  const count = product.ratings?.count ?? 0
-  const snippets = [
-    { title: 'Everyday upgrade', body: 'Feels flagship where it matters — display, battery, and polish.' },
-    { title: 'Shipped fast', body: 'Arrived with double boxing and zero dead pixels. Setup was painless.' },
-    { title: 'Worth the price', body: 'Compared three retailers — TechNova matched the best deal with cleaner UX.' },
-  ]
-
-  return (
-    <div className="rounded-tn-xl border border-zinc-200/80 bg-white/70 p-5 dark:border-white/10 dark:bg-tn-900/70">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-zinc-900 dark:text-white">Buyer snapshot</p>
-        <RatingStars value={avg} reviewCount={count} />
-      </div>
-      <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-500">
-        Community average {avg.toFixed(1)}★ across {count.toLocaleString()} verified purchases on TechNova.
-      </p>
-      <ul className="mt-4 space-y-3">
-        {snippets.map((row) => (
-          <li key={row.title} className="rounded-tn border border-zinc-100 bg-zinc-50/80 p-3 text-sm dark:border-white/5 dark:bg-white/5">
-            <p className="font-semibold text-zinc-900 dark:text-white">{row.title}</p>
-            <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">{row.body}</p>
-          </li>
-        ))}
-      </ul>
-      <p className="mt-3 text-[11px] text-zinc-500 dark:text-zinc-500">
-        Preview UI only — wire to a reviews collection when you are ready for moderation workflows.
-      </p>
-    </div>
-  )
-}
+import { ProductReviewsSection } from '@/components/shop/ProductReviewsSection.jsx'
 
 export function ProductDetailsPage() {
   const { slug } = useParams()
@@ -143,6 +111,16 @@ export function ProductDetailsPage() {
       controller.abort()
     }
   }, [product?.id, product?.category])
+
+  const refreshProduct = useCallback(async () => {
+    if (!slug) return
+    try {
+      const doc = await fetchProductBySlug(slug)
+      setProduct(doc)
+    } catch {
+      /* keep existing product on transient errors */
+    }
+  }, [slug])
 
   const recentSnapshots = product?.id ? getRecentlyViewedSnapshots(product.id) : []
 
@@ -280,7 +258,6 @@ export function ProductDetailsPage() {
             </p>
           </div>
 
-          <ReviewPreview product={product} />
         </div>
 
         <div className="space-y-6">
@@ -380,6 +357,14 @@ export function ProductDetailsPage() {
             ← Back to shop
           </Link>
         </div>
+      </div>
+
+      <div className="tn-container mt-14">
+        <ProductReviewsSection
+          productId={product.id}
+          ratingSummary={{ average: product.ratings?.average ?? 0, count: product.ratings?.count ?? 0 }}
+          onReviewsChanged={refreshProduct}
+        />
       </div>
 
       {related.length ? (

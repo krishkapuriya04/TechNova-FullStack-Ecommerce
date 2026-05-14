@@ -1,6 +1,20 @@
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
 
+const savedAddressSchema = new mongoose.Schema(
+  {
+    label: { type: String, trim: true, maxlength: [40, 'Label too long'], default: 'Home' },
+    fullName: { type: String, trim: true, maxlength: [120, 'Name too long'], required: true },
+    line1: { type: String, trim: true, maxlength: [200, 'Address too long'], required: true },
+    line2: { type: String, trim: true, maxlength: [200, 'Address too long'], default: '' },
+    city: { type: String, trim: true, maxlength: [80, 'City too long'], required: true },
+    postalCode: { type: String, trim: true, maxlength: [24, 'Postal code too long'], required: true },
+    country: { type: String, trim: true, maxlength: [80, 'Country too long'], required: true },
+    phone: { type: String, trim: true, maxlength: [32, 'Phone too long'], required: true },
+  },
+  { _id: true },
+)
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -36,6 +50,11 @@ const userSchema = new mongoose.Schema(
       },
       default: 'user',
     },
+    savedAddresses: {
+      type: [savedAddressSchema],
+      default: [],
+      validate: [(arr) => arr.length <= 10, 'You can save at most 10 addresses'],
+    },
   },
   { timestamps: true },
 )
@@ -58,6 +77,17 @@ userSchema.methods.toSafeObject = function toSafeObject() {
     email: this.email,
     avatar: this.avatar,
     role: this.role,
+    savedAddresses: (this.savedAddresses ?? []).map((a) => ({
+      id: a._id.toString(),
+      label: a.label,
+      fullName: a.fullName,
+      line1: a.line1,
+      line2: a.line2 ?? '',
+      city: a.city,
+      postalCode: a.postalCode,
+      country: a.country,
+      phone: a.phone,
+    })),
     createdAt: this.createdAt,
   }
 }

@@ -6,6 +6,7 @@ import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
 import { ShippingAddressForm } from '@/components/checkout/ShippingAddressForm.jsx'
 import { PaymentSection } from '@/components/checkout/PaymentSection.jsx'
 import { CheckoutOrderSummary } from '@/components/checkout/CheckoutOrderSummary.jsx'
+import { CheckoutCouponField } from '@/components/checkout/CheckoutCouponField.jsx'
 import { EmptyCartState } from '@/components/cart/EmptyCartState.jsx'
 import { CartPageSkeleton } from '@/components/cart/CartPageSkeleton.jsx'
 import { useCart } from '@/hooks/useCart.js'
@@ -13,6 +14,7 @@ import { ROUTES } from '@/constants/routes.js'
 import { PAYMENT_METHOD, estimateOrderTotals } from '@/constants/checkout.js'
 import * as orderService from '@/services/orderService.js'
 import { getErrorMessage } from '@/utils/apiError.js'
+import { useNotifications } from '@/hooks/useNotifications.js'
 
 const emptyAddress = {
   fullName: '',
@@ -37,18 +39,34 @@ function validateShipping(addr) {
 
 export function CheckoutPage() {
   const navigate = useNavigate()
+  const { push } = useNotifications()
   const { cart, loading, refreshCart, mutating } = useCart()
   const [address, setAddress] = useState(emptyAddress)
   const [errors, setErrors] = useState({})
   const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHOD.COD)
   const [cardLast4, setCardLast4] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [couponInput, setCouponInput] = useState('')
+  const [appliedDiscount, setAppliedDiscount] = useState(0)
+  const [appliedCode, setAppliedCode] = useState('')
 
   useEffect(() => {
     refreshCart()
   }, [refreshCart])
 
-  const pricing = useMemo(() => estimateOrderTotals(cart?.subtotal ?? 0), [cart?.subtotal])
+  useEffect(() => {
+    const h = window.setTimeout(() => {
+      setAppliedDiscount(0)
+      setAppliedCode('')
+      setCouponInput('')
+    }, 0)
+    return () => window.clearTimeout(h)
+  }, [cart?.subtotal])
+
+  const pricing = useMemo(
+    () => estimateOrderTotals(cart?.subtotal ?? 0, appliedDiscount),
+    [cart?.subtotal, appliedDiscount],
+  )
 
   const hasItems = (cart?.items?.length ?? 0) > 0
 
@@ -60,6 +78,17 @@ export function CheckoutPage() {
       delete next[name]
       return next
     })
+  }, [])
+
+  const handleCouponApplied = useCallback((discount, code) => {
+    setAppliedDiscount(discount)
+    setAppliedCode(code)
+  }, [])
+
+  const handleCouponClear = useCallback(() => {
+    setAppliedDiscount(0)
+    setAppliedCode('')
+    setCouponInput('')
   }, [])
 
   const handleSubmit = useCallback(
@@ -97,9 +126,17 @@ export function CheckoutPage() {
         if (paymentMethod === PAYMENT_METHOD.CARD) {
           payload.cardLast4 = cardLast4
         }
+        if (appliedCode) {
+          payload.couponCode = appliedCode
+        }
         const order = await orderService.createOrderRequest(payload)
         await refreshCart()
         toast.success('Order placed')
+        push({
+          type: 'order',
+          title: 'Order placed',
+          message: `Order ${order.id} — ${order.orderItems?.length ?? 0} line(s)`,
+        })
         navigate(ROUTES.CHECKOUT_SUCCESS, { replace: true, state: { orderId: order.id } })
       } catch (err) {
         toast.error(getErrorMessage(err, 'Unable to place order'))
@@ -107,7 +144,7 @@ export function CheckoutPage() {
         setSubmitting(false)
       }
     },
-    [address, paymentMethod, cardLast4, hasItems, navigate, refreshCart],
+    [address, paymentMethod, cardLast4, hasItems, navigate, refreshCart, appliedCode, push],
   )
 
   const busy = submitting || mutating
@@ -137,6 +174,15 @@ export function CheckoutPage() {
                   onChange={onAddressChange}
                 />
               </section>
+              <CheckoutCouponField
+                subtotal={cart?.subtotal ?? 0}
+                couponInput={couponInput}
+                onCouponInputChange={setCouponInput}
+                appliedCode={appliedCode}
+                onApplied={handleCouponApplied}
+                onClear={handleCouponClear}
+                disabled={busy}
+              />
               <section>
                 <PaymentSection
                   method={paymentMethod}

@@ -4,6 +4,7 @@ import { APP_NAME } from '@/constants/app.js'
 import { ROUTES } from '@/constants/routes.js'
 import { primaryNavLinks } from '@/data/navLinks.js'
 import { ThemeToggle } from '@/components/layout/ThemeToggle.jsx'
+import { NotificationBell } from '@/components/layout/NotificationBell.jsx'
 import { MobileMenu, MobileMenuButton } from '@/components/layout/MobileMenu.jsx'
 import { useAuth } from '@/hooks/useAuth.js'
 import { useCart } from '@/hooks/useCart.js'
@@ -107,9 +108,10 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden md:block">
-              <ThemeToggle />
-            </div>
+          <div className="hidden items-center gap-2 md:flex" aria-label="Tools">
+            <NotificationBell />
+            <ThemeToggle />
+          </div>
             <MobileMenuButton open={mobileOpen} onClick={() => setMobileOpen((o) => !o)} />
           </div>
         </div>

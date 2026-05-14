@@ -47,6 +47,8 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
     product.discountPrice > 0 &&
     product.discountPrice < product.price
   const effective = hasDiscount ? product.discountPrice : product.price
+  const stockCount = product.stock ?? 0
+  const lowStock = stockCount > 0 && stockCount <= 8
   const hint =
     product.imageHint ??
     ([product.brand, product.category].filter(Boolean).join(' · ') || 'Premium tech')
@@ -166,6 +168,15 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
               Trending
             </span>
           ) : null}
+          {stockCount <= 0 ? (
+            <span className="rounded-full bg-zinc-700/95 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow">
+              Out of stock
+            </span>
+          ) : lowStock ? (
+            <span className="rounded-full bg-amber-500/95 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-zinc-950 shadow">
+              Low stock
+            </span>
+          ) : null}
         </div>
         <button
           type="button"
@@ -207,11 +218,11 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
           type="button"
           size="sm"
           className="w-full justify-center shadow-none"
-          disabled={commerceLocked || addBusy || (product.stock ?? 0) <= 0}
+          disabled={commerceLocked || addBusy || stockCount <= 0}
           onClick={handleAddToCart}
         >
           <IconCart className="h-4 w-4" />
-          {addBusy ? 'Adding…' : (product.stock ?? 0) <= 0 ? 'Out of stock' : 'Add to cart'}
+          {addBusy ? 'Adding…' : stockCount <= 0 ? 'Out of stock' : 'Add to cart'}
         </PrimaryButton>
       </div>
     </motion.article>

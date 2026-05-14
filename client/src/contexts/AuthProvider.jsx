@@ -114,6 +114,22 @@ export function AuthProvider({ children }) {
     navigate(ROUTES.HOME, { replace: true })
   }, [navigate])
 
+  const updateProfile = useCallback(async (payload) => {
+    setLoading(true)
+    try {
+      const fresh = await authService.updateProfileRequest(payload)
+      setUser(fresh)
+      localStorage.setItem(STORAGE_KEYS.AUTH_USER, JSON.stringify(fresh))
+      toast.success('Profile saved')
+      return fresh
+    } catch (err) {
+      toast.error(getErrorMessage(err, 'Unable to update profile'))
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   const value = useMemo(
     () => ({
       user,
@@ -123,8 +139,9 @@ export function AuthProvider({ children }) {
       login,
       register,
       logout,
+      updateProfile,
     }),
-    [user, bootstrapped, loading, login, register, logout],
+    [user, bootstrapped, loading, login, register, logout, updateProfile],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -13,6 +13,16 @@ const footerColumns = [
     ],
   },
   {
+    title: 'Company',
+    links: [
+      { to: ROUTES.FAQ, label: 'FAQ' },
+      { to: ROUTES.SHIPPING_INFO, label: 'Shipping' },
+      { to: ROUTES.RETURNS, label: 'Returns' },
+      { to: ROUTES.CONTACT, label: 'Contact' },
+      { to: ROUTES.NEWSLETTER, label: 'Newsletter' },
+    ],
+  },
+  {
     title: 'Account',
     links: [
       { to: ROUTES.AUTH_LOGIN, label: 'Sign in' },
@@ -25,8 +35,9 @@ const footerColumns = [
   {
     title: 'Legal',
     links: [
-      { label: 'Privacy', disabled: true },
-      { label: 'Terms', disabled: true },
+      { to: ROUTES.RETURNS, label: 'Return policy' },
+      { to: ROUTES.FAQ, label: 'Help center' },
+      { label: 'Privacy (soon)', disabled: true },
     ],
   },
 ]
@@ -61,7 +72,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="grid flex-1 gap-8 sm:grid-cols-3 lg:col-span-8">
+          <div className="grid flex-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:col-span-8">
             {footerColumns.map((col) => (
               <div key={col.title}>
                 <p className="text-sm font-semibold text-zinc-900 dark:text-white">{col.title}</p>

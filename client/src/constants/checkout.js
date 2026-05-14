@@ -7,12 +7,16 @@ export const PAYMENT_METHOD = {
   CARD: 'card',
 }
 
-export function estimateOrderTotals(subtotal) {
-  const s = Number(subtotal) || 0
-  const tax = Math.round(s * TAX_RATE * 100) / 100
-  const totalPrice = Math.round((s + FLAT_SHIPPING_USD + tax) * 100) / 100
+export function estimateOrderTotals(subtotal, discountAmount = 0) {
+  const s = Math.round((Number(subtotal) || 0) * 100) / 100
+  const rawD = Number(discountAmount) || 0
+  const d = Math.round(Math.min(Math.max(0, rawD), s) * 100) / 100
+  const after = Math.round((s - d) * 100) / 100
+  const tax = Math.round(after * TAX_RATE * 100) / 100
+  const totalPrice = Math.round((after + FLAT_SHIPPING_USD + tax) * 100) / 100
   return {
-    subtotal: Math.round(s * 100) / 100,
+    subtotal: s,
+    discountAmount: d,
     shippingFee: FLAT_SHIPPING_USD,
     tax,
     totalPrice,

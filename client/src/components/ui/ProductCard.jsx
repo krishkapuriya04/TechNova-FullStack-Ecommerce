@@ -16,10 +16,10 @@ import { ProductImage } from '@/components/ui/ProductImage.jsx'
 
 function hashGradient(seed) {
   const palettes = [
-    'from-indigo-600 via-violet-600 to-fuchsia-500',
+    'from-slate-800 via-slate-900 to-black',
     'from-slate-700 via-zinc-800 to-zinc-900',
-    'from-sky-600 via-blue-700 to-indigo-800',
-    'from-amber-500 via-orange-600 to-rose-600',
+    'from-sky-900 via-slate-900 to-black',
+    'from-amber-600 via-orange-700 to-rose-900',
   ]
   let sum = 0
   const key = seed || 'product'
@@ -102,7 +102,7 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
   return (
     <motion.article
       layout
-      className="group relative flex flex-col overflow-hidden rounded-tn-xl border border-zinc-200/90 bg-white/90 shadow-tn-card tn-transition-base dark:border-white/10 dark:bg-tn-900/80"
+      className="group relative flex flex-col overflow-hidden rounded-tn-xl border border-zinc-200/90 bg-white/95 shadow-tn-card tn-transition-base dark:border-white/10 dark:bg-tn-900/85"
       whileHover={
         reduceMotion
           ? undefined
@@ -162,7 +162,7 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
             </span>
           ) : null}
           {product.trending ? (
-            <span className="rounded-full bg-fuchsia-600/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow">
+            <span className="rounded-full bg-sky-600/95 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow">
               Trending
             </span>
           ) : null}
@@ -184,7 +184,7 @@ export function ProductCard({ product, detailSlug, onAddToCart, onToggleWishlist
         <div className="space-y-1">
           {detailTo ? (
             <Link to={detailTo} className="block">
-              <h3 className="text-base font-semibold text-zinc-900 transition hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+              <h3 className="text-base font-semibold text-zinc-900 transition hover:text-sky-700 dark:text-white dark:hover:text-sky-300">
                 {product.title}
               </h3>
             </Link>

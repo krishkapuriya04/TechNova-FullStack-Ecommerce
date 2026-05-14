@@ -95,10 +95,10 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
                 key={chip.key}
                 type="button"
                 onClick={() => patch(chip.clear)}
-                className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-900 transition hover:border-indigo-300 dark:border-indigo-500/30 dark:bg-indigo-500/10 dark:text-indigo-100"
+                className="inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-900 transition hover:border-sky-300 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100"
               >
                 {chip.label}
-                <span aria-hidden className="text-indigo-500">
+                <span aria-hidden className="text-sky-500">
                   ×
                 </span>
               </button>
@@ -123,7 +123,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
               onFocus={() => setSuggestOpen(true)}
               autoComplete="off"
               placeholder="Search products, brands, categories…"
-              className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-indigo-500/30 focus:border-indigo-400 focus:ring-2 dark:border-white/10 dark:bg-tn-900 dark:text-zinc-100"
+              className="mt-2 w-full rounded-tn border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none ring-sky-500/30 focus:border-sky-400 focus:ring-2 dark:border-white/10 dark:bg-tn-900 dark:text-zinc-100"
             />
             {suggestOpen ? (
               <div className="absolute left-0 right-0 z-40 mt-2 max-h-72 overflow-auto rounded-tn-xl border border-zinc-200 bg-white p-2 text-sm shadow-tn-soft dark:border-white/10 dark:bg-tn-900">
@@ -248,7 +248,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
               type="checkbox"
               checked={featured === 'true'}
               onChange={(e) => patch({ featured: e.target.checked ? 'true' : '' })}
-              className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
+              className="h-4 w-4 rounded border-zinc-300 text-sky-600 focus:ring-sky-500"
             />
             Featured only
           </label>
@@ -257,7 +257,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
               type="checkbox"
               checked={trending === 'true'}
               onChange={(e) => patch({ trending: e.target.checked ? 'true' : '' })}
-              className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
+              className="h-4 w-4 rounded border-zinc-300 text-sky-600 focus:ring-sky-500"
             />
             Trending only
           </label>
@@ -293,7 +293,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
               <p className="text-sm font-semibold text-zinc-900 dark:text-white">Filters</p>
               <button
                 type="button"
-                className="text-sm font-semibold text-indigo-600 dark:text-indigo-300"
+                className="text-sm font-semibold text-sky-600 dark:text-sky-300"
                 onClick={() => setDrawerOpen(false)}
               >
                 Done
@@ -359,7 +359,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
                   type="checkbox"
                   checked={featured === 'true'}
                   onChange={(e) => patch({ featured: e.target.checked ? 'true' : '' })}
-                  className="h-4 w-4 rounded border-zinc-300 text-indigo-600"
+                  className="h-4 w-4 rounded border-zinc-300 text-sky-600"
                 />
                 Featured only
               </label>
@@ -368,7 +368,7 @@ export function ShopToolbar({ searchInput, onSearchChange }) {
                   type="checkbox"
                   checked={trending === 'true'}
                   onChange={(e) => patch({ trending: e.target.checked ? 'true' : '' })}
-                  className="h-4 w-4 rounded border-zinc-300 text-indigo-600"
+                  className="h-4 w-4 rounded border-zinc-300 text-sky-600"
                 />
                 Trending only
               </label>

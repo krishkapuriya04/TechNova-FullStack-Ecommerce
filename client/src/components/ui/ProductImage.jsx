@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react'
 
 function hashGradient(seed) {
   const palettes = [
-    'from-indigo-600 via-violet-600 to-fuchsia-500',
-    'from-slate-700 via-zinc-800 to-zinc-900',
-    'from-sky-600 via-blue-700 to-indigo-800',
-    'from-amber-500 via-orange-600 to-rose-600',
+    'from-slate-800 via-slate-900 to-slate-950',
+    'from-sky-900 via-slate-900 to-slate-950',
+    'from-zinc-800 via-neutral-900 to-black',
+    'from-slate-700 via-cyan-950 to-slate-950',
   ]
   let sum = 0
   const key = seed || 'p'
@@ -31,7 +31,7 @@ export function ProductImage({
         role="img"
         aria-label={alt || 'Product placeholder'}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.35),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.28),transparent_55%)]" />
       </div>
     )
   }
@@ -44,7 +44,7 @@ export function ProductImage({
         loading="lazy"
         decoding="async"
         onError={() => setFailed(true)}
-        className={`${imgClassName} transition duration-300 ease-out group-hover:scale-[1.04]`}
+        className={`${imgClassName} duration-500 ease-out group-hover:scale-[1.06] motion-safe:transition-transform`}
       />
     </div>
   )

@@ -9,21 +9,21 @@ const collections = [
     id: 'col-creator',
     title: 'Creator workstations',
     subtitle: 'OLED laptops · color-accurate monitors',
-    accent: 'from-indigo-500/90 to-violet-600/90',
+    accent: 'from-sky-500/90 to-cyan-600/90',
     params: { category: 'Laptops', sort: 'rating' },
   },
   {
     id: 'col-game',
     title: 'Battle-ready setups',
     subtitle: 'High-refresh panels · precision mice',
-    accent: 'from-fuchsia-600/90 to-rose-600/90',
+    accent: 'from-rose-600/90 to-orange-600/90',
     params: { category: 'Gaming', sort: 'newest' },
   },
   {
     id: 'col-audio',
     title: 'Quiet everywhere',
     subtitle: 'ANC headphones · studio clarity',
-    accent: 'from-sky-500/90 to-cyan-600/90',
+    accent: 'from-emerald-500/90 to-teal-600/90',
     params: { category: 'Audio', featured: 'true' },
   },
 ]
@@ -55,19 +55,19 @@ export function FeaturedCollectionsSection() {
             >
               <Link
                 to={shopHref(col.params)}
-                className="group relative block overflow-hidden rounded-tn-2xl border border-zinc-200/80 bg-zinc-50 p-8 shadow-tn-card transition hover:-translate-y-1 hover:border-indigo-300/60 dark:border-white/10 dark:bg-tn-900/80 dark:hover:border-indigo-400/30"
+                className="group relative block overflow-hidden rounded-tn-2xl border border-zinc-200/80 bg-zinc-50 p-8 shadow-tn-card transition hover:-translate-y-1 hover:border-sky-300/60 dark:border-white/10 dark:bg-tn-900/80 dark:hover:border-sky-400/30"
               >
                 <div
                   className={`pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br ${col.accent} opacity-40 blur-3xl transition duration-500 group-hover:opacity-70`}
                   aria-hidden
                 />
                 <div className="relative space-y-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-300">
                     Shop the edit
                   </p>
                   <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">{col.title}</h3>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">{col.subtitle}</p>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 dark:text-indigo-300">
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-sky-600 dark:text-sky-300">
                     Explore collection
                     <span aria-hidden>→</span>
                   </span>

@@ -82,7 +82,7 @@ export function ShopPage() {
         canonicalPath={ROUTES.SHOP}
         description="Browse smartphones, laptops, gaming gear, audio, and accessories with live inventory and filters."
       />
-      <div className="tn-section-y">
+      <div className="tn-section-y bg-gradient-to-b from-zinc-50 via-white to-zinc-100 dark:from-tn-void dark:via-tn-950 dark:to-slate-950">
       <div className="tn-container space-y-8">
         <SectionTitle
           eyebrow="Catalog"
@@ -94,7 +94,7 @@ export function ShopPage() {
 
         <div className="grid gap-10 xl:grid-cols-[15rem_minmax(0,1fr)] xl:items-start">
           <aside className="hidden xl:block">
-            <div className="sticky top-24 rounded-tn-2xl border border-zinc-200/80 bg-white/80 p-4 shadow-sm dark:border-white/10 dark:bg-tn-900/70">
+            <div className="sticky top-24 rounded-tn-2xl border border-zinc-200/90 bg-white/90 p-5 shadow-tn-card backdrop-blur-md dark:border-white/10 dark:bg-slate-950/60">
               <ShopCategoryNav />
             </div>
           </aside>
@@ -160,7 +160,7 @@ export function ShopPage() {
                       next.set('page', String(data.meta.page - 1))
                       setParams(next, { replace: true })
                     }}
-                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-indigo-400 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
+                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-sky-400 enabled:hover:text-sky-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
                   >
                     Previous
                   </button>
@@ -172,7 +172,7 @@ export function ShopPage() {
                       next.set('page', String(data.meta.page + 1))
                       setParams(next, { replace: true })
                     }}
-                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-indigo-400 enabled:hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
+                    className="rounded-tn border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-800 transition enabled:hover:border-sky-400 enabled:hover:text-sky-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:text-zinc-100"
                   >
                     Next
                   </button>

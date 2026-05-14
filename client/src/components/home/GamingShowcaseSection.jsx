@@ -10,7 +10,7 @@ export function GamingShowcaseSection() {
 
   return (
     <section className="relative overflow-hidden tn-section-y">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-fuchsia-600/15 via-transparent to-indigo-600/20 dark:from-fuchsia-500/10 dark:to-indigo-500/10" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-rose-600/15 via-transparent to-sky-600/20 dark:from-rose-500/10 dark:to-sky-500/10" />
       <div className="tn-container relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <motion.div
           initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
@@ -28,7 +28,7 @@ export function GamingShowcaseSection() {
             <PrimaryButton to={`${ROUTES.SHOP}?category=Gaming&sort=rating`}>Shop gaming</PrimaryButton>
             <Link
               to={`${ROUTES.SHOP}?category=Monitors&sort=price_desc`}
-              className="inline-flex items-center justify-center rounded-tn border border-zinc-200 px-5 py-2.5 text-sm font-semibold text-zinc-800 transition hover:border-indigo-300 dark:border-white/10 dark:text-zinc-100 dark:hover:border-indigo-400/40"
+              className="inline-flex items-center justify-center rounded-tn border border-zinc-200 px-5 py-2.5 text-sm font-semibold text-zinc-800 transition hover:border-sky-300 dark:border-white/10 dark:text-zinc-100 dark:hover:border-sky-400/40"
             >
               OLED monitors
             </Link>
@@ -51,7 +51,7 @@ export function GamingShowcaseSection() {
               { k: 'Portable', v: 'Handheld AAA' },
             ].map((row) => (
               <div key={row.k} className="rounded-tn border border-white/10 bg-white/5 p-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-indigo-200">{row.k}</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-sky-200">{row.k}</p>
                 <p className="mt-2 text-sm text-zinc-100">{row.v}</p>
               </div>
             ))}

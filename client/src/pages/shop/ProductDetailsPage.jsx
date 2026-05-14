@@ -151,7 +151,7 @@ export function ProductDetailsPage() {
         <p className="text-sm text-zinc-600 dark:text-zinc-400">{error}</p>
         <Link
           to={ROUTES.SHOP}
-          className="inline-flex rounded-tn bg-indigo-500 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-400"
+          className="inline-flex rounded-tn bg-sky-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-sky-500"
         >
           Back to shop
         </Link>
@@ -215,8 +215,8 @@ export function ProductDetailsPage() {
         ogImage={product.images?.[0]}
       />
       <div className="tn-container grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
-        <div className="space-y-4">
-          <div className="overflow-hidden rounded-tn-2xl border border-zinc-200/80 bg-zinc-100 dark:border-white/10 dark:bg-tn-900">
+        <div className="space-y-5 lg:sticky lg:top-24 lg:self-start">
+          <div className="group overflow-hidden rounded-tn-2xl border border-zinc-200/80 bg-zinc-100 shadow-tn-card dark:border-white/10 dark:bg-tn-900">
             <ProductImage
               src={hero}
               alt={product.title}
@@ -231,10 +231,10 @@ export function ProductDetailsPage() {
                   key={`${src}-${index}`}
                   type="button"
                   onClick={() => setActiveImage(index)}
-                  className={`h-16 w-24 overflow-hidden rounded-tn border transition ${
+                  className={`h-24 w-32 overflow-hidden rounded-tn-lg border-2 transition tn-transition-base ${
                     index === activeImage
-                      ? 'border-indigo-500 ring-2 ring-indigo-400/40'
-                      : 'border-zinc-200 hover:border-indigo-200 dark:border-white/10 dark:hover:border-indigo-400/40'
+                      ? 'border-sky-500 shadow-md ring-2 ring-sky-400/30'
+                      : 'border-zinc-200 opacity-90 hover:border-sky-300/80 hover:opacity-100 dark:border-white/10 dark:hover:border-sky-500/40'
                   }`}
                   aria-label={`Show image ${index + 1}`}
                 >
@@ -270,10 +270,10 @@ export function ProductDetailsPage() {
           <ReviewPreview product={product} />
         </div>
 
-        <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
-          <div className="rounded-tn-2xl border border-zinc-200/80 bg-white/80 p-6 shadow-tn-card dark:border-white/10 dark:bg-tn-900/80">
+        <div className="space-y-6">
+          <div className="rounded-tn-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-tn-card dark:border-white/10 dark:bg-tn-900/85">
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
                 {product.brand} · {product.category}
               </p>
               <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
@@ -363,7 +363,7 @@ export function ProductDetailsPage() {
             </dl>
           </div>
 
-          <Link to={ROUTES.SHOP} className="inline-flex text-sm font-semibold text-indigo-600 dark:text-indigo-300">
+          <Link to={ROUTES.SHOP} className="inline-flex text-sm font-semibold text-sky-700 transition hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200">
             ← Back to shop
           </Link>
         </div>
@@ -371,7 +371,7 @@ export function ProductDetailsPage() {
 
       {related.length ? (
         <div className="tn-container mt-16 space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
             Related in {product.category}
           </p>
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -384,7 +384,7 @@ export function ProductDetailsPage() {
 
       {trending.length ? (
         <div className="tn-container mt-12 space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
             Trending now
           </p>
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -397,7 +397,7 @@ export function ProductDetailsPage() {
 
       {recentSnapshots.length ? (
         <div className="tn-container mt-12 space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700 dark:text-sky-300">
             Recently viewed
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -405,7 +405,7 @@ export function ProductDetailsPage() {
               <Link
                 key={snap.slug}
                 to={productPath(snap.slug)}
-                className="flex items-center gap-3 rounded-tn-xl border border-zinc-200/80 bg-white/80 p-3 shadow-sm transition hover:border-indigo-300/60 dark:border-white/10 dark:bg-tn-900/70"
+                className="flex items-center gap-3 rounded-tn-xl border border-zinc-200/80 bg-white/90 p-3 shadow-sm transition hover:border-sky-300/60 dark:border-white/10 dark:bg-tn-900/70 dark:hover:border-sky-500/35"
               >
                 <ProductImage
                   src={snap.thumb}

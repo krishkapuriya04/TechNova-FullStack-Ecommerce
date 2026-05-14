@@ -1,4 +1,5 @@
 import { slugify } from '../../utils/slugify.js'
+import { getCatalogImageUrls } from './productImageUrls.js'
 
 /**
  * Deterministic pseudo-random for repeatable seed runs.
@@ -13,15 +14,6 @@ function mulberry32(seed) {
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
-}
-
-function picsumImages(catalogIndex) {
-  const base = `tn-catalog-${catalogIndex}`
-  return [
-    `https://picsum.photos/seed/${base}-a/1200/900`,
-    `https://picsum.photos/seed/${base}-b/1200/900`,
-    `https://picsum.photos/seed/${base}-c/1200/900`,
-  ]
 }
 
 function buildDescription({ brand, title, category }) {
@@ -1090,7 +1082,7 @@ export function generateBulkCatalog() {
       discountPrice,
       category: row.category,
       brand: row.brand,
-      images: picsumImages(index),
+      images: getCatalogImageUrls(row.category, index),
       stock,
       ratings: { average: avg, count },
       featured,

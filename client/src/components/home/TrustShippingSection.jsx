@@ -26,7 +26,7 @@ export function TrustShippingSection() {
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-4"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-indigo-600 dark:text-indigo-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-600 dark:text-sky-300">
             Trust
           </p>
           <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
@@ -52,7 +52,7 @@ export function TrustShippingSection() {
           transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-4"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-indigo-600 dark:text-indigo-300">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-600 dark:text-sky-300">
             Shipping
           </p>
           <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">

@@ -27,7 +27,7 @@ export function ShopCategoryNav({ className = '' }) {
             })}
             className={`block rounded-tn px-3 py-2 text-sm font-medium transition ${
               !current
-                ? 'bg-indigo-500/15 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200'
+                ? 'bg-sky-500/15 text-sky-700 dark:bg-sky-500/20 dark:text-sky-200'
                 : 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/5'
             }`}
           >
@@ -44,7 +44,7 @@ export function ShopCategoryNav({ className = '' }) {
                 })}
                 className={`block rounded-tn px-3 py-2 text-sm font-medium transition ${
                   active
-                    ? 'bg-indigo-500/15 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200'
+                    ? 'bg-sky-500/15 text-sky-700 dark:bg-sky-500/20 dark:text-sky-200'
                     : 'text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-white/5'
                 }`}
               >

@@ -1,73 +1,12 @@
 import '../config/env.js'
 import { connectDatabase, disconnectDatabase } from '../config/database.js'
-import { Product } from '../models/Product.js'
-import { User } from '../models/User.js'
-import { Coupon } from '../models/Coupon.js'
-import { generateBulkCatalog } from './lib/generateBulkCatalog.js'
-
-const ADMIN_EMAIL = 'admin@technova.dev'
-const ADMIN_PASSWORD = 'Password123'
+import { ensureCatalogBootstrap } from '../services/catalogBootstrap.js'
 
 const fresh = process.argv.includes('--fresh')
 
 async function seed() {
   await connectDatabase()
-
-  if (fresh) {
-    const cleared = await Product.deleteMany({})
-    console.log(`[seed] Cleared ${cleared.deletedCount} products (--fresh)`)
-  }
-
-  const existingProducts = await Product.countDocuments()
-  if (existingProducts === 0) {
-    const catalog = generateBulkCatalog()
-    await Product.insertMany(catalog)
-    console.log(`[seed] Inserted ${catalog.length} products`)
-  } else {
-    console.log('[seed] Products already present — skipping catalog insert (use --fresh to replace)')
-  }
-
-  const adminExists = await User.exists({ email: ADMIN_EMAIL })
-  if (!adminExists) {
-    await User.create({
-      name: 'TechNova Admin',
-      email: ADMIN_EMAIL,
-      password: ADMIN_PASSWORD,
-      role: 'admin',
-      avatar: '',
-    })
-    console.log(`[seed] Created admin user (${ADMIN_EMAIL})`)
-  } else {
-    console.log('[seed] Admin user already exists — skipping')
-  }
-
-  const couponCount = await Coupon.countDocuments()
-  if (couponCount === 0) {
-    const soon = new Date()
-    soon.setDate(soon.getDate() + 45)
-    await Coupon.insertMany([
-      {
-        code: 'TECH10',
-        discountType: 'percent',
-        discountValue: 10,
-        minimumOrder: 75,
-        expiryDate: soon,
-        active: true,
-      },
-      {
-        code: 'FLAT15',
-        discountType: 'fixed',
-        discountValue: 15,
-        minimumOrder: 120,
-        expiryDate: soon,
-        active: true,
-      },
-    ])
-    console.log('[seed] Inserted starter coupons')
-  } else {
-    console.log('[seed] Coupons already present — skipping')
-  }
-
+  await ensureCatalogBootstrap({ fresh })
   await disconnectDatabase()
   console.log('[seed] Done')
 }

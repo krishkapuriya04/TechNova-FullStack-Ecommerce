@@ -1,6 +1,7 @@
 import { createApp } from './app.js'
 import { env, assertBootstrapConfig, logStartupEnv } from './config/env.js'
 import { connectDatabase } from './config/database.js'
+import { ensureCatalogBootstrap } from './services/catalogBootstrap.js'
 
 async function bootstrap() {
   logStartupEnv()
@@ -9,6 +10,10 @@ async function bootstrap() {
   try {
     await connectDatabase()
     console.log('[db] MongoDB connected')
+
+    if (env.autoSeedCatalog) {
+      await ensureCatalogBootstrap()
+    }
 
     const app = createApp()
     app.listen(env.port, () => {

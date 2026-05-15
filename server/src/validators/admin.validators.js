@@ -1,9 +1,9 @@
 import { body, param, query } from 'express-validator'
 
 export const listAdminProductsValidators = [
-  query('page').optional().toInt().isInt({ min: 1 }),
-  query('limit').optional().toInt().isInt({ min: 1, max: 100 }),
-  query('search').optional().isString().trim().isLength({ max: 120 }),
+  query('page').optional({ checkFalsy: true }).toInt().isInt({ min: 1 }),
+  query('limit').optional({ checkFalsy: true }).toInt().isInt({ min: 1, max: 100 }),
+  query('search').optional({ checkFalsy: true }).isString().trim().isLength({ max: 120 }),
 ]
 
 export const listAdminOrdersValidators = [
@@ -35,9 +35,9 @@ export const updatePaymentStatusValidators = [
 ]
 
 export const listAdminUsersValidators = [
-  query('page').optional().toInt().isInt({ min: 1 }),
-  query('limit').optional().toInt().isInt({ min: 1, max: 100 }),
-  query('search').optional().isString().trim().isLength({ max: 120 }),
+  query('page').optional({ checkFalsy: true }).toInt().isInt({ min: 1 }),
+  query('limit').optional({ checkFalsy: true }).toInt().isInt({ min: 1, max: 100 }),
+  query('search').optional({ checkFalsy: true }).isString().trim().isLength({ max: 120 }),
 ]
 
 export const adminUserIdValidators = [param('id').isMongoId().withMessage('Invalid user id')]

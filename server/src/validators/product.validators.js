@@ -17,6 +17,16 @@ export const listProductValidators = [
 
 export const idParamValidators = [mongoId]
 
+export const slugParamValidators = [
+  param('slug')
+    .trim()
+    .notEmpty()
+    .withMessage('Slug is required')
+    .isLength({ max: 180 })
+    .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .withMessage('Invalid slug format'),
+]
+
 export const createProductValidators = [
   body('title').trim().notEmpty().isLength({ max: 160 }),
   body('slug')

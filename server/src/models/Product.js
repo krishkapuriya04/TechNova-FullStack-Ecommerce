@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import { slugify } from '../utils/slugify.js'
+import { sanitizeProductImages } from '../utils/productImages.js'
 
 const specSchema = new mongoose.Schema(
   {
@@ -127,7 +128,7 @@ productSchema.methods.toPublicJSON = function toPublicJSON() {
     effectivePrice: this.effectivePrice,
     category: this.category,
     brand: this.brand,
-    images: this.images,
+    images: sanitizeProductImages(this.images, this.slug ?? this._id?.toString()),
     stock: this.stock,
     ratings: this.ratings,
     featured: this.featured,

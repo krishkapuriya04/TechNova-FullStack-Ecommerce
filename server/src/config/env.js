@@ -51,10 +51,17 @@ const trustProxy =
   process.env.TRUST_PROXY === 'true' ||
   process.env.TRUST_PROXY === 'yes'
 
+const autoSeedCatalog =
+  process.env.AUTO_SEED_CATALOG !== '0' &&
+  process.env.AUTO_SEED_CATALOG !== 'false' &&
+  process.env.AUTO_SEED_CATALOG !== 'no'
+
 export const env = {
   nodeEnv,
   isProduction,
   port: Number(process.env.PORT) || 5000,
+  /** When true (default), seed demo catalog if the database has no products. Set AUTO_SEED_CATALOG=0 to disable. */
+  autoSeedCatalog,
   /** Allowed browser origins for CORS (comma list or single CLIENT_ORIGIN). */
   clientOrigins: parseClientOrigins(),
   mongodbUri: rawMongo,
@@ -84,6 +91,7 @@ export function logStartupEnv() {
   console.log(`[env] CORS origins (${env.clientOrigins.length}): ${env.clientOrigins.join(' | ')}`)
   console.log(`[env] MONGODB_URI: ${mongoState}`)
   console.log(`[env] JWT_SECRET: ${jwtState}`)
+  console.log(`[env] AUTO_SEED_CATALOG: ${env.autoSeedCatalog ? 'on (empty DB → demo products)' : 'off'}`)
 }
 
 /**

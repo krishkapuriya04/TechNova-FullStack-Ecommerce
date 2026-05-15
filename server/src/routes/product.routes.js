@@ -6,6 +6,7 @@ import {
   createProductValidators,
   idParamValidators,
   listProductValidators,
+  slugParamValidators,
   updateProductValidators,
 } from '../validators/product.validators.js'
 import { asyncHandler } from '../utils/asyncHandler.js'
@@ -40,7 +41,11 @@ router.get(
   asyncHandler(productController.getProducts),
 )
 
-router.get('/slug/:slug', asyncHandler(productController.getProductBySlug))
+router.get(
+  '/slug/:slug',
+  validate(slugParamValidators),
+  asyncHandler(productController.getProductBySlug),
+)
 
 router.post(
   '/',

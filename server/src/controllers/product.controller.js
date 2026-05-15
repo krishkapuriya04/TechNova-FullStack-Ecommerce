@@ -5,9 +5,7 @@ import { AppError } from '../utils/AppError.js'
 import { sendCreated, sendSuccess } from '../utils/apiResponse.js'
 import { slugify } from '../utils/slugify.js'
 import { buildProductFilter, buildProductSort } from '../utils/productQuery.js'
-
-const PLACEHOLDER_IMAGE =
-  'https://placehold.co/1200x800/e2e8f0/475569?text=TechNova+Product'
+import { sanitizeProductImages } from '../utils/productImages.js'
 
 export async function getProducts(req, res) {
   const page = Number(req.query.page) || 1
@@ -46,7 +44,7 @@ export async function getProducts(req, res) {
       effectivePrice: doc.effectivePrice,
       category: doc.category,
       brand: doc.brand,
-      images: doc.images,
+      images: sanitizeProductImages(doc.images, doc.slug ?? doc._id?.toString()),
       stock: doc.stock,
       ratings: doc.ratings,
       featured: doc.featured,
@@ -74,7 +72,14 @@ export async function getSingleProduct(req, res) {
 }
 
 export async function getProductBySlug(req, res) {
-  const product = await Product.findOne({ slug: req.params.slug }).lean()
+  const slug = String(req.params.slug ?? '')
+    .trim()
+    .toLowerCase()
+  if (!slug || slug.length > 180) {
+    throw new AppError('Invalid product slug', HttpStatus.BAD_REQUEST)
+  }
+
+  const product = await Product.findOne({ slug }).lean()
   if (!product) {
     throw new AppError('Product not found', HttpStatus.NOT_FOUND)
   }
@@ -87,9 +92,7 @@ export async function createProduct(req, res) {
   if (!payload.slug) {
     payload.slug = slugify(payload.title)
   }
-  if (!payload.images?.length) {
-    payload.images = [PLACEHOLDER_IMAGE]
-  }
+  payload.images = sanitizeProductImages(payload.images, payload.slug ?? payload.title)
 
   try {
     const product = await Product.create(payload)
@@ -112,8 +115,8 @@ export async function updateProduct(req, res) {
   if (updates.title && !updates.slug) {
     updates.slug = slugify(updates.title)
   }
-  if (updates.images !== undefined && (!Array.isArray(updates.images) || updates.images.length === 0)) {
-    updates.images = [PLACEHOLDER_IMAGE]
+  if (updates.images !== undefined) {
+    updates.images = sanitizeProductImages(updates.images, updates.slug ?? product.slug)
   }
 
   Object.assign(product, updates)
@@ -149,7 +152,7 @@ function mapProduct(doc) {
     effectivePrice: doc.effectivePrice,
     category: doc.category,
     brand: doc.brand,
-    images: doc.images,
+    images: sanitizeProductImages(doc.images, doc.slug ?? doc._id?.toString()),
     stock: doc.stock,
     ratings: doc.ratings,
     featured: doc.featured,

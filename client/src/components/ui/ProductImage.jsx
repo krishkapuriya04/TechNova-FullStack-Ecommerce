@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { resolveProductImage } from '@/utils/productImages.js'
 
 function hashGradient(seed) {
   const palettes = [
@@ -13,19 +14,20 @@ function hashGradient(seed) {
   return palettes[sum % palettes.length]
 }
 
-export function ProductImage({
-  src,
+function ProductImageFrame({
+  resolvedSrc,
+  fallbackSrc,
   alt,
-  className = '',
-  imgClassName = 'h-full w-full object-cover',
-  aspectClassName = 'aspect-[4/3]',
-  seed = '',
+  className,
+  imgClassName,
+  aspectClassName,
+  gradient,
 }) {
+  const [activeSrc, setActiveSrc] = useState(resolvedSrc)
   const [failed, setFailed] = useState(false)
   const [loaded, setLoaded] = useState(false)
-  const gradient = useMemo(() => hashGradient(`${seed}-${alt}`), [seed, alt])
 
-  if (!src || failed) {
+  if (failed) {
     return (
       <div
         className={`relative overflow-hidden bg-gradient-to-br ${gradient} ${aspectClassName} ${className}`}
@@ -49,16 +51,49 @@ export function ProductImage({
         />
       ) : null}
       <img
-        src={src}
+        src={activeSrc}
         alt={alt || ''}
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
+        onError={() => {
+          if (activeSrc !== fallbackSrc) {
+            setActiveSrc(fallbackSrc)
+            setLoaded(false)
+            return
+          }
+          setFailed(true)
+        }}
         className={`${imgClassName} duration-700 ease-out motion-safe:transition-[transform,opacity] ${
           loaded ? 'opacity-100 group-hover:scale-[1.05]' : 'scale-[1.02] opacity-0'
         }`}
       />
     </div>
+  )
+}
+
+export function ProductImage({
+  src,
+  alt,
+  className = '',
+  imgClassName = 'h-full w-full object-cover',
+  aspectClassName = 'aspect-[4/3]',
+  seed = '',
+}) {
+  const resolvedSrc = useMemo(() => resolveProductImage(src, seed), [src, seed])
+  const fallbackSrc = useMemo(() => resolveProductImage(null, seed), [seed])
+  const gradient = useMemo(() => hashGradient(`${seed}-${alt}`), [seed, alt])
+
+  return (
+    <ProductImageFrame
+      key={resolvedSrc}
+      resolvedSrc={resolvedSrc}
+      fallbackSrc={fallbackSrc}
+      alt={alt}
+      className={className}
+      imgClassName={imgClassName}
+      aspectClassName={aspectClassName}
+      gradient={gradient}
+    />
   )
 }

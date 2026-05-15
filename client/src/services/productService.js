@@ -1,5 +1,22 @@
 import axios from 'axios'
 import { apiClient } from '@/services/api/index.js'
+import { resolveProductImages } from '@/utils/productImages.js'
+
+function normalizeProduct(product) {
+  if (!product) return product
+  return {
+    ...product,
+    images: resolveProductImages(product.images, product.slug ?? product.id),
+  }
+}
+
+function normalizeProductList(payload) {
+  if (!payload) return payload
+  return {
+    ...payload,
+    products: (payload.products ?? []).map(normalizeProduct),
+  }
+}
 
 /**
  * Drops empty / null query values so the API does not receive "", which can break validators.
@@ -17,22 +34,22 @@ export function normalizeProductListParams(raw) {
 export async function fetchProducts(params, axiosConfig = {}) {
   const clean = normalizeProductListParams(params)
   const { data } = await apiClient.get('/products', { params: clean, ...axiosConfig })
-  return data.data
+  return normalizeProductList(data.data)
 }
 
 export async function fetchProductBySlug(slug, axiosConfig = {}) {
   const { data } = await apiClient.get(`/products/slug/${slug}`, axiosConfig)
-  return data.data.product
+  return normalizeProduct(data.data.product)
 }
 
 export async function createProduct(payload) {
   const { data } = await apiClient.post('/products', payload)
-  return data.data.product
+  return normalizeProduct(data.data.product)
 }
 
 export async function updateProduct(id, payload) {
   const { data } = await apiClient.put(`/products/${id}`, payload)
-  return data.data.product
+  return normalizeProduct(data.data.product)
 }
 
 export async function deleteProduct(id) {

@@ -6,28 +6,47 @@ import { heroShowcaseDevices } from '@/constants/heroShowcase.js'
 import { PrimaryButton } from '@/components/ui/PrimaryButton.jsx'
 import { SecondaryButton } from '@/components/ui/SecondaryButton.jsx'
 import { ProductImage } from '@/components/ui/ProductImage.jsx'
+import { HeroShowcaseImage } from '@/components/home/HeroShowcaseImage.jsx'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion.js'
 import { fetchProducts, isCancelledRequest } from '@/services/productService.js'
-import { productPath } from '@/constants/routes.js'
+import { productPath, ROUTES } from '@/constants/routes.js'
 import { formatCurrency } from '@/utils/formatCurrency.js'
+import { getErrorMessage } from '@/utils/apiError.js'
 
 export function HeroSection() {
   const reduceMotion = usePrefersReducedMotion()
   const [spotlights, setSpotlights] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [retryTick, setRetryTick] = useState(0)
 
   useEffect(() => {
     let active = true
     const controller = new AbortController()
     async function load() {
+      setLoading(true)
+      setError('')
       try {
-        const payload = await fetchProducts(
+        let payload = await fetchProducts(
           { featured: 'true', limit: '3', sort: 'rating' },
           { signal: controller.signal },
         )
-        if (active) setSpotlights(payload.products ?? [])
+        let products = payload.products ?? []
+        if (products.length === 0) {
+          payload = await fetchProducts(
+            { limit: '3', sort: 'rating' },
+            { signal: controller.signal },
+          )
+          products = payload.products ?? []
+        }
+        if (!active) return
+        setSpotlights(products)
       } catch (err) {
         if (!active || isCancelledRequest(err)) return
         setSpotlights([])
+        setError(getErrorMessage(err, 'Could not load staff picks'))
+      } finally {
+        if (active) setLoading(false)
       }
     }
     load()
@@ -35,7 +54,7 @@ export function HeroSection() {
       active = false
       controller.abort()
     }
-  }, [])
+  }, [retryTick])
 
   return (
     <section className="relative overflow-hidden border-b border-zinc-200/60 bg-gradient-to-b from-white via-zinc-50 to-zinc-100 dark:border-white/[0.06] dark:from-tn-void dark:via-tn-950 dark:to-black tn-section-y">
@@ -144,11 +163,9 @@ export function HeroSection() {
                   className="block overflow-hidden rounded-tn-2xl border border-white/50 bg-white/55 shadow-tn-card backdrop-blur-2xl tn-transition-base hover:-translate-y-1 hover:border-teal-300/35 hover:shadow-tn-lift dark:border-white/[0.08] dark:bg-zinc-950/50 dark:hover:border-teal-400/25"
                 >
                   <div className="relative aspect-[5/4] overflow-hidden">
-                    <img
+                    <HeroShowcaseImage
                       src={item.image}
                       alt={item.title}
-                      loading="eager"
-                      decoding="async"
                       className="h-full w-full object-cover tn-transition-transform duration-700 ease-out group-hover:scale-[1.07]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
@@ -183,7 +200,19 @@ export function HeroSection() {
               </div>
             </div>
             <div className="relative mt-4 grid gap-3 sm:grid-cols-3">
-              {spotlights.length ? (
+              {loading ? (
+                <div className="col-span-full rounded-tn-xl border border-dashed border-zinc-300/90 px-4 py-8 text-center text-sm text-zinc-500 dark:border-white/12 dark:text-zinc-400">
+                  <span className="inline-block h-4 w-4 animate-pulse rounded-full bg-teal-500/40 align-middle" />{' '}
+                  Loading staff picks…
+                </div>
+              ) : error ? (
+                <div className="col-span-full space-y-3 rounded-tn-xl border border-amber-500/30 bg-amber-500/10 px-4 py-6 text-center text-sm text-amber-950 dark:text-amber-100">
+                  <p>{error}</p>
+                  <SecondaryButton type="button" size="sm" onClick={() => setRetryTick((t) => t + 1)}>
+                    Retry
+                  </SecondaryButton>
+                </div>
+              ) : spotlights.length ? (
                 spotlights.map((p, idx) => {
                   const img = p.images?.[0]
                   const price =
@@ -222,8 +251,13 @@ export function HeroSection() {
                 })
               ) : (
                 <div className="col-span-full rounded-tn-xl border border-dashed border-zinc-300/90 px-4 py-8 text-center text-sm text-zinc-500 dark:border-white/12 dark:text-zinc-400">
-                  <span className="inline-block h-4 w-4 animate-pulse rounded-full bg-teal-500/40 align-middle" />{' '}
-                  Loading featured picks…
+                  <p>Catalog is warming up.</p>
+                  <Link
+                    to={ROUTES.SHOP}
+                    className="mt-2 inline-block text-sm font-semibold text-teal-700 dark:text-teal-300"
+                  >
+                    Browse the shop →
+                  </Link>
                 </div>
               )}
             </div>

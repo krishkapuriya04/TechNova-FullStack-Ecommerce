@@ -66,6 +66,7 @@ export function ShopPage() {
         if (active) setData(payload)
       } catch (err) {
         if (!active || isCancelledRequest(err)) return
+        setData(null)
         setError(getErrorMessage(err, 'Unable to load products'))
       } finally {
         if (active) setLoading(false)

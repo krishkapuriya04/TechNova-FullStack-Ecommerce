@@ -102,19 +102,17 @@ function computeEffectivePrice(doc) {
   return base
 }
 
-productSchema.pre('validate', function assignSlug(next) {
+productSchema.pre('validate', function assignSlug() {
   if (!this.slug && this.title) {
     this.slug = slugify(this.title)
   }
   this.effectivePrice = computeEffectivePrice(this)
-  next()
 })
 
-productSchema.pre('save', function recomputePrice(next) {
+productSchema.pre('save', function recomputePrice() {
   if (this.isModified('price') || this.isModified('discountPrice')) {
     this.effectivePrice = computeEffectivePrice(this)
   }
-  next()
 })
 
 productSchema.methods.toPublicJSON = function toPublicJSON() {
